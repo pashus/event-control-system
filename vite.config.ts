@@ -45,6 +45,10 @@ function getAliasesToDebugInProduction() {
     find: "ra-data-fakerest",
     replacement: path.resolve(__dirname, "./node_modules/ra-data-fakerest/src"),
   },
+  {
+    find: "ra-language-russian",
+    replacement: path.resolve(__dirname, "./node_modules/ra-language-russian/src"),
+  },
   // add any other react-admin packages you have
 ];
 }

@@ -1,9 +1,28 @@
-import React from "react";
+import './styles/index.css';
+import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App";
+import App from "./components/App";
+import Loader from './components/Loader/Loader';
+
+const Index = () => {
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        setLoading(false);
+    }, []);
+
+    return (
+        <>
+            {loading && <Loader />}
+            <div id="root">
+                {!loading && <App />}
+            </div>
+        </>
+    );
+};
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+    <React.StrictMode>
+        <Index />
+    </React.StrictMode>,
 );
