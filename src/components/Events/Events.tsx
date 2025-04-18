@@ -13,16 +13,28 @@ import {
     SelectInput,
     FunctionField,
     TimeInput,
+    TopToolbar,
+    ExportButton,
+    CreateButton
 } from 'react-admin';
 
-function EventTitle() {
+function EventListActions(): React.ReactElement {
+    return (
+        <TopToolbar>
+            <CreateButton label='Создать мероприятие'/>
+            <ExportButton />
+        </TopToolbar>
+    );
+}
+
+function EventEditTitle() {
     const record = useRecordContext<{ name?: string }>();
     return <span>Мероприятие {record?.name ?? ''}</span>;
 };
 
 export function EventList() {
     return (
-        <List title="Мероприятия">
+        <List actions={<EventListActions />} title="Мероприятия">
             <Datagrid
                 sx={{
                     '& .MuiTableCell-root': {
@@ -56,7 +68,7 @@ export function EventList() {
 
 export function EventEdit() {
     return (
-        <Edit title={<EventTitle />}>
+        <Edit title={<EventEditTitle />}>
             <SimpleForm>
                 <TextInput
                     source="name" 

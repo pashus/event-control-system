@@ -21,6 +21,15 @@ const data = {
             registrationLink: 'https://forms.yandex.ru/u/ai_hackathon/'
         },
     ],
+
+    users: [
+        {
+            id: 1,
+            fullName: 'Мартынов Павел Максимович',
+            studyGroup: 'РИ-230948',
+            email: '25pashok@mail.ru',
+        }
+    ]
 };
 
 export const dataProvider = fakeDataProvider(data);
