@@ -15,8 +15,10 @@ import {
     TimeInput,
     TopToolbar,
     ExportButton,
-    CreateButton
+    CreateButton,
+    NumberField
 } from 'react-admin';
+import { baseFormUrl } from '../../api/data-provider';
 
 function EventListActions(): React.ReactElement {
     return (
@@ -43,23 +45,27 @@ export function EventList() {
                     },
                 }}
             >
-                <TextField source='name' label="Название мероприятия"  />
-                <DateField source='date' label="Дата" />
+                <NumberField source="id" label="ID"  />
+                <TextField source="name" label="Название мероприятия"  />
+                <DateField source="date" label="Дата" />
                 <TextField source="location" label="Место проведения" />
                 <TextField source="startTime" label="Время начала" />
                 <TextField source="entryType" label="Тип входа" />
                 <FunctionField
                     label="Регистрация"
-                    render={record => (
-                        <a 
-                            href={record.registrationLink} 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            onClick={e => e.stopPropagation()}
-                        >
-                            Перейти
-                        </a>
-                    )}
+                    render={record => {
+                        const url = `${baseFormUrl}?eventId=${record.id}`
+                        return (
+                            <a 
+                                href={url} 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                onClick={e => e.stopPropagation()}
+                            >
+                                Перейти
+                            </a>
+                        )
+                    }}
                 />
             </Datagrid>
         </List>
@@ -99,7 +105,6 @@ export function EventEdit() {
                     ]}
                     validate={required()}
                 />
-                <TextInput source="registrationLink" label="Ссылка на регистрацию" />
             </SimpleForm>
         </Edit>
     )
@@ -138,7 +143,6 @@ export function EventCreate() {
                     ]}
                     validate={required()}
                 />
-                <TextInput source="registrationLink" label="Ссылка на регистрацию" />
             </SimpleForm>
         </Create>
     )

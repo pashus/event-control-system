@@ -5,6 +5,7 @@ import { EventList, EventEdit, EventCreate } from './Events/Events'
 import { UserList, UserEdit, UserCreate } from './Users/Users'
 import { dataProvider } from "../api/data-provider";
 import { MyLayout } from './UI/MyLayout/MyLayout';
+import authProvider from '../api/auth-provider';
 
 const i18nProvider = polyglotI18nProvider(() => russianMessages, 'ru');
 
@@ -12,8 +13,9 @@ function App() {
     return (
         <Admin
             i18nProvider={i18nProvider}
-            dataProvider={dataProvider}
             layout={MyLayout}
+            dataProvider={dataProvider}
+            authProvider={authProvider}
         >
             <Resource
                 name='events' 

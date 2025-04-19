@@ -1,5 +1,7 @@
 import fakeDataProvider from 'ra-data-fakerest';
 
+export const baseFormUrl = 'https://forms.yandex.ru/u/68021be3068ff098e0031717/'
+
 const data = {
     events: [
         {
@@ -9,7 +11,6 @@ const data = {
             location: 'Екатеринбург',
             startTime: '10:00',
             entryType: 'nfc',
-            registrationLink: 'https://forms.yandex.ru/u/68021be3068ff098e0031717/'
         },
         {
             id: 2,
@@ -18,7 +19,6 @@ const data = {
             location: 'Екатеринбург',
             startTime: '12:00',
             entryType: 'qr',
-            registrationLink: 'https://forms.yandex.ru/u/ai_hackathon/'
         },
     ],
 
