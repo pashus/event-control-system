@@ -12,20 +12,25 @@ import {
     TopToolbar,
     CreateButton,
     ExportButton,
+    Show,
+    SimpleShowLayout,
+    EmailField,
+    NumberField
 } from 'react-admin';
 import UserImportButton from './UserImportButton';
+import { QRCodeField } from '../QRCodeField/QRCodeField';
 
-function UserListActions(): React.ReactElement {
+function UserListActions() {
     return (
         <TopToolbar>
-            <CreateButton label='Добавить пользователя'/>
+            <CreateButton label='Добавить пользователя' />
             <UserImportButton />
             <ExportButton />
         </TopToolbar>
     );
 }
 
-function UserEditTitle() {
+function UserShowEditTitle() {
     const record = useRecordContext<{ fullName?: string }>();
     return <span>Пользователь {record?.fullName ?? ''}</span>;
 };
@@ -41,19 +46,34 @@ export function UserList() {
                     },
                 }}
             >
-                <TextField source="id" label="ID" />
+                <NumberField source="id" label="ID" />
                 <TextField source="fullName" label="Полное имя" />
                 <TextField source="studyGroup" label="Учебная группа" />
-                <TextField source="email" label="Email-почта" />
+                <EmailField source="email" label="Email-почта" />
                 <TextField source="role" label="Роли" />
+                <QRCodeField source="id" label="QR" />
             </Datagrid>
         </List>
     )
 }
 
+export function UserShow() {
+    return (
+        <Show title={<UserShowEditTitle />}>
+            <SimpleShowLayout>
+                <TextField source="fullName" label="ФИО" />
+                <TextField source="studyGroup" label="Группа" />
+                <EmailField source="email" label="Email" />
+                <TextField source="role" label="Роли" />
+                <QRCodeField source="id" label="QR‑код для входа" />
+            </SimpleShowLayout>
+        </Show>
+    );
+}
+
 export function UserEdit() {
     return (
-        <Edit title={<UserEditTitle />}>
+        <Edit title={<UserShowEditTitle />}>
             <SimpleForm>
                 <TextInput
                     source="fullName"

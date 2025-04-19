@@ -10,7 +10,7 @@ const data = {
             date: '2025-05-20',
             location: 'Екатеринбург',
             startTime: '10:00',
-            entryType: 'nfc',
+            entryType: ['nfc', 'qr'],
         },
         {
             id: 2,
@@ -18,7 +18,7 @@ const data = {
             date: '2025-06-15',
             location: 'Екатеринбург',
             startTime: '12:00',
-            entryType: 'qr',
+            entryType: ['qr'],
         },
     ],
 

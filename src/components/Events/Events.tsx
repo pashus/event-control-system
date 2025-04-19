@@ -10,13 +10,12 @@ import {
     TextInput,
     DateInput,
     Create,
-    SelectInput,
     FunctionField,
-    TimeInput,
     TopToolbar,
     ExportButton,
     CreateButton,
-    NumberField
+    NumberField,
+    CheckboxGroupInput
 } from 'react-admin';
 import { baseFormUrl } from '../../api/data-provider';
 
@@ -91,12 +90,12 @@ export function EventEdit() {
                     label="Место проведения" 
                     validate={required()}
                 />
-                <TimeInput 
+                <TextInput  
                     source="startTime" 
                     label="Время начала" 
                     validate={required()}
                 />
-                <SelectInput
+                <CheckboxGroupInput
                     source="entryType"
                     label="Тип входа"
                     choices={[
@@ -129,12 +128,12 @@ export function EventCreate() {
                     label="Место проведения" 
                     validate={required()}
                 />
-                <TimeInput 
+                <TextInput  
                     source="startTime" 
                     label="Время начала" 
                     validate={required()}
                 />
-                <SelectInput
+                <CheckboxGroupInput
                     source="entryType"
                     label="Тип входа"
                     choices={[

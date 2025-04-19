@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 import UploadIcon from '@mui/icons-material/UploadFile';
 
-const UserImportButton: React.FC = () => {
+function UserImportButton() {
     const [open, setOpen] = useState(false);
     const [fileError, setFileError] = useState<string | null>(null);
     const dataProvider = useDataProvider();
@@ -93,6 +93,6 @@ const UserImportButton: React.FC = () => {
             </Dialog>
         </>
     );
-};
+}
 
 export default UserImportButton;
