@@ -20,6 +20,14 @@ const data = {
             startTime: '12:00',
             entryType: ['qr'],
         },
+        {
+            id: 3,
+            name: 'Безимени',
+            date: '2025-02-12',
+            location: 'Екатеринбург',
+            startTime: '16:00',
+            entryType: ['qr'],
+        },
     ],
 
     users: [
@@ -28,6 +36,20 @@ const data = {
             fullName: 'Мартынов Павел Максимович',
             studyGroup: 'РИ-230948',
             email: '25pashok@mail.ru',
+            roles: [
+                { eventId: 1, roles: ['участник', 'куратор'] },
+                { eventId: 2, roles: ['организатор'] },
+            ]
+        },
+        {
+            id: 2,
+            fullName: 'Иваныч',
+            studyGroup: 'РИ-45124',
+            email: '123',
+            roles: [
+                { eventId: 3, roles: ['участник'] },
+                { eventId: 1, roles: ['участник'] }
+            ]
         }
     ]
 };

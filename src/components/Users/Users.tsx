@@ -15,7 +15,14 @@ import {
     Show,
     SimpleShowLayout,
     EmailField,
-    NumberField
+    NumberField,
+    ArrayField,
+    FunctionField,
+    ReferenceField,
+    ArrayInput,
+    SimpleFormIterator,
+    CheckboxGroupInput,
+    ReferenceInput
 } from 'react-admin';
 import UserImportButton from './UserImportButton';
 import { QRCodeField } from '../QRCodeField/QRCodeField';
@@ -39,18 +46,12 @@ export function UserList() {
     return (
         <List actions={<UserListActions />} title="Пользователи" perPage={50}>
             <Datagrid
-                sx={{
-                    '& .MuiTableCell-root': {
-                        paddingTop: '16px',
-                        paddingBottom: '16px',
-                    },
-                }}
+                size='medium'
             >
                 <NumberField source="id" label="ID" />
                 <TextField source="fullName" label="Полное имя" />
                 <TextField source="studyGroup" label="Учебная группа" />
                 <EmailField source="email" label="Email-почта" />
-                <TextField source="role" label="Роли" />
                 <QRCodeField source="id" label="QR" />
             </Datagrid>
         </List>
@@ -64,7 +65,18 @@ export function UserShow() {
                 <TextField source="fullName" label="ФИО" />
                 <TextField source="studyGroup" label="Группа" />
                 <EmailField source="email" label="Email" />
-                <TextField source="role" label="Роли" />
+                <ArrayField source="roles" label="Роли на мероприятиях">
+                    <Datagrid bulkActionButtons={false} rowClick={false}>
+                        <ReferenceField source="eventId" reference="events" label="Мероприятие">
+                            <TextField source="name" />
+                        </ReferenceField>
+                        <FunctionField
+                            source="roles"
+                            label="Роли"
+                            render={record => record.roles.join(', ')}
+                        />
+                    </Datagrid>
+                </ArrayField>
                 <QRCodeField source="id" label="QR‑код для входа" />
             </SimpleShowLayout>
         </Show>
@@ -90,14 +102,27 @@ export function UserEdit() {
                     label="Email-почта"
                     validate={required()}
                 />
-                <SelectInput
-                    source="role"
-                    label="Роли"
-                    choices={[
-                        { id: 'admin', name: 'Admin' },
-                        { id: 'user', name: 'User' },
-                    ]}
-                />
+                <ArrayInput source="roles" label="Роли пользователя">
+                    <SimpleFormIterator>
+                        <ReferenceInput
+                            source="eventId"
+                            reference="events"
+                            label="Мероприятие"
+                        >
+                            <SelectInput validate={required()} label="Выберите мероприятие" optionText="name" />
+                        </ReferenceInput>
+                        <CheckboxGroupInput
+                            source="roles"
+                            label="Роли"
+                            choices={[
+                                { id: 'участник', name: 'Участник' },
+                                { id: 'организатор', name: 'Организатор' },
+                                { id: 'куратор', name: 'Куратор' },
+                            ]}
+                            validate={required()}
+                        />
+                    </SimpleFormIterator>
+                </ArrayInput>
             </SimpleForm>
         </Edit>
     )
@@ -122,14 +147,27 @@ export function UserCreate() {
                     label="Email-почта"
                     validate={required()}
                 />
-                <SelectInput
-                    source="role"
-                    label="Роли"
-                    choices={[
-                        { id: 'admin', name: 'Admin' },
-                        { id: 'user', name: 'User' },
-                    ]}
-                />
+                <ArrayInput source="roles" label="Роли пользователя">
+                    <SimpleFormIterator>
+                        <ReferenceInput
+                            source="eventId"
+                            reference="events"
+                            label="Мероприятие"
+                        >
+                            <SelectInput validate={required()} label="Выберите мероприятие" optionText="name" />
+                        </ReferenceInput>
+                        <CheckboxGroupInput
+                            source="roles"
+                            label="Роли"
+                            choices={[
+                                { id: 'участник', name: 'Участник' },
+                                { id: 'организатор', name: 'Организатор' },
+                                { id: 'куратор', name: 'Куратор' },
+                            ]}
+                            validate={required()}
+                        />
+                    </SimpleFormIterator>
+                </ArrayInput>
             </SimpleForm>
         </Create>
     )

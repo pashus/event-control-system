@@ -15,7 +15,9 @@ import {
     ExportButton,
     CreateButton,
     NumberField,
-    CheckboxGroupInput
+    CheckboxGroupInput,
+    Show,
+    SimpleShowLayout,
 } from 'react-admin';
 import { baseFormUrl } from '../../api/data-provider';
 
@@ -37,12 +39,7 @@ export function EventList() {
     return (
         <List actions={<EventListActions />} title="Мероприятия">
             <Datagrid
-                sx={{
-                    '& .MuiTableCell-root': {
-                        paddingTop: '16px',
-                        paddingBottom: '16px',
-                    },
-                }}
+                size='medium'
             >
                 <NumberField source="id" label="ID"  />
                 <TextField source="name" label="Название мероприятия"  />
@@ -69,6 +66,35 @@ export function EventList() {
             </Datagrid>
         </List>
     )
+}
+
+export function EventShow() {
+    return (
+        <Show title={<EventEditTitle />}>
+            <SimpleShowLayout>
+            <TextField source="name" label="Название мероприятия"  />
+                <DateField source="date" label="Дата" />
+                <TextField source="location" label="Место проведения" />
+                <TextField source="startTime" label="Время начала" />
+                <TextField source="entryType" label="Тип входа" />
+                <FunctionField
+                    label="Регистрация"
+                    render={record => {
+                        const url = `${baseFormUrl}?eventId=${record.id}`;
+                        return (
+                            <a 
+                                href={url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                {url}
+                            </a>
+                        );
+                    }}
+                />
+            </SimpleShowLayout>
+        </Show>
+    );
 }
 
 export function EventEdit() {

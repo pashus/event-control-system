@@ -1,7 +1,7 @@
 import russianMessages from 'ra-language-russian';
 import polyglotI18nProvider from 'ra-i18n-polyglot';
 import { Admin, Resource } from "react-admin";
-import { EventList, EventEdit, EventCreate } from './Events/Events'
+import { EventList, EventEdit, EventCreate, EventShow } from './Events/Events'
 import { UserList, UserEdit, UserCreate, UserShow } from './Users/Users'
 import { dataProvider } from "../api/data-provider";
 import { MyLayout } from './UI/MyLayout/MyLayout';
@@ -20,6 +20,7 @@ function App() {
             <Resource
                 name='events' 
                 list={EventList} 
+                show={EventShow}
                 edit={EventEdit} 
                 create={EventCreate}
             />
