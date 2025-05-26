@@ -8,30 +8,18 @@ import {
     SimpleForm,
     TextInput,
     Create,
-    SelectInput,
     TopToolbar,
     CreateButton,
     ExportButton,
     Show,
     SimpleShowLayout,
-    EmailField,
     NumberField,
-    ArrayField,
-    FunctionField,
-    ReferenceField,
-    ArrayInput,
-    SimpleFormIterator,
-    CheckboxGroupInput,
-    ReferenceInput
 } from 'react-admin';
-import UserImportButton from './UserImportButton';
-import { QRCodeField } from '../QRCodeField/QRCodeField';
 
 function UserListActions() {
     return (
         <TopToolbar>
             <CreateButton label='Добавить пользователя' />
-            <UserImportButton />
             <ExportButton />
         </TopToolbar>
     );
@@ -48,11 +36,8 @@ export function UserList() {
             <Datagrid
                 size='medium'
             >
-                <NumberField source="id" label="ID" />
-                <TextField source="fullName" label="Полное имя" />
-                <TextField source="studyGroup" label="Учебная группа" />
-                <EmailField source="email" label="Email-почта" />
-                <QRCodeField source="id" label="QR" />
+                <TextField source="id" label="ID" />
+                <TextField source="username" label="Имя" />
             </Datagrid>
         </List>
     )
@@ -62,22 +47,7 @@ export function UserShow() {
     return (
         <Show title={<UserShowEditTitle />}>
             <SimpleShowLayout>
-                <TextField source="fullName" label="ФИО" />
-                <TextField source="studyGroup" label="Группа" />
-                <EmailField source="email" label="Email" />
-                <ArrayField source="roles" label="Роли на мероприятиях">
-                    <Datagrid bulkActionButtons={false} rowClick={false}>
-                        <ReferenceField source="eventId" reference="events" label="Мероприятие">
-                            <TextField source="name" />
-                        </ReferenceField>
-                        <FunctionField
-                            source="roles"
-                            label="Роли"
-                            render={record => record.roles.join(', ')}
-                        />
-                    </Datagrid>
-                </ArrayField>
-                <QRCodeField source="id" label="QR‑код для входа" />
+                <TextField source="username" label="Имя" />
             </SimpleShowLayout>
         </Show>
     );
@@ -88,41 +58,10 @@ export function UserEdit() {
         <Edit title={<UserShowEditTitle />}>
             <SimpleForm>
                 <TextInput
-                    source="fullName"
-                    label="Полное имя"
+                    source="username"
+                    label="Имя"
                     validate={required()}
                 />
-                <TextInput
-                    source="studyGroup"
-                    label="Учебная группа"
-                    validate={required()}
-                />
-                <TextInput
-                    source="email"
-                    label="Email-почта"
-                    validate={required()}
-                />
-                <ArrayInput source="roles" label="Роли пользователя">
-                    <SimpleFormIterator>
-                        <ReferenceInput
-                            source="eventId"
-                            reference="events"
-                            label="Мероприятие"
-                        >
-                            <SelectInput validate={required()} label="Выберите мероприятие" optionText="name" />
-                        </ReferenceInput>
-                        <CheckboxGroupInput
-                            source="roles"
-                            label="Роли"
-                            choices={[
-                                { id: 'участник', name: 'Участник' },
-                                { id: 'организатор', name: 'Организатор' },
-                                { id: 'куратор', name: 'Куратор' },
-                            ]}
-                            validate={required()}
-                        />
-                    </SimpleFormIterator>
-                </ArrayInput>
             </SimpleForm>
         </Edit>
     )
@@ -133,44 +72,16 @@ export function UserCreate() {
         <Create redirect="list" title="Добавить пользователя">
             <SimpleForm>
                 <TextInput
-                    source="fullName"
+                    source="username"
                     label="Полное имя"
                     validate={required()}
                 />
                 <TextInput
-                    source="studyGroup"
-                    label="Учебная группа"
+                    source="password"
+                    label="Пароль"
                     validate={required()}
                 />
-                <TextInput
-                    source="email"
-                    label="Email-почта"
-                    validate={required()}
-                />
-                <ArrayInput source="roles" label="Роли пользователя">
-                    <SimpleFormIterator>
-                        <ReferenceInput
-                            source="eventId"
-                            reference="events"
-                            label="Мероприятие"
-                        >
-                            <SelectInput validate={required()} label="Выберите мероприятие" optionText="name" />
-                        </ReferenceInput>
-                        <CheckboxGroupInput
-                            source="roles"
-                            label="Роли"
-                            choices={[
-                                { id: 'участник', name: 'Участник' },
-                                { id: 'организатор', name: 'Организатор' },
-                                { id: 'куратор', name: 'Куратор' },
-                            ]}
-                            validate={required()}
-                        />
-                    </SimpleFormIterator>
-                </ArrayInput>
             </SimpleForm>
         </Create>
     )
 }
-
-

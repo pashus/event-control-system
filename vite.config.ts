@@ -10,7 +10,7 @@ export default defineConfig(({ mode }) => ({
     // Добавляем прокси для API
     proxy: {
       '/api': {
-        target: 'http://127.0.0.1:8000', // Ваш бэкенд-адрес
+        target: 'http://127.0.0.1:8000', 
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '/api/v1'), // Переписываем путь
         secure: false, // Для локального HTTPS (если нужно)

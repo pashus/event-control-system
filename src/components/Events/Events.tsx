@@ -4,22 +4,22 @@ import {
     List,
     Datagrid,
     TextField,
-    DateField,
     Edit,
     SimpleForm,
     TextInput,
-    DateInput,
     Create,
-    FunctionField,
     TopToolbar,
     ExportButton,
     CreateButton,
     NumberField,
-    CheckboxGroupInput,
     Show,
     SimpleShowLayout,
-    TimeInput
+    Button,
+    Link,
+    DateTimeInput,
+    DateField,
 } from 'react-admin';
+import { useParams } from 'react-router';
 
 function EventListActions(): React.ReactElement {
     return (
@@ -41,11 +41,11 @@ export function EventList() {
             <Datagrid
                 size='medium'
             >
-                <NumberField source="id" label="ID"  />
-                <TextField source="name" label="Название мероприятия"  />
-                <TextField source='description' label="Описание" />
-                <TextField source="startTime" label="Время начала" />
-                <TextField source="entryType" label="Тип входа" />
+                <NumberField source="id" label="ID" />
+                <TextField source="name" label="Название мероприятия" />
+                <TextField source="description" label="Описание" />
+                <DateField source="start_time" label="Время начала" showTime />
+                <DateField source="end_time" label="Время окончания" showTime />
                 <TextField source="location" label="Место проведения" />
             </Datagrid>
         </List>
@@ -53,18 +53,33 @@ export function EventList() {
 }
 
 export function EventShow() {
+    const record = useRecordContext();
+    const params = useParams();
+    const eventId = params.id;
+
+    if (!eventId) return <div>Мероприятие не найдено</div>;
+
     return (
-        <Show title={<EventEditTitle />}>
+        <Show>
             <SimpleShowLayout>
-            <TextField source="name" label="Название мероприятия"  />
-                <DateField source="date" label="Дата" />
-                <TextField source="location" label="Место проведения" />
-                <TextField source="startTime" label="Время начала" />
-                <TextField source="entryType" label="Тип входа" />
+                <TextField source="name" label="Название" />
+                <TextField source="description" label="Описание" />
+                <DateField source="start_time" label="Начало" showTime />
+                <DateField source="end_time" label="Окончание" showTime />
+                <TextField source="location" label="Место" />
+                
+                <Button
+                    component={Link}
+                    to={`/events/${eventId}/players`}
+                    label="Участники"
+                    sx={{ marginTop: 2 }}
+                />
             </SimpleShowLayout>
         </Show>
     );
 }
+
+
 
 export function EventEdit() {
     return (
@@ -80,28 +95,21 @@ export function EventEdit() {
                     label="Описание" 
                     validate={required()} 
                 />
-                <TimeInput  
-                    source="startTime" 
+                <DateTimeInput  
+                    source="start_time" 
                     label="Время начала" 
                     validate={required()}
+                    parse={value => value ? new Date(value).toISOString() : null}
                 />
-                <TimeInput  
-                    source="endTime" 
-                    label="Время конца" 
+                <DateTimeInput  
+                    source="end_time" 
+                    label="Время окончания" 
                     validate={required()}
+                    parse={value => value ? new Date(value).toISOString() : null}
                 />
                 <TextInput 
                     source="location" 
                     label="Место проведения" 
-                    validate={required()}
-                />
-                <CheckboxGroupInput
-                    source="entryType"
-                    label="Тип входа"
-                    choices={[
-                        { id: 'qr', name: 'QR' },
-                        { id: 'nfc', name: 'NFC' },
-                    ]}
                     validate={required()}
                 />
             </SimpleForm>
@@ -123,28 +131,21 @@ export function EventCreate() {
                     label="Описание" 
                     validate={required()} 
                 />
-                <TimeInput
-                    source="startTime" 
+                <DateTimeInput  
+                    source="start_time" 
                     label="Время начала" 
                     validate={required()}
+                    parse={value => value ? new Date(value).toISOString() : null}
                 />
-                <TimeInput
-                    source="endTime" 
-                    label="Время конца" 
+                <DateTimeInput  
+                    source="end_time" 
+                    label="Время окончания" 
                     validate={required()}
+                    parse={value => value ? new Date(value).toISOString() : null}
                 />
                 <TextInput 
                     source="location" 
                     label="Место проведения" 
-                    validate={required()}
-                />
-                <CheckboxGroupInput
-                    source="entryType"
-                    label="Тип входа"
-                    choices={[
-                        { id: 'qr', name: 'QR' },
-                        { id: 'nfc', name: 'NFC' },
-                    ]}
                     validate={required()}
                 />
             </SimpleForm>

@@ -6,7 +6,9 @@ import { UserList, UserEdit, UserCreate, UserShow } from './Users/Users'
 import { dataProvider } from "../api/data-provider";
 import { MyLayout } from './UI/MyLayout/MyLayout';
 import authProvider from '../api/auth-provider';
-
+import { PlayerList, PlayerShow, PlayerCreate, PlayerEdit } from './Players/Players';
+import { Route } from 'react-router';
+import EventPlayersList from './Events/EventPlayersList';
 const i18nProvider = polyglotI18nProvider(() => russianMessages, 'ru');
 
 function App() {
@@ -31,6 +33,15 @@ function App() {
                 edit={UserEdit} 
                 create={UserCreate}
             />
+            <Resource
+                name="events/:id/players"
+                list={PlayerList}
+                create={PlayerCreate}
+                edit={PlayerEdit}
+                show={PlayerShow}
+                options={{ label: 'Участники' }}
+            />
+
         </Admin>
     )
 }
