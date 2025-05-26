@@ -18,8 +18,8 @@ import {
     CheckboxGroupInput,
     Show,
     SimpleShowLayout,
+    TimeInput
 } from 'react-admin';
-import { baseFormUrl } from '../../api/data-provider';
 
 function EventListActions(): React.ReactElement {
     return (
@@ -43,26 +43,10 @@ export function EventList() {
             >
                 <NumberField source="id" label="ID"  />
                 <TextField source="name" label="Название мероприятия"  />
-                <DateField source="date" label="Дата" />
-                <TextField source="location" label="Место проведения" />
+                <TextField source='description' label="Описание" />
                 <TextField source="startTime" label="Время начала" />
                 <TextField source="entryType" label="Тип входа" />
-                <FunctionField
-                    label="Регистрация"
-                    render={record => {
-                        const url = `${baseFormUrl}?eventId=${record.id}`
-                        return (
-                            <a 
-                                href={url} 
-                                target="_blank" 
-                                rel="noopener noreferrer"
-                                onClick={e => e.stopPropagation()}
-                            >
-                                Перейти
-                            </a>
-                        )
-                    }}
-                />
+                <TextField source="location" label="Место проведения" />
             </Datagrid>
         </List>
     )
@@ -77,21 +61,6 @@ export function EventShow() {
                 <TextField source="location" label="Место проведения" />
                 <TextField source="startTime" label="Время начала" />
                 <TextField source="entryType" label="Тип входа" />
-                <FunctionField
-                    label="Регистрация"
-                    render={record => {
-                        const url = `${baseFormUrl}?eventId=${record.id}`;
-                        return (
-                            <a 
-                                href={url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                {url}
-                            </a>
-                        );
-                    }}
-                />
             </SimpleShowLayout>
         </Show>
     );
@@ -106,19 +75,24 @@ export function EventEdit() {
                     label="Название мероприятия" 
                     validate={required()} 
                 />
-                <DateInput 
-                    source="date" 
-                    label="Дата" 
+                <TextInput
+                    source="description" 
+                    label="Описание" 
+                    validate={required()} 
+                />
+                <TimeInput  
+                    source="startTime" 
+                    label="Время начала" 
+                    validate={required()}
+                />
+                <TimeInput  
+                    source="endTime" 
+                    label="Время конца" 
                     validate={required()}
                 />
                 <TextInput 
                     source="location" 
                     label="Место проведения" 
-                    validate={required()}
-                />
-                <TextInput  
-                    source="startTime" 
-                    label="Время начала" 
                     validate={required()}
                 />
                 <CheckboxGroupInput
@@ -144,19 +118,24 @@ export function EventCreate() {
                     label="Название мероприятия" 
                     validate={required()} 
                 />
-                <DateInput 
-                    source="date" 
-                    label="Дата" 
+                <TextInput
+                    source="description" 
+                    label="Описание" 
+                    validate={required()} 
+                />
+                <TimeInput
+                    source="startTime" 
+                    label="Время начала" 
+                    validate={required()}
+                />
+                <TimeInput
+                    source="endTime" 
+                    label="Время конца" 
                     validate={required()}
                 />
                 <TextInput 
                     source="location" 
                     label="Место проведения" 
-                    validate={required()}
-                />
-                <TextInput  
-                    source="startTime" 
-                    label="Время начала" 
                     validate={required()}
                 />
                 <CheckboxGroupInput

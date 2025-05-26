@@ -7,12 +7,19 @@ export default defineConfig(({ mode }) => ({
   plugins: [react()],
   server: {
     host: true,
+    // Добавляем прокси для API
+    proxy: {
+      '/api': {
+        target: 'http://127.0.0.1:8000', // Ваш бэкенд-адрес
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '/api/v1'), // Переписываем путь
+        secure: false, // Для локального HTTPS (если нужно)
+      }
+    }
   },
   build: {
     sourcemap: mode === "development",
   },
-  // This allows to have sourcemaps in production. They are not loaded unless you open the devtools
-  // Remove this line if you don't need to debug react-admin in production
   resolve: { alias: getAliasesToDebugInProduction() },
   base: "/event-control-system/",
 }));
