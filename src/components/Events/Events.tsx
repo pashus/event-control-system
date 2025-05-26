@@ -10,7 +10,6 @@ import {
     TextInput,
     DateInput,
     Create,
-    FunctionField,
     TopToolbar,
     ExportButton,
     CreateButton,
@@ -19,7 +18,6 @@ import {
     Show,
     SimpleShowLayout,
 } from 'react-admin';
-import { baseFormUrl } from '../../api/data-provider';
 
 function EventListActions(): React.ReactElement {
     return (
@@ -43,26 +41,10 @@ export function EventList() {
             >
                 <NumberField source="id" label="ID"  />
                 <TextField source="name" label="Название мероприятия"  />
-                <DateField source="date" label="Дата" />
+                <TextField source="description" label="Описание"  />
+                <TextField source="start_time" label="Время начала" />
+                <TextField source="end_time" label="Время окончания" />
                 <TextField source="location" label="Место проведения" />
-                <TextField source="startTime" label="Время начала" />
-                <TextField source="entryType" label="Тип входа" />
-                <FunctionField
-                    label="Регистрация"
-                    render={record => {
-                        const url = `${baseFormUrl}?eventId=${record.id}`
-                        return (
-                            <a 
-                                href={url} 
-                                target="_blank" 
-                                rel="noopener noreferrer"
-                                onClick={e => e.stopPropagation()}
-                            >
-                                Перейти
-                            </a>
-                        )
-                    }}
-                />
             </Datagrid>
         </List>
     )
@@ -77,21 +59,6 @@ export function EventShow() {
                 <TextField source="location" label="Место проведения" />
                 <TextField source="startTime" label="Время начала" />
                 <TextField source="entryType" label="Тип входа" />
-                <FunctionField
-                    label="Регистрация"
-                    render={record => {
-                        const url = `${baseFormUrl}?eventId=${record.id}`;
-                        return (
-                            <a 
-                                href={url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                {url}
-                            </a>
-                        );
-                    }}
-                />
             </SimpleShowLayout>
         </Show>
     );
@@ -144,28 +111,24 @@ export function EventCreate() {
                     label="Название мероприятия" 
                     validate={required()} 
                 />
-                <DateInput 
-                    source="date" 
-                    label="Дата" 
+                <TextInput
+                    source="description" 
+                    label="Описание" 
+                    validate={required()} 
+                />
+                <TextInput  
+                    source="start_time" 
+                    label="Время начала" 
+                    validate={required()}
+                />
+                <TextInput  
+                    source="end_time" 
+                    label="Время окончания" 
                     validate={required()}
                 />
                 <TextInput 
                     source="location" 
                     label="Место проведения" 
-                    validate={required()}
-                />
-                <TextInput  
-                    source="startTime" 
-                    label="Время начала" 
-                    validate={required()}
-                />
-                <CheckboxGroupInput
-                    source="entryType"
-                    label="Тип входа"
-                    choices={[
-                        { id: 'qr', name: 'QR' },
-                        { id: 'nfc', name: 'NFC' },
-                    ]}
                     validate={required()}
                 />
             </SimpleForm>

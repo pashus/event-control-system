@@ -1,29 +1,54 @@
-type TAuth = {
-    username: string;
-    password?: string;
-}
+const API_URL = 'http://127.0.0.1:8000/api/v1';
 
 const authProvider = {
-    login: ({ username }: TAuth) => {
-        localStorage.setItem('username', username);
+    login: async ({ username, password }: { username: string; password: string }) => {
+        const request = new Request(`${API_URL}/token/login/`, {
+            method: 'POST',
+            body: JSON.stringify({ username, password }),
+            headers: new Headers({ 'Content-Type': 'application/json' }),
+        });
+
+        const response = await fetch(request);
+        if (!response.ok) {
+            throw new Error('Ошибка авторизации');
+        }
+
+        const data = await response.json();
+        localStorage.setItem('token', data.auth_token);
         return Promise.resolve();
     },
-    logout: () => {
-        localStorage.removeItem('username');
+
+    logout: async () => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            await fetch(`${API_URL}/token/logout/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Token ${token}`,
+                },
+            });
+        }
+        localStorage.removeItem('token');
         return Promise.resolve();
     },
-    checkAuth: () => {
-        return localStorage.getItem('username')
-            ? Promise.resolve()
-            : Promise.reject();
+
+    checkAuth: async () => {
+        return localStorage.getItem('token') ? Promise.resolve() : Promise.reject();
     },
-    checkError: (error: any) => {
-        return Promise.resolve(); 
+
+    checkError: async (error: any) => {
+        const status = error.status;
+        if (status === 401 || status === 403) {
+            localStorage.removeItem('token');
+            return Promise.reject();
+        }
+        return Promise.resolve();
     },
-    getPermissions: () => {
-        const username = localStorage.getItem('username');
-        return Promise.resolve(username === 'admin' ? 'admin' : 'user');
-    },
+
+    getPermissions: async () => Promise.resolve(),
+
+    getIdentity: async () => Promise.resolve({ id: 'admin', fullName: 'Admin' }),
 };
 
 export default authProvider;
