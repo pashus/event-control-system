@@ -39,7 +39,7 @@ const PlayerListActions = () => {
     );
 };
 
-// Список участников
+
 // export const PlayerList = () => {
 //     const { id: eventId } = useParams();
 //     const { data, isLoading } = useGetList('event_players', {
@@ -104,7 +104,7 @@ export const PlayerList = () => {
     if (isLoading) return <div>Загрузка...</div>;
     if (!eventId) return <div>Мероприятие не найдено</div>;
 
-    // Объединяем серверных и локальных игроков
+
     const allPlayers = [...(data || []), ...localPlayers];
 
     return (
@@ -137,7 +137,7 @@ export const PlayerList = () => {
     );
 };
 
-// Создание участника
+
 export const PlayerCreate = () => {
     const { id: eventId } = useParams();
     const notify = useNotify();
@@ -170,7 +170,7 @@ export const PlayerCreate = () => {
     );
 };
 
-// Просмотр участника
+
 export const PlayerShow = () => {
     return (
         <Show>

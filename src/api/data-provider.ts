@@ -18,7 +18,6 @@ const httpClient = (url: string, options: any = {}) => {
 
 export const dataProvider: DataProvider = {
     getList: (resource, params) => {
-        // Обработка участников мероприятия
         if (resource === 'event_players') {
             const eventId = params.filter?.event_id;
             if (!eventId) return Promise.resolve({ data: [], total: 0 });
@@ -30,7 +29,6 @@ export const dataProvider: DataProvider = {
         }));
     }
 
-        // Стандартная обработка
         const url = `${API_URL}/${resource}/`;
         return httpClient(url).then(({ json }) => ({
             data: json,
@@ -65,7 +63,6 @@ export const dataProvider: DataProvider = {
         }).then(({ json }) => ({ data: json })),
 
     create: (resource, params) => {
-        // Обработка создания участника
             if (resource === 'event_players') {
             const eventId = params.data.event_id;
             const url = `${API_URL}/events/${eventId}/players/`;
@@ -79,7 +76,6 @@ export const dataProvider: DataProvider = {
                 }),
             }).then(({ json }) => ({ data: json }));
         }
-        // Стандартное создание для других ресурсов
         return httpClient(`${API_URL}/${resource}/`, {
             method: 'POST',
             body: JSON.stringify(params.data),
@@ -133,6 +129,6 @@ export const getEventPlayers = async (eventId: string) => {
     const json = await response.json();
     return json.map((player: any) => ({
         ...player,
-        id: player.id, // RA требует поле id
+        id: player.id, 
     }));
 };
