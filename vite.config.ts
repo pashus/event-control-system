@@ -57,5 +57,6 @@ function getAliasesToDebugInProduction() {
     replacement: path.resolve(__dirname, "./node_modules/ra-language-russian/src"),
   },
   // add any other react-admin packages you have
+  
 ];
 }

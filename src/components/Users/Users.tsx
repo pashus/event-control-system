@@ -15,6 +15,10 @@ import {
     SimpleShowLayout,
     NumberField,
 } from 'react-admin';
+<<<<<<< HEAD
+=======
+import { QRCodeField } from '../QRCodeField/QRCodeField';
+>>>>>>> backend_recovery
 
 function UserListActions() {
     return (
@@ -36,7 +40,11 @@ export function UserList() {
             <Datagrid
                 size='medium'
             >
+<<<<<<< HEAD
                 <TextField source="id" label="ID" />
+=======
+                <NumberField source="id" label="ID" />
+>>>>>>> backend_recovery
                 <TextField source="username" label="Имя" />
             </Datagrid>
         </List>

@@ -16,7 +16,7 @@ function App() {
         <Admin
             i18nProvider={i18nProvider}
             layout={MyLayout}
-            dataProvider={dataProvider}
+            dataProvider={dataProvider} 
             authProvider={authProvider}
         >
             <Resource
