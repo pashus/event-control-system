@@ -24,3 +24,32 @@ npm run dev
 npm run build
 ```
 
+## Запуск локального сервера
+
+1. Распаковать архив
+2. На компьютере должен быть установлен MySQL
+3. Запустить create_db 1 и 2, предварительно указав в них свой логин и пароль от подключения к MySQL, а также установив mysql-connector-python
+
+```sh
+pip install mysql-connector-python
+```
+
+4. В файле EventControlUrFU\eventDB\eventDB.py тоже прописать логин и пароль
+5. В командной строке перейти в папку с ProjectUrFU
+6. Прописать в cmd следующую команду:
+
+```sh
+python -m venv venv && .\venv\Scripts\activate.bat && python.exe -m pip install --upgrade pip && pip install -r requirements.txt
+```
+
+7. Перейти в папку проекта в командной строке
+
+```sh
+cd EventControlUrFU
+```
+
+8. Запустить бэк
+
+```sh
+python manage.py runserver
+```
