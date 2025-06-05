@@ -1,11 +1,11 @@
 import russianMessages from "ra-language-russian";
 import polyglotI18nProvider from "ra-i18n-polyglot";
 import { Admin, Resource } from "react-admin";
-import { EventList, EventEdit, EventCreate, EventShow } from "./Events/Events";
-import { UserList, UserEdit, UserCreate, UserShow } from "./Users/Users";
-import { dataProvider } from "../api/data-provider";
-import { MyLayout } from "./UI/MyLayout/MyLayout";
-import authProvider from "../api/auth-provider";
+import { EventList, EventEdit, EventCreate, EventShow } from "../Events/Events";
+import { UserList, UserEdit, UserCreate, UserShow } from "../Users/Users";
+import { dataProvider } from "../../api/data-provider";
+import { MyLayout } from "../UI/MyLayout/MyLayout";
+import authProvider from "../../api/auth-provider";
 
 const i18nProvider = polyglotI18nProvider(() => russianMessages, "ru");
 

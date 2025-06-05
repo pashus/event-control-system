@@ -8,23 +8,12 @@ import {
   SimpleForm,
   TextInput,
   Create,
-  SelectInput,
   TopToolbar,
   CreateButton,
   ExportButton,
   Show,
   SimpleShowLayout,
-  EmailField,
-  NumberField,
-  ArrayField,
-  FunctionField,
-  ReferenceField,
-  ArrayInput,
-  SimpleFormIterator,
-  CheckboxGroupInput,
-  ReferenceInput,
 } from "react-admin";
-import { QRCodeField } from "../QRCodeField/QRCodeField";
 
 function UserListActions() {
   return (
@@ -44,7 +33,7 @@ export function UserList() {
   return (
     <List actions={<UserListActions />} title="Пользователи" perPage={50}>
       <Datagrid size="medium">
-        <NumberField source="id" label="ID" />
+        <TextField source="id" label="ID" />
         <TextField source="username" label="Имя" />
       </Datagrid>
     </List>

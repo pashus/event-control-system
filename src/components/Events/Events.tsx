@@ -13,11 +13,12 @@ import {
   TopToolbar,
   ExportButton,
   CreateButton,
-  NumberField,
   CheckboxGroupInput,
   Show,
   SimpleShowLayout,
+  DateTimeInput,
 } from "react-admin";
+import { timeOptions } from "../../constants/constants";
 
 function EventListActions(): React.ReactElement {
   return (
@@ -37,11 +38,21 @@ export function EventList() {
   return (
     <List actions={<EventListActions />} title="Мероприятия">
       <Datagrid size="medium">
-        <NumberField source="id" label="ID" />
+        <TextField source="id" label="ID" />
         <TextField source="name" label="Название мероприятия" />
         <TextField source="description" label="Описание" />
-        <TextField source="start_time" label="Время начала" />
-        <TextField source="end_time" label="Время окончания" />
+        <DateField
+          source="start_time"
+          label="Время начала"
+          showTime
+          options={timeOptions}
+        />
+        <DateField
+          source="end_time"
+          label="Время окончания"
+          showTime
+          options={timeOptions}
+        />
         <TextField source="location" label="Место проведения" />
       </Datagrid>
     </List>
@@ -53,10 +64,20 @@ export function EventShow() {
     <Show title={<EventEditTitle />}>
       <SimpleShowLayout>
         <TextField source="name" label="Название мероприятия" />
-        <DateField source="date" label="Дата" />
+        <TextField source="description" label="Описание" />
+        <DateField
+          source="start_time"
+          label="Время начала"
+          showTime
+          options={timeOptions}
+        />
+        <DateField
+          source="end_time"
+          label="Время окончания"
+          showTime
+          options={timeOptions}
+        />
         <TextField source="location" label="Место проведения" />
-        <TextField source="startTime" label="Время начала" />
-        <TextField source="entryType" label="Тип входа" />
       </SimpleShowLayout>
     </Show>
   );
@@ -72,15 +93,17 @@ export function EventEdit() {
           validate={required()}
         />
         <DateInput source="date" label="Дата" validate={required()} />
-        <TextInput
-          source="location"
-          label="Место проведения"
-          validate={required()}
-        />
-        <TextInput
-          source="startTime"
+        <DateTimeInput
+          source="start_time"
           label="Время начала"
           validate={required()}
+          parse={(value) => (value ? new Date(value).toISOString() : null)}
+        />
+        <DateTimeInput
+          source="end_time"
+          label="Время окончания"
+          validate={required()}
+          parse={(value) => (value ? new Date(value).toISOString() : null)}
         />
         <CheckboxGroupInput
           source="entryType"
@@ -110,15 +133,17 @@ export function EventCreate() {
           label="Описание"
           validate={required()}
         />
-        <TextInput
+        <DateTimeInput
           source="start_time"
           label="Время начала"
           validate={required()}
+          parse={(value) => (value ? new Date(value).toISOString() : null)}
         />
-        <TextInput
+        <DateTimeInput
           source="end_time"
           label="Время окончания"
           validate={required()}
+          parse={(value) => (value ? new Date(value).toISOString() : null)}
         />
         <TextInput
           source="location"
