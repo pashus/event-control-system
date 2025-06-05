@@ -7,7 +7,7 @@ import { dataProvider } from "../../api/data-provider";
 import { MyLayout } from "../UI/MyLayout/MyLayout";
 import authProvider from "../../api/auth-provider";
 import { Route } from "react-router";
-import { EventPlayersList } from "../EventsPlayers/EventsPlayers";
+import { EventPlayersList, PlayerShow } from "../EventsPlayers/EventsPlayers";
 
 const i18nProvider = polyglotI18nProvider(() => russianMessages, "ru");
 
@@ -35,6 +35,10 @@ function App() {
       />
       <CustomRoutes>
         <Route path="/events/:id/players" element={<EventPlayersList />} />
+        <Route
+          path="/events/:id/players/:player_id/show"
+          element={<PlayerShow />}
+        />
       </CustomRoutes>
     </Admin>
   );

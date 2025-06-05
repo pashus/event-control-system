@@ -25,7 +25,6 @@ import { useNavigate } from "react-router";
 const PlayersButton = () => {
   const record = useRecordContext();
   const navigate = useNavigate();
-
   if (!record) return null;
 
   return (
@@ -124,15 +123,6 @@ export function EventEdit() {
           label="Время окончания"
           validate={required()}
           parse={(value) => (value ? new Date(value).toISOString() : null)}
-        />
-        <CheckboxGroupInput
-          source="entryType"
-          label="Тип входа"
-          choices={[
-            { id: "qr", name: "QR" },
-            { id: "nfc", name: "NFC" },
-          ]}
-          validate={required()}
         />
       </SimpleForm>
     </Edit>
