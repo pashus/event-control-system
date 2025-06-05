@@ -3,7 +3,7 @@ import { DataProvider } from "react-admin";
 
 const API_URL = "http://127.0.0.1:8000/api/v1";
 
-const httpClient = (url: string, options: any = {}) => {
+export const httpClient = (url: string, options: any = {}) => {
   if (!options.headers) {
     options.headers = new Headers({ Accept: "application/json" });
   }

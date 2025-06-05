@@ -2,6 +2,7 @@ import {
   required,
   useRecordContext,
   List,
+  Button,
   Datagrid,
   TextField,
   DateField,
@@ -18,7 +19,9 @@ import {
   SimpleShowLayout,
   DateTimeInput,
 } from "react-admin";
+
 import { timeOptions } from "../../constants/constants";
+import { Link } from 'react-router-dom';
 
 function EventListActions(): React.ReactElement {
   return (
@@ -78,6 +81,7 @@ export function EventShow() {
           options={timeOptions}
         />
         <TextField source="location" label="Место проведения" />
+        <ShowButton />
       </SimpleShowLayout>
     </Show>
   );
@@ -154,3 +158,23 @@ export function EventCreate() {
     </Create>
   );
 }
+
+
+
+
+const ShowButton = () => {
+  const record = useRecordContext();
+  if (!record) return null;
+  
+  return (
+    <Button
+      component={Link}
+      to={`/events/${record.id}/players`}
+      label="Участники"
+    />
+  );
+};
+
+
+
+
