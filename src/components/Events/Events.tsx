@@ -19,6 +19,25 @@ import {
   DateTimeInput,
 } from "react-admin";
 import { timeOptions } from "../../constants/constants";
+import { Button } from "@mui/material";
+import { useNavigate } from "react-router";
+
+const PlayersButton = () => {
+  const record = useRecordContext();
+  const navigate = useNavigate();
+
+  if (!record) return null;
+
+  return (
+    <Button
+      variant="contained"
+      color="secondary"
+      onClick={() => navigate(`/events/${record.id}/players`)}
+    >
+      Показать участников
+    </Button>
+  );
+};
 
 function EventListActions(): React.ReactElement {
   return (
@@ -78,6 +97,7 @@ export function EventShow() {
           options={timeOptions}
         />
         <TextField source="location" label="Место проведения" />
+        <PlayersButton />
       </SimpleShowLayout>
     </Show>
   );

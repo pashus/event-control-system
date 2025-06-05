@@ -1,4 +1,4 @@
-const API_URL = "http://127.0.0.1:8000/api/v1";
+const apiUrl = "http://127.0.0.1:8000/api/v1";
 
 const authProvider = {
   login: async ({
@@ -8,7 +8,7 @@ const authProvider = {
     username: string;
     password: string;
   }) => {
-    const request = new Request(`${API_URL}/token/login/`, {
+    const request = new Request(`${apiUrl}/token/login/`, {
       method: "POST",
       body: JSON.stringify({ username, password }),
       headers: new Headers({ "Content-Type": "application/json" }),
@@ -28,7 +28,7 @@ const authProvider = {
   logout: async () => {
     const token = localStorage.getItem("token");
     if (token) {
-      await fetch(`${API_URL}/token/logout/`, {
+      await fetch(`${apiUrl}/token/logout/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
