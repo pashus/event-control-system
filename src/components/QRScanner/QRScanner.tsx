@@ -41,24 +41,7 @@ function QRScanner() {
           }, 1000);
         });
       },
-      (err) => {
-        console.log(err);
-        let seconds = 3;
-        setResponse("Ошибка");
-        setCountdown(seconds);
-
-        const interval = setInterval(() => {
-          seconds -= 1;
-          if (seconds === 0) {
-            clearInterval(interval);
-            setCountdown(0);
-            setResponse("");
-            startScanner();
-          } else {
-            setCountdown(seconds);
-          }
-        }, 1000);
-      },
+      () => {},
     );
   };
 
