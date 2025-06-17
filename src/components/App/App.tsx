@@ -8,6 +8,7 @@ import { MyLayout } from "../../UI/MyLayout/MyLayout";
 import authProvider from "../../api/auth-provider";
 import { Route } from "react-router";
 import { EventPlayersList, PlayerShow } from "../EventsPlayers/EventsPlayers";
+import QRScanner from "../QRScanner/QRScanner";
 
 const i18nProvider = polyglotI18nProvider(() => russianMessages, "ru");
 
@@ -39,6 +40,7 @@ function App() {
           path="/events/:id/players/:player_id/show"
           element={<PlayerShow />}
         />
+        <Route path="qr-scanner" element={<QRScanner />} />
       </CustomRoutes>
     </Admin>
   );

@@ -1,6 +1,7 @@
 import { Menu, MenuItemLink } from "react-admin";
 import PeopleIcon from "@mui/icons-material/People";
 import EventIcon from "@mui/icons-material/Event";
+import QrCodeIcon from "@mui/icons-material/QrCode";
 
 export const MyMenu = () => (
   <Menu>
@@ -14,6 +15,12 @@ export const MyMenu = () => (
       to="/users"
       primaryText="Пользователи"
       leftIcon={<PeopleIcon />}
+      sx={{ py: 2 }}
+    />
+    <MenuItemLink
+      to="/qr-scanner"
+      primaryText="QR-Сканер"
+      leftIcon={<QrCodeIcon />}
       sx={{ py: 2 }}
     />
   </Menu>
