@@ -4,7 +4,7 @@ import { Admin, CustomRoutes, Resource } from "react-admin";
 import { EventList, EventEdit, EventCreate, EventShow } from "../Events/Events";
 import { UserList, UserEdit, UserCreate, UserShow } from "../Users/Users";
 import { dataProvider } from "../../api/data-provider";
-import { MyLayout } from "../UI/MyLayout/MyLayout";
+import { MyLayout } from "../../UI/MyLayout/MyLayout";
 import authProvider from "../../api/auth-provider";
 import { Route } from "react-router";
 import { EventPlayersList, PlayerShow } from "../EventsPlayers/EventsPlayers";

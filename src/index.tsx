@@ -2,7 +2,7 @@ import "./styles/index.css";
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import App from "./components/App/App";
-import Loader from "./components/UI/Loader/Loader";
+import Loader from "./UI/Loader/Loader";
 
 const Index = () => {
   const [loading, setLoading] = useState(true);
