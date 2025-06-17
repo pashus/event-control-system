@@ -42,7 +42,9 @@ const authProvider = {
   },
 
   checkAuth: async () => {
-    return localStorage.getItem("token") ? Promise.resolve() : Promise.reject();
+    return localStorage.getItem("token")
+      ? Promise.resolve()
+      : Promise.reject({ redirectTo: "/login" });
   },
 
   checkError: async (error: any) => {
@@ -54,7 +56,7 @@ const authProvider = {
     return Promise.resolve();
   },
 
-  getPermissions: async () => Promise.resolve(),
+  getPermissions: async () => Promise.resolve("admin"),
 
   getIdentity: async () => {
     const username = localStorage.getItem("username");

@@ -9,6 +9,7 @@ import authProvider from "../../api/auth-provider";
 import { Route } from "react-router";
 import { EventPlayersList, PlayerShow } from "../EventsPlayers/EventsPlayers";
 import QRScanner from "../QRScanner/QRScanner";
+import RequireAuth from "../RequireAuth/RequireAuth";
 
 const i18nProvider = polyglotI18nProvider(() => russianMessages, "ru");
 
@@ -35,12 +36,30 @@ function App() {
         create={UserCreate}
       />
       <CustomRoutes>
-        <Route path="/events/:id/players" element={<EventPlayersList />} />
+        <Route
+          path="/events/:id/players"
+          element={
+            <RequireAuth>
+              <EventPlayersList />
+            </RequireAuth>
+          }
+        />
         <Route
           path="/events/:id/players/:player_id/show"
-          element={<PlayerShow />}
+          element={
+            <RequireAuth>
+              <PlayerShow />
+            </RequireAuth>
+          }
         />
-        <Route path="qr-scanner" element={<QRScanner />} />
+        <Route
+          path="/qr-scanner"
+          element={
+            <RequireAuth>
+              <QRScanner />
+            </RequireAuth>
+          }
+        />
       </CustomRoutes>
     </Admin>
   );

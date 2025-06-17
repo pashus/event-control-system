@@ -16,18 +16,18 @@ import {
   useNotify,
   useRefresh,
 } from "react-admin";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 
 export function EventPlayersList() {
   const { id } = useParams();
-  const { data: event } = useGetOne("events", { id: id ?? "" });
+  const { data: event } = useGetOne("events", { id: id });
 
   if (!id) return null;
 
   return (
     <List
       resource={`events/${id}/players`}
-      title={`Участники мероприятия ${event?.name ?? ""}`}
+      title={`Участники мероприятия ${event?.name}`}
       actions={<PlayersListActions eventId={id} />}
     >
       <Datagrid size="medium" rowClick="show">
@@ -46,6 +46,7 @@ export function PlayerShow() {
   const notify = useNotify();
   const refresh = useRefresh();
   const dataProvider = useDataProvider();
+  const navigate = useNavigate();
   const [loadingCheckIn, setLoadingCheckIn] = useState(false);
 
   const { data: player } = useGetOne(
@@ -63,8 +64,10 @@ export function PlayerShow() {
       });
       notify("Участник отмечен");
       refresh();
+      navigate(-1); //ПОКА ТАК
     } catch (error) {
       notify("Ошибка при отметке", { type: "error" });
+      navigate(-1); //ПОКА ТАК
     } finally {
       setLoadingCheckIn(false);
       refresh();
