@@ -10,6 +10,7 @@ import { Route } from "react-router";
 import { EventPlayersList, PlayerShow } from "../EventsPlayers/EventsPlayers";
 import QRScanner from "../QRScanner/QRScanner";
 import RequireAuth from "../RequireAuth/RequireAuth";
+import { EventRegistrationPage } from "../EventsPlayers/EventPlayersRegistration";
 
 const customRussianMessages = {
   ...russianMessages,
@@ -73,6 +74,10 @@ function App() {
             </RequireAuth>
           }
         />
+        <Route
+          path="/events/:id/registration"
+          element={<EventRegistrationPage />}
+        ></Route>
       </CustomRoutes>
     </Admin>
   );
