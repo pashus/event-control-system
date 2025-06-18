@@ -40,6 +40,29 @@ const PlayersButton = () => {
   );
 };
 
+const RegistrationButton = () => {
+  const record = useRecordContext();
+  const navigate = useNavigate();
+  if (!record) return null;
+
+  return (
+    <Button
+      variant="contained"
+      color="primary"
+      onClick={() => navigate(`/events/${record.id}/registration`)}
+      sx={{ 
+        marginRight: '8px',
+        backgroundColor: '#4caf50', 
+        '&:hover': {
+          backgroundColor: '#388e3c', 
+        }
+      }}
+    >
+      Открыть регистрацию
+    </Button>
+  );
+};
+
 function EventListActions(): React.ReactElement {
   return (
     <TopToolbar>
@@ -99,6 +122,7 @@ export function EventShow() {
         />
         <TextField source="location" label="Место проведения" />
         <PlayersButton />
+        <RegistrationButton />
       </SimpleShowLayout>
     </Show>
   );
