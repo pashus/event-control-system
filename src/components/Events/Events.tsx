@@ -13,7 +13,6 @@ import {
   TopToolbar,
   ExportButton,
   CreateButton,
-  CheckboxGroupInput,
   Show,
   SimpleShowLayout,
   DateTimeInput,
@@ -130,9 +129,47 @@ export function EventEdit() {
 }
 
 export function EventCreate() {
+  const navigate = useNavigate();
+
+  const handleSave = async (values: any) => {
+    try {
+      const settingsParsed = JSON.parse(values.settings);
+
+      const payload = {
+        event_info: {
+          name: values.name,
+          description: values.description,
+          start_time: values.start_time,
+          end_time: values.end_time,
+          location: values.location,
+        },
+        settings: settingsParsed,
+        reg_form: {},
+      };
+      const token = localStorage.getItem("token");
+
+      const response = await fetch("http://127.0.0.1:8000/api/v1/events/new/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Token ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error("Ошибка при создании мероприятия");
+      }
+
+      navigate(-1);
+    } catch (error) {
+      alert("Ошибка: " + (error as Error).message);
+    }
+  };
+
   return (
-    <Create redirect="list" title="Создать мероприятие">
-      <SimpleForm>
+    <Create title="Создать мероприятие">
+      <SimpleForm onSubmit={handleSave}>
         <TextInput
           source="name"
           label="Название мероприятия"
@@ -158,6 +195,12 @@ export function EventCreate() {
         <TextInput
           source="location"
           label="Место проведения"
+          validate={required()}
+        />
+        <TextInput
+          source="settings"
+          label="Настрйоки"
+          multiline
           validate={required()}
         />
       </SimpleForm>

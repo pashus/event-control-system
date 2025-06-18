@@ -44,7 +44,7 @@ export const dataProvider: DataProvider = {
     }));
   },
 
-  getManyReference: (resource, params) => {
+  getManyReference: () => {
     return Promise.resolve({ data: [], total: 0 });
   },
 

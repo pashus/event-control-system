@@ -13,6 +13,7 @@ import {
   ExportButton,
   Show,
   SimpleShowLayout,
+  PasswordInput,
 } from "react-admin";
 
 function UserListActions() {
@@ -25,8 +26,8 @@ function UserListActions() {
 }
 
 function UserShowEditTitle() {
-  const record = useRecordContext<{ fullName?: string }>();
-  return <span>Пользователь {record?.fullName ?? ""}</span>;
+  const record = useRecordContext<{ username?: string }>();
+  return <span>Пользователь {record?.username ?? ""}</span>;
 }
 
 export function UserList() {
@@ -65,7 +66,7 @@ export function UserCreate() {
     <Create redirect="list" title="Добавить пользователя">
       <SimpleForm>
         <TextInput source="username" label="Полное имя" validate={required()} />
-        <TextInput source="password" label="Пароль" validate={required()} />
+        <PasswordInput source="password" label="Пароль" validate={required()} />
       </SimpleForm>
     </Create>
   );

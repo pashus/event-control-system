@@ -11,7 +11,12 @@ import { EventPlayersList, PlayerShow } from "../EventsPlayers/EventsPlayers";
 import QRScanner from "../QRScanner/QRScanner";
 import RequireAuth from "../RequireAuth/RequireAuth";
 
-const i18nProvider = polyglotI18nProvider(() => russianMessages, "ru");
+const customRussianMessages = {
+  ...russianMessages,
+  "Создать мероприятие": "Создать мероприятие",
+  "Добавить пользователя": "Добавить пользователя",
+};
+const i18nProvider = polyglotI18nProvider(() => customRussianMessages, "ru");
 
 function App() {
   return (
