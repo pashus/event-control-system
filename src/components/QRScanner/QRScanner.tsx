@@ -1,11 +1,13 @@
 import { Card, CardContent, Typography } from "@mui/material";
 import { Html5QrcodeScanner } from "html5-qrcode";
 import { useEffect, useState } from "react";
-import { Title } from "react-admin";
+import { Title, useNotify } from "react-admin";
+import { dataProvider } from "../../api/data-provider";
 
 function QRScanner() {
   const [response, setResponse] = useState("");
   const [countdown, setCountdown] = useState(0);
+  const notify = useNotify();
 
   useEffect(() => {
     startScanner();
@@ -22,8 +24,17 @@ function QRScanner() {
     );
 
     scanner.render(
-      () => {
-        setResponse("Успешно");
+      async (decodedText) => {
+        try {
+          await dataProvider.create(decodedText.slice(0, -1), {
+            data: {},
+          });
+          setResponse(`Успешно`);
+          notify("Участник отмечен", { type: "success" });
+        } catch (error: any) {
+          notify(`${error.body.error}`, { type: "error" });
+        }
+
         scanner.clear().then(() => {
           let seconds = 3;
           setCountdown(seconds);

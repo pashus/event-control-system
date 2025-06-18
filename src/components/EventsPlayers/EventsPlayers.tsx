@@ -1,5 +1,5 @@
 import { Box, Dialog, DialogContent, DialogTitle } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   BooleanField,
   Button,
@@ -17,6 +17,8 @@ import {
   useRefresh,
 } from "react-admin";
 import { useNavigate, useParams } from "react-router";
+import { apiUrl } from "../../constants/constants";
+import httpClient from "../../api/httpClient";
 
 const PlayersListActions = ({ eventId }: { eventId: string }) => {
   return (
@@ -56,8 +58,44 @@ export function PlayerShow() {
   const dataProvider = useDataProvider();
   const navigate = useNavigate();
   const [loadingCheckIn, setLoadingCheckIn] = useState(false);
+  const [qrCodeUrl, setQrCodeUrl] = useState("");
 
-  const { data: player } = useGetOne(`events/${id}/players`, { id: player_id });
+  useEffect(() => {
+    const fetchQrCode = async () => {
+      try {
+        const response = await fetch(
+          `${apiUrl}/events/${id}/players/${player_id}/qr-code/`,
+          {
+            headers: {
+              Authorization: `Token ${localStorage.getItem("token")}`,
+              Accept: "image/png",
+            },
+          },
+        );
+        if (!response.ok) throw new Error("Ошибка при получении QR-кода");
+
+        const blob = await response.blob();
+        const imageUrl = URL.createObjectURL(blob);
+        setQrCodeUrl(imageUrl);
+      } catch (error) {
+        notify("Ошибка при получении QR-кода", { type: "error" });
+      }
+    };
+
+    if (id && player_id) {
+      fetchQrCode();
+    }
+  }, [id, player_id]);
+
+  const {
+    data: player,
+    isLoading,
+    error,
+  } = useGetOne(`events/${id}/players`, { id: player_id });
+
+  if (isLoading) return <div>Загрузка...</div>;
+  if (error) return <div>Ошибка при загрузке данных игрока</div>;
+  if (!player) return <div>Игрок не найден</div>;
 
   const handleCheckIn = async () => {
     setLoadingCheckIn(true);
@@ -84,6 +122,15 @@ export function PlayerShow() {
         <TextField source="last_name" label="Фамилия" />
         <TextField source="group_name" label="Группа" />
         <BooleanField source="is_present" label="Был/не был" />
+        {qrCodeUrl && (
+          <Box mt={2}>
+            <img
+              src={qrCodeUrl}
+              alt="QR код участника"
+              style={{ maxWidth: "200px" }}
+            />
+          </Box>
+        )}
         {!player?.is_present && (
           <Button disabled={loadingCheckIn} onClick={handleCheckIn}>
             Отметить присутствие

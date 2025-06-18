@@ -1,7 +1,8 @@
+import { AuthProvider } from "react-admin";
 import { apiUrl } from "../constants/constants";
 import httpClient from "./httpClient";
 
-const authProvider = {
+const authProvider: AuthProvider = {
   login: async ({
     username,
     password,
@@ -16,7 +17,6 @@ const authProvider = {
       });
 
       localStorage.setItem("token", json.auth_token);
-      return Promise.resolve();
     } catch (error) {
       throw new Error("Ошибка авторизации");
     }
@@ -25,50 +25,52 @@ const authProvider = {
   logout: async () => {
     const token = localStorage.getItem("token");
     if (!token) {
-      return Promise.resolve();
+      return;
     }
 
     const { json, status } = await httpClient(`${apiUrl}/token/logout`, {
       method: "POST",
     });
     if (status < 200 || status >= 300) {
-      return Promise.reject();
+      throw new Error();
     }
 
     localStorage.removeItem("token");
-    return Promise.resolve();
   },
 
   checkAuth: async () => {
-    return localStorage.getItem("token") ? Promise.resolve() : Promise.reject();
+    if (localStorage.getItem("token")) {
+      return;
+    }
+    throw new Error();
   },
 
-  checkError: async (error: any) => {
+  checkError: async (error) => {
     const status = error.status;
     if (status === 401 || status === 403) {
       localStorage.removeItem("token");
-      return Promise.reject();
+      throw new Error();
     }
-    return Promise.resolve();
+    return;
   },
 
-  getPermissions: async () => Promise.resolve(),
+  getPermissions: async () => {},
 
   getIdentity: async () => {
     const token = localStorage.getItem("token");
     if (!token) {
-      return Promise.reject();
+      throw new Error();
     }
 
     const { json, status } = await httpClient(`${apiUrl}/users/me/`, {});
     if (status < 200 || status >= 300) {
-      return Promise.reject();
+      throw new Error();
     }
 
-    return Promise.resolve({
+    return {
       id: json.id,
       fullName: json.username,
-    });
+    };
   },
 };
 

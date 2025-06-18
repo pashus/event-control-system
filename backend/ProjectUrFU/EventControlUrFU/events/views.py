@@ -81,7 +81,7 @@ class PlayersView(APIView):
         db.close()
         serializer = PlayerSerializer(instance=data, many=True)
         if len(data) <= 0:
-            return Response({"error": "Участники отсутствуют или в них ошибка!"})
+            return Response([{"error": "Участники отсутствуют или в них ошибка!"}])
         
         try:
             import json
