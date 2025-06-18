@@ -18,6 +18,14 @@ import {
 } from "react-admin";
 import { useNavigate, useParams } from "react-router";
 
+const PlayersListActions = ({ eventId }: { eventId: string }) => {
+  return (
+    <TopToolbar>
+      <AddPlayerButton eventId={eventId} />
+    </TopToolbar>
+  );
+};
+
 export function EventPlayersList() {
   const { id } = useParams();
   const { data: event } = useGetOne("events", { id: id });
@@ -62,15 +70,12 @@ export function PlayerShow() {
       await dataProvider.create(`events/${id}/players/${player_id}/check-in`, {
         data: {},
       });
-      notify("Участник отмечен");
+      notify("Участник отмечен", { type: "success" });
       refresh();
       navigate(-1); //ПОКА ТАК
     } catch (error) {
       notify("Ошибка при отметке", { type: "error" });
       navigate(-1); //ПОКА ТАК
-    } finally {
-      setLoadingCheckIn(false);
-      refresh();
     }
   };
 
@@ -95,14 +100,6 @@ export function PlayerShow() {
   );
 }
 
-const PlayersListActions = ({ eventId }: { eventId: string }) => {
-  return (
-    <TopToolbar>
-      <AddPlayerButton eventId={eventId} />
-    </TopToolbar>
-  );
-};
-
 const AddPlayerButton = ({ eventId }: { eventId: string }) => {
   const [open, setOpen] = useState(false);
   const notify = useNotify();
@@ -119,13 +116,11 @@ const AddPlayerButton = ({ eventId }: { eventId: string }) => {
         },
       });
 
-      notify("Участник успешно добавлен");
+      notify("Участник успешно добавлен", { type: "success" });
       refresh();
-      setOpen(false);
     } catch (error) {
       notify("Ошибка при добавлении участника", { type: "error" });
       refresh();
-      setOpen(false);
     }
   }; //тут пока траблы с сервером, поэтому ошибка, но потом добавляется на самом деле
 
@@ -140,7 +135,9 @@ const AddPlayerButton = ({ eventId }: { eventId: string }) => {
             <TextInput source="last_name" label="Фамилия" />
             <TextInput source="group_name" label="Группа" />
             <Box display="flex" width="100%" justifyContent="space-between">
-              <Button type="submit">Сохранить</Button>
+              <Button onClick={() => setOpen(false)} type="submit">
+                Сохранить
+              </Button>
               <Button onClick={() => setOpen(false)}>Отмена</Button>
             </Box>
           </SimpleForm>

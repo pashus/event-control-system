@@ -31,11 +31,11 @@ class ActivitySerializer(serializers.Serializer):
 class RoleSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     name = serializers.CharField(max_length=50)
-    # act_data = serializers.JSONField()
+    activities_values = serializers.JSONField(required=False)
 
 class PlayerVarsSerializer(serializers.Serializer):
-    player_id = serializers.IntegerField()
-    activity_id = serializers.IntegerField()
+    player_id = serializers.IntegerField(required=False)
+    activity_id = serializers.IntegerField(required=False)
     act_vars = serializers.JSONField()
 
 # вообще не нужный и тупой костыль

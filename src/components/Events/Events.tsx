@@ -16,8 +16,12 @@ import {
   Show,
   SimpleShowLayout,
   DateTimeInput,
+  RadioButtonGroupInput,
+  ArrayInput,
+  SimpleFormIterator,
+  useNotify,
 } from "react-admin";
-import { timeOptions } from "../../constants/constants";
+import { apiUrl, timeOptions } from "../../constants/constants";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router";
 
@@ -133,8 +137,6 @@ export function EventCreate() {
 
   const handleSave = async (values: any) => {
     try {
-      const settingsParsed = JSON.parse(values.settings);
-
       const payload = {
         event_info: {
           name: values.name,
@@ -143,12 +145,28 @@ export function EventCreate() {
           end_time: values.end_time,
           location: values.location,
         },
-        settings: settingsParsed,
+        settings: {
+          has_player_balance: values.has_player_balance,
+          activities: values.activities.map((act: any) => ({
+            name: act.name,
+            act_vars: act.act_vars.map((v: any) => [v.key, v.type]),
+          })),
+          roles: values.roles.map((role: any) => ({
+            name: role.name,
+            activities_values: role.activities_values.map((av: any) => ({
+              name: av.name,
+              act_vars: av.act_vars.map((v: any) => [
+                v.key,
+                JSON.parse(v.value),
+              ]),
+            })),
+          })),
+        },
         reg_form: {},
       };
       const token = localStorage.getItem("token");
 
-      const response = await fetch("http://127.0.0.1:8000/api/v1/events/new/", {
+      const response = await fetch(`${apiUrl}/events/new/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -163,7 +181,7 @@ export function EventCreate() {
 
       navigate(-1);
     } catch (error) {
-      alert("Ошибка: " + (error as Error).message);
+      console.log(error);
     }
   };
 
@@ -197,12 +215,45 @@ export function EventCreate() {
           label="Место проведения"
           validate={required()}
         />
-        <TextInput
-          source="settings"
-          label="Настрйоки"
-          multiline
-          validate={required()}
+        <RadioButtonGroupInput
+          label="Выберите, будет ли у пользователя баланс"
+          source="has_player_balance"
+          choices={[
+            { id: true, name: "Да" },
+            { id: false, name: "Нет" },
+          ]}
         />
+        <ArrayInput source="activities" label="Активности">
+          <SimpleFormIterator>
+            <TextInput source="name" label="Название активности" />
+            <ArrayInput source="act_vars" label="Переменные активности">
+              <SimpleFormIterator>
+                <TextInput source="key" label="Название переменной" />
+                <TextInput source="type" label="Тип (bool или int)" />
+              </SimpleFormIterator>
+            </ArrayInput>
+          </SimpleFormIterator>
+        </ArrayInput>
+
+        <ArrayInput source="roles" label="Роли">
+          <SimpleFormIterator>
+            <TextInput source="name" label="Название роли" />
+            <ArrayInput source="activities_values" label="Значения активностей">
+              <SimpleFormIterator>
+                <TextInput source="name" label="Название активности" />
+                <ArrayInput source="act_vars" label="Значения переменных">
+                  <SimpleFormIterator>
+                    <TextInput source="key" label="Название переменной" />
+                    <TextInput
+                      source="value"
+                      label="Значение (true/false или число)"
+                    />
+                  </SimpleFormIterator>
+                </ArrayInput>
+              </SimpleFormIterator>
+            </ArrayInput>
+          </SimpleFormIterator>
+        </ArrayInput>
       </SimpleForm>
     </Create>
   );

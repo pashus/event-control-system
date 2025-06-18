@@ -8,7 +8,7 @@ const RequireAuth = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     checkAuth({}, false).catch(() => {
-      notify("Пожалуйста, авторизуйтесь для продолжения работы", {
+      notify("Ошибка авторизации", {
         type: "error",
       });
       redirect("/login");

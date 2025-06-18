@@ -1,4 +1,4 @@
-DB_NAME = "testdatabase_v2"
+DB_NAME = "testdatabase_one_more"
 USER = "root"
 HOST = "localhost"
 PASSWD = "0000"
