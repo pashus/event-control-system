@@ -11,6 +11,7 @@ import { EventPlayersList, PlayerShow } from "../EventsPlayers/EventsPlayers";
 import QRScanner from "../QRScanner/QRScanner";
 import RequireAuth from "../RequireAuth/RequireAuth";
 import { EventRegistrationPage } from "../EventsPlayers/EventPlayersRegistration";
+import { EventRegistrationPage } from "../EventsPlayers/EventPlayersRegistration";
 
 const customRussianMessages = {
   ...russianMessages,
