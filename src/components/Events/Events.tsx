@@ -8,7 +8,6 @@ import {
   Edit,
   SimpleForm,
   TextInput,
-  DateInput,
   Create,
   TopToolbar,
   ExportButton,
@@ -19,11 +18,11 @@ import {
   RadioButtonGroupInput,
   ArrayInput,
   SimpleFormIterator,
-  useNotify,
 } from "react-admin";
 import { apiUrl, timeOptions } from "../../constants/constants";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router";
+import httpClient from "../../api/httpClient";
 
 const PlayersButton = () => {
   const record = useRecordContext();
@@ -114,7 +113,11 @@ export function EventEdit() {
           label="Название мероприятия"
           validate={required()}
         />
-        <DateInput source="date" label="Дата" validate={required()} />
+        <TextInput
+          source="description"
+          label="Описание"
+          validate={required()}
+        />
         <DateTimeInput
           source="start_time"
           label="Время начала"
@@ -127,6 +130,11 @@ export function EventEdit() {
           validate={required()}
           parse={(value) => (value ? new Date(value).toISOString() : null)}
         />
+        <TextInput
+          source="location"
+          label="Место проведения"
+          validate={required()}
+        />
       </SimpleForm>
     </Edit>
   );
@@ -135,23 +143,23 @@ export function EventEdit() {
 export function EventCreate() {
   const navigate = useNavigate();
 
-  const handleSave = async (values: any) => {
+  const handleSave = async (data: any) => {
     try {
       const payload = {
         event_info: {
-          name: values.name,
-          description: values.description,
-          start_time: values.start_time,
-          end_time: values.end_time,
-          location: values.location,
+          name: data.name,
+          description: data.description,
+          start_time: data.start_time,
+          end_time: data.end_time,
+          location: data.location,
         },
         settings: {
-          has_player_balance: values.has_player_balance,
-          activities: values.activities.map((act: any) => ({
+          has_player_balance: data.has_player_balance,
+          activities: data.activities.map((act: any) => ({
             name: act.name,
             act_vars: act.act_vars.map((v: any) => [v.key, v.type]),
           })),
-          roles: values.roles.map((role: any) => ({
+          roles: data.roles.map((role: any) => ({
             name: role.name,
             activities_values: role.activities_values.map((av: any) => ({
               name: av.name,
@@ -164,18 +172,13 @@ export function EventCreate() {
         },
         reg_form: {},
       };
-      const token = localStorage.getItem("token");
 
-      const response = await fetch(`${apiUrl}/events/new/`, {
+      const { json, status } = await httpClient(`${apiUrl}/events/new/`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Token ${token}`,
-        },
         body: JSON.stringify(payload),
       });
 
-      if (!response.ok) {
+      if (status < 200 || status >= 300) {
         throw new Error("Ошибка при создании мероприятия");
       }
 

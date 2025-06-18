@@ -1,4 +1,5 @@
-import { apiUrl, IUserData } from "../constants/constants";
+import { apiUrl } from "../constants/constants";
+import httpClient from "./httpClient";
 
 const authProvider = {
   login: async ({
@@ -8,41 +9,38 @@ const authProvider = {
     username: string;
     password: string;
   }) => {
-    const request = new Request(`${apiUrl}/token/login/`, {
-      method: "POST",
-      body: JSON.stringify({ username, password }),
-      headers: new Headers({ "Content-Type": "application/json" }),
-    });
+    try {
+      const { json, status } = await httpClient(`${apiUrl}/token/login/`, {
+        method: "POST",
+        body: JSON.stringify({ username, password }),
+      });
 
-    const response = await fetch(request);
-    if (!response.ok) {
+      localStorage.setItem("token", json.auth_token);
+      return Promise.resolve();
+    } catch (error) {
       throw new Error("Ошибка авторизации");
     }
-
-    const data = await response.json();
-    localStorage.setItem("token", data.auth_token);
-    return Promise.resolve();
   },
 
   logout: async () => {
     const token = localStorage.getItem("token");
-    if (token) {
-      await fetch(`${apiUrl}/token/logout/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Token ${token}`,
-        },
-      });
+    if (!token) {
+      return Promise.resolve();
     }
+
+    const { json, status } = await httpClient(`${apiUrl}/token/logout`, {
+      method: "POST",
+    });
+    if (status < 200 || status >= 300) {
+      return Promise.reject();
+    }
+
     localStorage.removeItem("token");
     return Promise.resolve();
   },
 
   checkAuth: async () => {
-    return localStorage.getItem("token")
-      ? Promise.resolve()
-      : Promise.reject({ redirectTo: "/login" });
+    return localStorage.getItem("token") ? Promise.resolve() : Promise.reject();
   },
 
   checkError: async (error: any) => {
@@ -62,21 +60,14 @@ const authProvider = {
       return Promise.reject();
     }
 
-    const response = await fetch(`${apiUrl}/users/me/`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Token ${token}`,
-      },
-    });
-    if (!response.ok) {
+    const { json, status } = await httpClient(`${apiUrl}/users/me/`, {});
+    if (status < 200 || status >= 300) {
       return Promise.reject();
     }
 
-    const data: IUserData = await response.json();
-
     return Promise.resolve({
-      id: data.id,
-      fullName: data.username,
+      id: json.id,
+      fullName: json.username,
     });
   },
 };

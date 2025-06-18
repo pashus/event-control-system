@@ -1,19 +1,6 @@
-import { fetchUtils } from "react-admin";
 import { DataProvider } from "react-admin";
 import { apiUrl } from "../constants/constants";
-
-const httpClient = (url: string, options: any = {}) => {
-  if (!options.headers) {
-    options.headers = new Headers({ Accept: "application/json" });
-  }
-
-  const token = localStorage.getItem("token");
-  if (token) {
-    options.headers.set("Authorization", `Token ${token}`);
-  }
-
-  return fetchUtils.fetchJson(url, options);
-};
+import httpClient from "./httpClient";
 
 export const dataProvider: DataProvider = {
   getList: (resource, params) => {

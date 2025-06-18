@@ -22,3 +22,6 @@ social-auth-core==4.6.1
 sqlparse==0.5.3
 tzdata==2025.2
 urllib3==2.4.0
+colorama==0.4.6
+qrcode==8.2
+pillow==11.2.1

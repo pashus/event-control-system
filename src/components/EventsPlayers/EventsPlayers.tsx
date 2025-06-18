@@ -28,7 +28,7 @@ const PlayersListActions = ({ eventId }: { eventId: string }) => {
 
 export function EventPlayersList() {
   const { id } = useParams();
-  const { data: event } = useGetOne("events", { id: id });
+  const { data: event } = useGetOne("events", { id });
 
   if (!id) return null;
 
@@ -57,14 +57,9 @@ export function PlayerShow() {
   const navigate = useNavigate();
   const [loadingCheckIn, setLoadingCheckIn] = useState(false);
 
-  const { data: player } = useGetOne(
-    `events/${id}/players`,
-    { id: player_id || "" },
-    { enabled: !!id && !!player_id },
-  );
+  const { data: player } = useGetOne(`events/${id}/players`, { id: player_id });
 
   const handleCheckIn = async () => {
-    if (!id || !player_id) return;
     setLoadingCheckIn(true);
     try {
       await dataProvider.create(`events/${id}/players/${player_id}/check-in`, {
@@ -72,10 +67,9 @@ export function PlayerShow() {
       });
       notify("Участник отмечен", { type: "success" });
       refresh();
-      navigate(-1); //ПОКА ТАК
+      navigate(-1);
     } catch (error) {
       notify("Ошибка при отметке", { type: "error" });
-      navigate(-1); //ПОКА ТАК
     }
   };
 
@@ -83,7 +77,7 @@ export function PlayerShow() {
     <Show
       resource={`events/${id}/players`}
       id={player_id}
-      title={`Информация про ${player.first_name}`}
+      title={`Информация про ${player.first_name} ${player.last_name}`}
     >
       <SimpleShowLayout record={player}>
         <TextField source="first_name" label="Имя" />
@@ -120,9 +114,8 @@ const AddPlayerButton = ({ eventId }: { eventId: string }) => {
       refresh();
     } catch (error) {
       notify("Ошибка при добавлении участника", { type: "error" });
-      refresh();
     }
-  }; //тут пока траблы с сервером, поэтому ошибка, но потом добавляется на самом деле
+  };
 
   return (
     <>

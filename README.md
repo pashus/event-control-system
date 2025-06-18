@@ -28,13 +28,13 @@ npm run build
 
 1. Распаковать архив
 2. На компьютере должен быть установлен MySQL
-3. Запустить create_db 1 и 2, предварительно указав в них свой логин и пароль от подключения к MySQL, а также установив mysql-connector-python
+3. Установить mysql-connector-python
 
 ```sh
 pip install mysql-connector-python
 ```
 
-4. В файле EventControlUrFU\eventDB\eventDB.py тоже прописать логин и пароль
+4. В файле ProjectUrFU\EventControlUrFU\events\eventDB\eventDB.py прописать логин и пароль
 5. В командной строке перейти в папку с ProjectUrFU
 6. Прописать в cmd следующую команду:
 

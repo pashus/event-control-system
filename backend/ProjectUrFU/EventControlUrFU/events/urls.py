@@ -15,4 +15,6 @@ urlpatterns = [
     path('events/<int:event_id>/roles/<int:role_id>/', RoleView.as_view(), name='role-detail'),
     path('events/<int:event_id>/players/<int:player_id>/vars/', AllPlyaerVarsView.as_view(), name='all-vars'),
     path('events/<int:event_id>/players/<int:player_id>/vars/<int:act_id>/', PlayerVarsView.as_view(), name='act-vars'),
+
+    path('events/<int:event_id>/players/<int:player_id>/qr-code/', generate_qr_code, name='check-in-qr'),
 ]

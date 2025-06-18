@@ -7,6 +7,10 @@ import events.eventDB.eventDB as eventDB
 import events.eventDB.rawJSON as eventJSON
 import json
 
+import qrcode
+from io import BytesIO
+from django.http import HttpResponse
+
 
 class EventsView(APIView):
     def get(self, request):
@@ -106,11 +110,13 @@ class PlayersView(APIView):
         db = eventDB.EventDB()
         role_id = data.get('role_id', None)
         if role_id is None:
-            db.new_player(pk, data['first_name'], data['last_name'], data['group_name'])
+            player_id = db.new_player(pk, data['first_name'], data['last_name'], data['group_name'])
         else:
-            db.new_player(pk, data['first_name'], data['last_name'], data['group_name'], role_id)
+            player_id = db.new_player(pk, data['first_name'], data['last_name'], data['group_name'], role_id)
         db.close()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        ser_data = serializer.data
+        ser_data["id"] = player_id
+        return Response(ser_data, status=status.HTTP_201_CREATED)
     
 class PlayerView(APIView):
     def get(self, request, event_id, player_id):
@@ -150,7 +156,7 @@ class CheckInView(APIView):
             return Response({"error": "Участник не найден!"}, status=status.HTTP_404_NOT_FOUND)
         db.check_in(event_id=event_id, player_id=player_id)
         db.close()
-        return Response({"message": "Участник успешно отмечен!"}, status=status.HTTP_200_OK)
+        return Response({"message": "Участник успешно отмечен!", "id": player_id}, status=status.HTTP_200_OK)
 
 # NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW
 class EventsJSONView(APIView):
@@ -350,3 +356,23 @@ class PlayerVarsView(APIView):
 class QRCodeView(APIView):
     def get(self, request, event_id, player_id):
         pass
+
+def generate_qr_code(request, event_id, player_id):
+    # Создаём QR-код
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=20,
+        border=2,
+    )
+    qr.add_data(f'events/{event_id}/players/{player_id}/check-in/')
+    qr.make(fit=True)
+    
+    img = qr.make_image(fill_color="black", back_color="white")
+    
+    buffer = BytesIO()
+    img.save(buffer, format="PNG")
+    
+    response = HttpResponse(buffer.getvalue(), content_type="image/png")
+    response['Content-Disposition'] = 'inline; filename="qr_code.png"'
+    return response
