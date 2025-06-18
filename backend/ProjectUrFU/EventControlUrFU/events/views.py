@@ -2,8 +2,9 @@ from django.shortcuts import render
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import EventSerializer, PlayerSerializer
-import eventDB.eventDB as eventDB
+from .serializers import *
+import events.eventDB.eventDB as eventDB
+import events.eventDB.rawJSON as eventJSON
 
 
 class EventsView(APIView):
@@ -83,7 +84,7 @@ class PlayersView(APIView):
             if range_param:
                 start, end = json.loads(range_param)
                 sliced_data = data[start:end+1]
-                serializer = EventSerializer(instance=sliced_data, many=True)
+                serializer = PlayerSerializer(instance=sliced_data, many=True) # лол, тут почему-то стоял EventSerializer
                 content_range = f'items {start}-{end}/{len(data)}'
             else:
                 content_range = f'items 0-{len(data)-1}/{len(data)}'
@@ -102,7 +103,11 @@ class PlayersView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         data = serializer.validated_data
         db = eventDB.EventDB()
-        db.new_player(pk, data['first_name'], data['last_name'], data['group_name'])
+        role_id = data.get('role_id', None)
+        if role_id is None:
+            db.new_player(pk, data['first_name'], data['last_name'], data['group_name'])
+        else:
+            db.new_player(pk, data['first_name'], data['last_name'], data['group_name'], role_id)
         db.close()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
@@ -125,6 +130,17 @@ class PlayerView(APIView):
         db.close()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
+    # реализовать обновление данных
+    def patch(self, request, event_id, player_id):
+        serializer = RoleIDSErializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        data = serializer.validated_data
+        db = eventDB.EventDB()
+        db.assign_role(event_id=event_id, player_id=player_id, role_id=data['role_id'])
+        db.close()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 class CheckInView(APIView):
     def post(self, request, event_id, player_id):
         db = eventDB.EventDB()
@@ -134,3 +150,183 @@ class CheckInView(APIView):
         db.check_in(event_id=event_id, player_id=player_id)
         db.close()
         return Response({"message": "Участник успешно отмечен!"}, status=status.HTTP_200_OK)
+
+# NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW
+class EventsJSONView(APIView):
+    def post(self, request):
+        raw_json_str = request.body.decode('utf-8')
+        try:
+            event_id = eventJSON.new_event(JSON=raw_json_str)
+        except:
+            return Response({"error": "Invalid JSON, увы"}, status=status.HTTP_400_BAD_REQUEST)
+        db = eventDB.EventDB()
+        created_event = db.get_event(event_id)
+        serializer = EventSerializer(instance=created_event)
+        db.close()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        # return Response({"status": "success", "data": {"id": event_id}}, status=status.HTTP_201_CREATED)
+
+class ActivitiesView(APIView):
+    def get(self, request, pk):
+        db = eventDB.EventDB()
+        data = db.get_activities(pk)
+        db.close()
+        serializer = ActivitySerializer(instance=data, many=True)
+        if len(data) <= 0:
+            return Response({"error": "Активности отсутствуют или в них ошибка!"})
+        try:
+            import json
+            range_param = request.GET.get('range')
+            if range_param:
+                start, end = json.loads(range_param)
+                sliced_data = data[start:end+1]
+                serializer = ActivitySerializer(instance=sliced_data, many=True)
+                content_range = f'items {start}-{end}/{len(data)}'
+            else:
+                content_range = f'items 0-{len(data)-1}/{len(data)}'
+        except Exception:
+            # На случай некорректного range
+            content_range = f'items 0-{len(data)-1}/{len(data)}'
+
+        response = Response(serializer.data, status=status.HTTP_200_OK)
+        response['Content-Range'] = content_range
+        response['Access-Control-Expose-Headers'] = 'Content-Range'  # обязательно для CORS!
+        return response
+
+    def post(self, request, pk):
+        serializer = ActivitySerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        data = serializer.validated_data
+        db = eventDB.EventDB()
+        db.new_activity(pk, data['name'], data['act_vars'])
+        db.close()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+class ActivityView(APIView):
+    def get(self, request, event_id, act_id):
+        db = eventDB.EventDB()
+        data = db.get_activity(event_id=event_id, act_id=act_id)
+        db.close()
+        serializer = ActivitySerializer(instance=data)
+        if data is None:
+            return Response({"error": "Активность не найдена!"}, status=status.HTTP_404_NOT_FOUND)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def delete(self, request, event_id, act_id):
+        db = eventDB.EventDB()
+        data = db.get_activity(event_id=event_id, act_id=act_id)
+        if data is None:
+            return Response({"error": "Активность не найдена!"}, status=status.HTTP_404_NOT_FOUND)
+        db.delete_activity(event_id=event_id, act_id=act_id)
+        db.close()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+class RolesView(APIView):
+    def get(self, request, pk):
+        db = eventDB.EventDB()
+        data = db.get_roles(pk)
+        db.close()
+        serializer = RoleSerializer(instance=data, many=True)
+        if len(data) <= 0:
+            return Response({"error": "Роли отсутствуют или в них ошибка!"})
+        try:
+            import json
+            range_param = request.GET.get('range')
+            if range_param:
+                start, end = json.loads(range_param)
+                sliced_data = data[start:end+1]
+                serializer = RoleSerializer(instance=sliced_data, many=True)
+                content_range = f'items {start}-{end}/{len(data)}'
+            else:
+                content_range = f'items 0-{len(data)-1}/{len(data)}'
+        except Exception:
+            # На случай некорректного range
+            content_range = f'items 0-{len(data)-1}/{len(data)}'
+
+        response = Response(serializer.data, status=status.HTTP_200_OK)
+        response['Content-Range'] = content_range
+        response['Access-Control-Expose-Headers'] = 'Content-Range'  # обязательно для CORS!
+        return response
+
+    def post(self, request, pk):
+        serializer = RoleSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        data = serializer.validated_data
+        db = eventDB.EventDB()
+        db.new_role(event_id=pk, name=data['name'], act_data=data['act_data'])
+        db.close()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+class RoleView(APIView):
+    def get(self, request, event_id, role_id):
+        db = eventDB.EventDB()
+        data = db.get_role(event_id=event_id, role_id=role_id)
+        db.close()
+        serializer = RoleSerializer(instance=data)
+        if data is None:
+            return Response({"error": "Роль не найдена!"}, status=status.HTTP_404_NOT_FOUND)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def delete(self, request, event_id, role_id):
+        db = eventDB.EventDB()
+        data = db.get_role(event_id=event_id, role_id=role_id)
+        if data is None:
+            return Response({"error": "Роль не найдена!"}, status=status.HTTP_404_NOT_FOUND)
+        db.delete_role(event_id=event_id, role_id=role_id)
+        db.close()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+class AllPlyaerVarsView(APIView):
+    def get(self, request, event_id, player_id):
+        db = eventDB.EventDB()
+        data = db.get_all_player_vars(event_id=event_id, player_id=player_id)
+        db.close()
+        serializer = PlayerVarsSerializer(instance=data, many=True)
+        if len(data) <= 0:
+            return Response({"error": "Роли отсутствуют или в них ошибка!"})
+        try:
+            import json
+            range_param = request.GET.get('range')
+            if range_param:
+                start, end = json.loads(range_param)
+                sliced_data = data[start:end+1]
+                serializer = PlayerVarsSerializer(instance=sliced_data, many=True)
+                content_range = f'items {start}-{end}/{len(data)}'
+            else:
+                content_range = f'items 0-{len(data)-1}/{len(data)}'
+        except Exception:
+            # На случай некорректного range
+            content_range = f'items 0-{len(data)-1}/{len(data)}'
+
+        response = Response(serializer.data, status=status.HTTP_200_OK)
+        response['Content-Range'] = content_range
+        response['Access-Control-Expose-Headers'] = 'Content-Range'  # обязательно для CORS!
+        return response
+
+class PlayerVarsView(APIView):
+    def get(self, request, event_id, player_id, act_id):
+        db = eventDB.EventDB()
+        data = db.get_player_vars(event_id=event_id, player_id=player_id, act_id=act_id)
+        # if data is None:
+        #     db.reset_act_vars(event_id=event_id, act_id=act_id, player_id=player_id)
+        #     data = db.get_player_vars(event_id=event_id, player_id=player_id, act_id=act_id)
+        db.close()
+        if data is None:
+            return Response({"error": "Переменные не найдены!"}, status=status.HTTP_404_NOT_FOUND)
+        return Response(data, status=status.HTTP_200_OK)
+
+    def post(self, request, event_id, player_id, act_id):
+        serializer = PlayerVarsSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        data = serializer.validated_data
+        db = eventDB.EventDB()
+        db.set_player_vars(event_id=event_id, player_id=player_id, act_id=act_id, act_vars=data['act_vars'])
+        db.close()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+class QRCodeView(APIView):
+    def get(self, request, event_id, player_id):
+        pass

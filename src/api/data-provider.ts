@@ -1,7 +1,6 @@
 import { fetchUtils } from "react-admin";
 import { DataProvider } from "react-admin";
-
-const apiUrl = "http://127.0.0.1:8000/api/v1";
+import { apiUrl } from "../constants/constants";
 
 const httpClient = (url: string, options: any = {}) => {
   if (!options.headers) {

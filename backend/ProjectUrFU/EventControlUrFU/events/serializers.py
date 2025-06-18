@@ -21,3 +21,23 @@ class PlayerSerializer(serializers.Serializer):
     last_name = serializers.CharField(max_length=50)
     group_name = serializers.CharField(max_length=50)
     is_present = serializers.BooleanField(required=False)
+    role_id = serializers.IntegerField(required=False)
+
+class ActivitySerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+    name = serializers.CharField(max_length=50)
+    act_vars = serializers.JSONField()
+
+class RoleSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+    name = serializers.CharField(max_length=50)
+    # act_data = serializers.JSONField()
+
+class PlayerVarsSerializer(serializers.Serializer):
+    player_id = serializers.IntegerField()
+    activity_id = serializers.IntegerField()
+    act_vars = serializers.JSONField()
+
+# вообще не нужный и тупой костыль
+class RoleIDSErializer(serializers.Serializer):
+    role_id = serializers.IntegerField()

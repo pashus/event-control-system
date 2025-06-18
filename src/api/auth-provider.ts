@@ -1,4 +1,4 @@
-const apiUrl = "http://127.0.0.1:8000/api/v1";
+import { apiUrl, IUserData } from "../constants/constants";
 
 const authProvider = {
   login: async ({
@@ -21,7 +21,6 @@ const authProvider = {
 
     const data = await response.json();
     localStorage.setItem("token", data.auth_token);
-    localStorage.setItem("username", username);
     return Promise.resolve();
   },
 
@@ -37,7 +36,6 @@ const authProvider = {
       });
     }
     localStorage.removeItem("token");
-    localStorage.removeItem("username");
     return Promise.resolve();
   },
 
@@ -56,13 +54,29 @@ const authProvider = {
     return Promise.resolve();
   },
 
-  getPermissions: async () => Promise.resolve("admin"),
+  getPermissions: async () => Promise.resolve(),
 
   getIdentity: async () => {
-    const username = localStorage.getItem("username");
+    const token = localStorage.getItem("token");
+    if (!token) {
+      return Promise.reject();
+    }
+
+    const response = await fetch(`${apiUrl}/users/me/`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Token ${token}`,
+      },
+    });
+    if (!response.ok) {
+      return Promise.reject();
+    }
+
+    const data: IUserData = await response.json();
+
     return Promise.resolve({
-      id: username ?? "admin",
-      fullName: username ?? "Admin",
+      id: data.id,
+      fullName: data.username,
     });
   },
 };
