@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
     List,
     Datagrid,
@@ -14,10 +14,8 @@ import {
     required,
     TopToolbar,
     FunctionField,
-    useRecordContext,
     SimpleShowLayout,
     Show,
-    ShowActions,
 } from 'react-admin';
 import { Dialog, DialogTitle, DialogContent, Box } from '@mui/material';
 
@@ -116,7 +114,7 @@ export const ActivityShow = () => {
     const {
         data: activity,
         isLoading,
-    } = useGetOne(`events/${id}/activity`, { id: activity_id });
+    } = useGetOne(`events/${id}/activities`, { id: activity_id });
 
     if (isLoading) return <div>Загрузка...</div>;
 
@@ -133,10 +131,6 @@ export const ActivityShow = () => {
                     label="Переменные"
                     render={(record: any) => (
                         <Box sx={{ 
-                            backgroundColor: '#f5f5f5',
-                            p: 2,
-                            borderRadius: 1,
-                            mt: 1
                         }}>
                             <pre style={{ margin: 0 }}>
                                 {record.act_vars}

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams} from "react-router-dom";
 import {
     List,
     Datagrid,
@@ -16,7 +16,6 @@ import {
     FunctionField,
     Show,
     SimpleShowLayout,
-    DeleteButton,
     ArrayInput,
     SimpleFormIterator
 } from 'react-admin';
@@ -171,3 +170,52 @@ const AddRoleButton = ({ eventId }: { eventId: string }) => {
         </>
     );
 }
+
+
+export const RoleShow = () => {
+    const { id, role_id } = useParams();
+    const {
+        data: role,
+        isLoading,
+    } = useGetOne(`events/${id}/roles`, { id: role_id });
+
+    if (isLoading) return <div>Загрузка...</div>;
+    if (!role) return <div>Роль не найдена</div>;
+
+    return (
+        <Show 
+            resource={`events/${id}/roles`}
+            id={role_id}
+            title={`Информация про ${role.name}`}
+        >
+            <SimpleShowLayout>
+                <TextField source="id" label="ID" />
+                <TextField source="name" label="Название роли" />
+                <FunctionField
+                    label="Активности"
+                    render={(record: any) => {
+                        if (!record.activities_values || record.activities_values.length === 0) {
+                            return <span>Нет активностей</span>;
+                        }
+                        return (
+                            <div>
+                                {record.activities_values.map((activity: any, index: number) => (
+                                    <div key={index} style={{ marginBottom: '16px' }}>
+                                        <div><strong>Активность:</strong> {activity.activity_id || 'не указан'}</div>
+                                        {activity.act_vars && activity.act_vars.length > 0 ? (
+                                            <pre>
+                                                {JSON.stringify(activity.act_vars, null, 2)}
+                                            </pre>
+                                        ) : (
+                                            <div style={{ marginTop: '8px' }}>Нет переменных</div>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        );
+                    }}
+                />
+            </SimpleShowLayout>
+        </Show>
+    );
+};

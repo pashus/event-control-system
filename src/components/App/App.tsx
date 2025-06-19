@@ -12,7 +12,8 @@ import QRScanner from "../QRScanner/QRScanner";
 import RequireAuth from "../RequireAuth/RequireAuth";
 import { EventRegistrationPage } from "../EventsPlayers/EventPlayersRegistration";
 import { EventActivitiesList, ActivityShow } from "../EventActivities/EventActivities";
-import { EventRolesList } from "../EventRoles/EventRoles";
+import { EventRolesList, RoleShow } from "../EventRoles/EventRoles";
+
 const customRussianMessages = {
   ...russianMessages,
   "Создать мероприятие": "Создать мероприятие",
@@ -76,10 +77,26 @@ function App() {
         }
         />
         <Route 
+          path="/events/:id/activities/:activity_id/show"
+          element={
+            <RequireAuth>
+              <ActivityShow/>
+            </RequireAuth>      
+        }
+        />
+        <Route 
           path="/events/:id/roles"
           element={
             <RequireAuth>
               <EventRolesList />
+            </RequireAuth>      
+        }
+        />
+        <Route 
+          path="/events/:id/roles/:role_id/show"
+          element={
+            <RequireAuth>
+              <RoleShow />
             </RequireAuth>      
         }
         />
