@@ -63,6 +63,51 @@ const RegistrationButton = () => {
   );
 };
 
+const ActivityButton = () => {
+  const record = useRecordContext();
+  const navigate = useNavigate();
+  if (!record) return null;
+
+  return (
+    <Button
+      variant="contained"
+      color="primary"
+      onClick={() => navigate(`/events/${record.id}/activities`)}
+      sx={{ 
+        marginRight: '8px',
+        backgroundColor: '#4a90e2', 
+        '&:hover': {
+          backgroundColor: '#3a7bc8', 
+        }
+      }}
+    >
+      Посмотреть активности
+    </Button>
+  );
+};
+
+const RoleButton = () => {
+  const record = useRecordContext();
+  const navigate = useNavigate();
+  if (!record) return null;
+
+  return (
+    <Button
+      variant="contained"
+      color="primary"
+      onClick={() => navigate(`/events/${record.id}/roles`)}
+      sx={{ 
+        marginRight: '8px',
+        backgroundColor: '#FF8C00', 
+        '&:hover': {
+          backgroundColor: '#FF6A00', 
+        }
+      }}
+    >
+      Посмотреть роли
+    </Button>
+  );
+};
 function EventListActions(): React.ReactElement {
   return (
     <TopToolbar>
@@ -123,6 +168,8 @@ export function EventShow() {
         <TextField source="location" label="Место проведения" />
         <PlayersButton />
         <RegistrationButton />
+        <ActivityButton />
+        <RoleButton />
       </SimpleShowLayout>
     </Show>
   );

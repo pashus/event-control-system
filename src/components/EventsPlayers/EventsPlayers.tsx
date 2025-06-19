@@ -51,6 +51,7 @@ export function EventPlayersList() {
   );
 }
 
+
 export function PlayerShow() {
   const { id, player_id } = useParams();
   const notify = useNotify();
