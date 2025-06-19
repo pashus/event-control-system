@@ -81,7 +81,7 @@ class PlayersView(APIView):
         db.close()
         serializer = PlayerSerializer(instance=data, many=True)
         if len(data) <= 0:
-            return Response([{"error": "Участники отсутствуют или в них ошибка!"}])
+            return Response({"error": "Участники отсутствуют или в них ошибка!"})
         
         try:
             import json
@@ -210,9 +210,11 @@ class ActivitiesView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         data = serializer.validated_data
         db = eventDB.EventDB()
-        db.new_activity(pk, data['name'], json.dumps(data['act_vars']))
+        act_id = db.new_activity(pk, data['name'], json.dumps(data['act_vars']))
+        ser_data = serializer.data
+        ser_data["id"] = act_id
         db.close()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(ser_data, status=status.HTTP_201_CREATED)
     
 class ActivityView(APIView):
     def get(self, request, event_id, act_id):
@@ -269,9 +271,11 @@ class RolesView(APIView):
         data = serializer.validated_data
         db = eventDB.EventDB()
         activities_values = json.dumps(data['activities_values'])
-        db.new_role(event_id=pk, name=data['name'], act_data=activities_values)
+        role_id = db.new_role(event_id=pk, name=data['name'], act_data=activities_values)
+        ser_data = serializer.data
+        ser_data['id'] = role_id
         db.close()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(ser_data, status=status.HTTP_201_CREATED)
     
 class RoleView(APIView):
     def get(self, request, event_id, role_id):

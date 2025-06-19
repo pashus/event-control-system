@@ -20,7 +20,7 @@ import {
   SimpleFormIterator,
 } from "react-admin";
 import { apiUrl, timeOptions } from "../../constants/constants";
-import { Button } from "@mui/material";
+import { Box, Button, Stack } from "@mui/material";
 import { useNavigate } from "react-router";
 import httpClient from "../../api/httpClient";
 
@@ -34,6 +34,9 @@ const PlayersButton = () => {
       variant="contained"
       color="secondary"
       onClick={() => navigate(`/events/${record.id}/players`)}
+      sx={{
+        width: "230px",
+      }}
     >
       Показать участников
     </Button>
@@ -50,12 +53,12 @@ const RegistrationButton = () => {
       variant="contained"
       color="primary"
       onClick={() => navigate(`/events/${record.id}/registration`)}
-      sx={{ 
-        marginRight: '8px',
-        backgroundColor: '#4caf50', 
-        '&:hover': {
-          backgroundColor: '#388e3c', 
-        }
+      sx={{
+        width: "230px",
+        backgroundColor: "#4caf50",
+        "&:hover": {
+          backgroundColor: "#388e3c",
+        },
       }}
     >
       Открыть регистрацию
@@ -73,12 +76,12 @@ const ActivityButton = () => {
       variant="contained"
       color="primary"
       onClick={() => navigate(`/events/${record.id}/activities`)}
-      sx={{ 
-        marginRight: '8px',
-        backgroundColor: '#4a90e2', 
-        '&:hover': {
-          backgroundColor: '#3a7bc8', 
-        }
+      sx={{
+        width: "230px",
+        backgroundColor: "#4a90e2",
+        "&:hover": {
+          backgroundColor: "#3a7bc8",
+        },
       }}
     >
       Посмотреть активности
@@ -96,12 +99,12 @@ const RoleButton = () => {
       variant="contained"
       color="primary"
       onClick={() => navigate(`/events/${record.id}/roles`)}
-      sx={{ 
-        marginRight: '8px',
-        backgroundColor: '#FF8C00', 
-        '&:hover': {
-          backgroundColor: '#FF6A00', 
-        }
+      sx={{
+        width: "230px",
+        backgroundColor: "#FF8C00",
+        "&:hover": {
+          backgroundColor: "#FF6A00",
+        },
       }}
     >
       Посмотреть роли
@@ -166,10 +169,12 @@ export function EventShow() {
           options={timeOptions}
         />
         <TextField source="location" label="Место проведения" />
-        <PlayersButton />
-        <RegistrationButton />
-        <ActivityButton />
-        <RoleButton />
+        <Stack direction="row" spacing={2} mt={2}>
+          <PlayersButton />
+          <RegistrationButton />
+          <ActivityButton />
+          <RoleButton />
+        </Stack>
       </SimpleShowLayout>
     </Show>
   );
