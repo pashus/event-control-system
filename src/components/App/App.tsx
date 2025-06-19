@@ -11,7 +11,10 @@ import { EventPlayersList, PlayerShow } from "../EventsPlayers/EventsPlayers";
 import QRScanner from "../QRScanner/QRScanner";
 import RequireAuth from "../RequireAuth/RequireAuth";
 import { EventRegistrationPage } from "../EventsPlayers/EventPlayersRegistration";
-import { EventActivitiesList, ActivityShow } from "../EventActivities/EventActivities";
+import {
+  EventActivitiesList,
+  ActivityShow,
+} from "../EventActivities/EventActivities";
 import { EventRolesList, RoleShow } from "../EventRoles/EventRoles";
 
 const customRussianMessages = {
@@ -26,6 +29,8 @@ const customRussianMessages = {
   "Участник отмечен": "Участник отмечен",
   "Участник не найден!": "Участник не найден!",
   "Ошибка при получении QR-кода": "Ошибка при получении QR-кода",
+  "Регистрация прошла успешно!": "Регистрация прошла успешно!",
+  "Ошибка при регистрации": "Ошибка при регистрации",
 };
 const i18nProvider = polyglotI18nProvider(() => customRussianMessages, "ru");
 
@@ -68,37 +73,37 @@ function App() {
             </RequireAuth>
           }
         />
-        <Route 
+        <Route
           path="/events/:id/activities"
           element={
             <RequireAuth>
               <EventActivitiesList />
-            </RequireAuth>      
-        }
+            </RequireAuth>
+          }
         />
-        <Route 
+        <Route
           path="/events/:id/activities/:activity_id/show"
           element={
             <RequireAuth>
-              <ActivityShow/>
-            </RequireAuth>      
-        }
+              <ActivityShow />
+            </RequireAuth>
+          }
         />
-        <Route 
+        <Route
           path="/events/:id/roles"
           element={
             <RequireAuth>
               <EventRolesList />
-            </RequireAuth>      
-        }
+            </RequireAuth>
+          }
         />
-        <Route 
+        <Route
           path="/events/:id/roles/:role_id/show"
           element={
             <RequireAuth>
               <RoleShow />
-            </RequireAuth>      
-        }
+            </RequireAuth>
+          }
         />
         <Route
           path="/qr-scanner"
@@ -111,7 +116,7 @@ function App() {
         <Route
           path="/events/:id/registration"
           element={<EventRegistrationPage />}
-        ></Route>
+        />
       </CustomRoutes>
     </Admin>
   );

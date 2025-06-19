@@ -38,7 +38,6 @@ export const EventRegistrationPage = () => {
 
   const handleSubmit = async (data: any) => {
     setLoading(true);
-
     try {
       await dataProvider.create(`events/${eventId}/players`, {
         data: {
@@ -49,11 +48,9 @@ export const EventRegistrationPage = () => {
       });
 
       notify("Регистрация прошла успешно!", { type: "success" });
-      navigate(`/events/${eventId}/players`);
+      setLoading(false);
     } catch (error) {
       notify("Ошибка при регистрации", { type: "error" });
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -137,7 +134,6 @@ export const EventRegistrationPage = () => {
             required
             sx={{ mb: 3 }}
           />
-
           <Box
             sx={{
               display: "flex",
