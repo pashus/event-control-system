@@ -20,7 +20,7 @@ import {
   SimpleFormIterator,
 } from "react-admin";
 import { apiUrl, timeOptions } from "../../constants/constants";
-import { Box, Button, Stack } from "@mui/material";
+import { Button, Stack } from "@mui/material";
 import { useNavigate } from "react-router";
 import httpClient from "../../api/httpClient";
 

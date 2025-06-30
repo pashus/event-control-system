@@ -16,6 +16,8 @@ import {
   FunctionField,
   SimpleShowLayout,
   Show,
+  ArrayInput,
+  SimpleFormIterator,
 } from "react-admin";
 import { Dialog, DialogTitle, DialogContent, Box } from "@mui/material";
 
@@ -32,11 +34,16 @@ export function EventActivitiesList() {
       actions={<ActivitiesListActions eventId={id} />}
     >
       <Datagrid size="medium" rowClick="show">
-        <TextField source="id" label="ID" />
         <TextField source="name" label="Название" />
         <FunctionField
           label="Переменные"
-          render={(record: any) => <span>{record.act_vars}</span>}
+          render={(record: any) => (
+            <div>
+              {record.act_vars?.map(([name, type]: [string, string]) => (
+                <div key={`${name}-${type}`}>{name}: {type}</div>
+              ))}
+            </div>
+          )}
         />
       </Datagrid>
     </List>
@@ -51,7 +58,7 @@ const ActivitiesListActions = ({ eventId }: { eventId: string }) => {
   );
 };
 
-const AddActivityButton = ({ eventId }: { eventId: string }) => {
+export const AddActivityButton = ({ eventId }: { eventId: string }) => {
   const [open, setOpen] = useState(false);
   const notify = useNotify();
   const refresh = useRefresh();
@@ -59,11 +66,16 @@ const AddActivityButton = ({ eventId }: { eventId: string }) => {
 
   const handleSubmit = async (data: any) => {
     try {
+      const postData = {
+        name: data.name,
+        act_vars: data.act_vars?.map((varItem: any) => [
+          varItem.key,
+          varItem.type
+        ]) || []
+      };
+
       await dataProvider.create(`events/${eventId}/activities`, {
-        data: {
-          name: data.name,
-          act_vars: data.act_vars,
-        },
+        data: postData,
       });
 
       notify("Активность успешно добавлена", { type: "success" });
@@ -77,21 +89,44 @@ const AddActivityButton = ({ eventId }: { eventId: string }) => {
   return (
     <>
       <Button onClick={() => setOpen(true)}>Добавить активность</Button>
-      <Dialog open={open} onClose={() => setOpen(false)}>
+      <Dialog open={open} onClose={() => setOpen(false)} maxWidth="md" fullWidth>
         <DialogTitle>Добавить активность</DialogTitle>
         <DialogContent>
-          <SimpleForm onSubmit={handleSubmit} toolbar={false} sx={{ p: 0 }}>
+          <SimpleForm 
+            onSubmit={handleSubmit} 
+            toolbar={false}
+            defaultValues={{ act_vars: [] }}
+          >
             <TextInput
               source="name"
               label="Название активности"
               validate={required()}
+              fullWidth
             />
-            <TextInput source="act_vars" label="Переменные активности" />
-            <Box display="flex" width="100%" justifyContent="space-between">
-              <Button onClick={() => setOpen(false)} type="submit">
+
+            <ArrayInput
+              source="act_vars"
+              label="Переменные активности"
+            >
+              <SimpleFormIterator inline>
+                <TextInput
+                  source="key"
+                  label="Название переменной"
+                  validate={required()}
+                />
+                <TextInput
+                  source="type"
+                  label="Тип (bool или int)"
+                  validate={required()}
+                />
+              </SimpleFormIterator>
+            </ArrayInput>
+
+            <Box display="flex" justifyContent="flex-end" gap={2} mt={2}>
+              <Button onClick={() => setOpen(false)}>Отмена</Button>
+              <Button type="submit" variant="contained" color="primary">
                 Сохранить
               </Button>
-              <Button onClick={() => setOpen(false)}>Отмена</Button>
             </Box>
           </SimpleForm>
         </DialogContent>
@@ -112,16 +147,18 @@ export const ActivityShow = () => {
     <Show
       resource={`events/${id}/activities`}
       id={activity_id}
-      title={`Информация про активность ${activity.name}`}
+      title={`Активность: ${activity.name}`}
     >
       <SimpleShowLayout>
         <TextField source="name" label="Название активности" />
         <FunctionField
           label="Переменные"
           render={(record: any) => (
-            <Box sx={{}}>
-              <pre style={{ margin: 0 }}>{record.act_vars}</pre>
-            </Box>
+            <div>
+              {record.act_vars?.map(([name, type]: [string, string]) => (
+                <div key={`${name}-${type}`}>{name}: {type}</div>
+              ))}
+            </div>
           )}
         />
       </SimpleShowLayout>

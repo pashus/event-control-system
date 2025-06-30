@@ -34,19 +34,17 @@ export function EventRolesList() {
       actions={<RolesListActions eventId={id} />}
     >
       <Datagrid size="medium" rowClick="show">
-        <TextField source="id" label="ID" />
         <TextField source="name" label="Название роли" />
         <FunctionField
           label="Активности"
-          render={(record: { activities_values?: Array<any> }) =>
-            record.activities_values?.length || 0
-          }
+          render={() => {
+            return "Нажмите для просмотра";
+          }}
         />
       </Datagrid>
     </List>
   );
 }
-
 const RolesListActions = ({ eventId }: { eventId: string }) => {
   return (
     <TopToolbar>
@@ -65,13 +63,16 @@ const AddRoleButton = ({ eventId }: { eventId: string }) => {
     try {
       const postData = {
         name: data.name,
-        activities_values:
-          data.activities?.map((activity: any) => ({
-            name: activity.name,
-            act_vars: activity.vars
-              ? Object.entries(activity.vars).map(([key, val]) => [key, val])
-              : [],
-          })) || [],
+        activities_values: data.activities_values?.map((activity: any) => ({
+          name: activity.name,
+          act_vars: activity.act_vars?.map((varItem: any) => [
+            varItem.key,
+            varItem.value === 'true' ? true : 
+            varItem.value === 'false' ? false : 
+            !isNaN(varItem.value) ? Number(varItem.value) : 
+            varItem.value
+          ]) || []
+        })) || []
       };
 
       await dataProvider.create(`events/${eventId}/roles`, {
@@ -84,35 +85,27 @@ const AddRoleButton = ({ eventId }: { eventId: string }) => {
     } catch (error: any) {
       notify(`Ошибка при добавлении роли: ${error.message}`, {
         type: "error",
-        undoable: false,
       });
-      console.error("Ошибка добавления роли:", error);
     }
   };
 
   return (
     <>
       <Button onClick={() => setOpen(true)}>Добавить роль</Button>
-
-      <Dialog
-        open={open}
-        onClose={() => setOpen(false)}
-        maxWidth="sm"
-        fullWidth
-      >
+      <Dialog open={open} onClose={() => setOpen(false)} maxWidth="sm" fullWidth>
         <DialogTitle>Добавить новую роль</DialogTitle>
         <DialogContent>
           <SimpleForm onSubmit={handleSubmit} toolbar={false}>
             <TextInput
               source="name"
               label="Название роли"
-              fullWidth
               validate={required()}
+              fullWidth
             />
 
             <ArrayInput
-              source="activities"
-              label="Активности роли"
+              source="activities_values"
+              label="Значения активностей"
               defaultValue={[]}
             >
               <SimpleFormIterator>
@@ -124,19 +117,19 @@ const AddRoleButton = ({ eventId }: { eventId: string }) => {
                 />
 
                 <ArrayInput
-                  source="vars"
-                  label="Переменные активности"
-                  defaultValue={{}}
+                  source="act_vars"
+                  label="Значения переменных"
+                  defaultValue={[]}
                 >
                   <SimpleFormIterator inline>
                     <TextInput
-                      source="name"
-                      label="Имя переменной"
+                      source="key"
+                      label="Название переменной"
                       validate={required()}
                     />
                     <TextInput
                       source="value"
-                      label="Значение"
+                      label="Значение (true/false или число)"
                       validate={required()}
                     />
                   </SimpleFormIterator>
@@ -145,18 +138,8 @@ const AddRoleButton = ({ eventId }: { eventId: string }) => {
             </ArrayInput>
 
             <Box display="flex" justifyContent="flex-end" gap={2} mt={2}>
-              <Button onClick={() => setOpen(false)} color="secondary">
-                Отмена
-              </Button>
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                sx={{
-                  backgroundColor: "#FF8C00",
-                  "&:hover": { backgroundColor: "#FF6A00" },
-                }}
-              >
+              <Button onClick={() => setOpen(false)}>Отмена</Button>
+              <Button type="submit" variant="contained" color="primary">
                 Сохранить
               </Button>
             </Box>
@@ -180,36 +163,30 @@ export const RoleShow = () => {
     <Show
       resource={`events/${id}/roles`}
       id={role_id}
-      title={`Информация про роль ${role.name}`}
+      title={`Роль: ${role.name}`}
     >
       <SimpleShowLayout>
         <TextField source="name" label="Название роли" />
         <FunctionField
           label="Активности"
           render={(record: any) => {
-            if (
-              !record.activities_values ||
-              record.activities_values.length === 0
-            ) {
-              return <span>Нет активностей</span>;
+            if (!record.activities_values?.length) {
+              return "Нет активностей";
             }
             return (
               <div>
-                {record.activities_values.map(
-                  (activity: any, index: number) => (
-                    <div key={index} style={{ marginBottom: "16px" }}>
-                      <div>
-                        <span>Активность:</span>{" "}
-                        {activity.activity_id || "не указан"}
-                      </div>
-                      {activity.act_vars && activity.act_vars.length > 0 ? (
-                        <pre>{JSON.stringify(activity.act_vars, null, 2)}</pre>
-                      ) : (
-                        <div style={{ marginTop: "8px" }}>Нет переменных</div>
-                      )}
+                {record.activities_values.map((activity: any) => (
+                  <div key={activity.activity_id} style={{ marginBottom: '16px' }}> 
+                    <div><strong>Активность {activity.activity_id}</strong></div>
+                    <div>
+                      {activity.act_vars?.map(([name, value]: [string, any]) => (
+                        <div key={name}>
+                          {name}: {typeof value === 'boolean' ? (value ? 'Да' : 'Нет') : value}
+                        </div>
+                      ))}
                     </div>
-                  ),
-                )}
+                  </div>
+                ))}
               </div>
             );
           }}
