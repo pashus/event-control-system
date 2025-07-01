@@ -35,15 +35,24 @@ export function EventActivitiesList() {
     >
       <Datagrid size="medium" rowClick="show">
         <TextField source="name" label="Название" />
-        <FunctionField
+          <FunctionField
           label="Переменные"
-          render={(record: any) => (
-            <div>
-              {record.act_vars?.map(([name, type]: [string, string]) => (
-                <div key={`${name}-${type}`}>{name}: {type}</div>
-              ))}
-            </div>
-          )}
+          render={(record: any) => {
+            const vars = Array.isArray(record.act_vars) ? record.act_vars : [];
+            return (
+              <div>
+                {vars.map((item: any, index: number) => {
+                  const [name, value] = Array.isArray(item) ? item : 
+                      [item?.key, item?.type];
+                  return (
+                    <div key={`var-${index}`}>
+                      {name}: {String(value)}
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          }}
         />
       </Datagrid>
     </List>
@@ -143,6 +152,7 @@ export const ActivityShow = () => {
 
   if (isLoading) return <div>Загрузка...</div>;
 
+
   return (
     <Show
       resource={`events/${id}/activities`}
@@ -153,13 +163,26 @@ export const ActivityShow = () => {
         <TextField source="name" label="Название активности" />
         <FunctionField
           label="Переменные"
-          render={(record: any) => (
-            <div>
-              {record.act_vars?.map(([name, type]: [string, string]) => (
-                <div key={`${name}-${type}`}>{name}: {type}</div>
-              ))}
-            </div>
-          )}
+          render={(record: any) => {
+            const vars = Array.isArray(record.act_vars) ? record.act_vars : [];
+            return (
+              <div>
+                {vars.length > 0 ? (
+                  vars.map((item: any, index: number) => {
+                    const [name, value] = Array.isArray(item) ? item : 
+                      [item?.key, item?.type];
+                    return (
+                      <div key={`var-${index}`}>
+                        {name}: {String(value)}
+                      </div>
+                    );
+                  })
+                ) : (
+                  <div>Нет переменных</div>
+                )}
+              </div>
+            );
+          }}
         />
       </SimpleShowLayout>
     </Show>
