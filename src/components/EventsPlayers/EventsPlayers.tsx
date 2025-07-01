@@ -51,7 +51,6 @@ export function EventPlayersList() {
   );
 }
 
-
 export function PlayerShow() {
   const { id, player_id } = useParams();
   const notify = useNotify();
@@ -155,6 +154,7 @@ const AddPlayerButton = ({ eventId }: { eventId: string }) => {
           first_name: data.first_name,
           last_name: data.last_name,
           group_name: data.group_name,
+          role_id: data.role_id,
         },
       });
 
@@ -175,6 +175,7 @@ const AddPlayerButton = ({ eventId }: { eventId: string }) => {
             <TextInput source="first_name" label="Имя" />
             <TextInput source="last_name" label="Фамилия" />
             <TextInput source="group_name" label="Группа" />
+            <TextInput source="role_id" label="ID роли" />
             <Box display="flex" width="100%" justifyContent="space-between">
               <Button onClick={() => setOpen(false)} type="submit">
                 Сохранить
