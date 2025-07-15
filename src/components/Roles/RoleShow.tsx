@@ -21,7 +21,7 @@ export const RoleShow = () => {
     <Show
       resource={`events/${id}/roles`}
       id={role_id}
-      title={`Информация про роль ${data.name}`}
+      title={`Роль: ${data.name}`}
     >
       <SimpleShowLayout>
         <TextField source="name" label="Название роли" />

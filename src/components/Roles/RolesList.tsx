@@ -18,7 +18,7 @@ export function RolesList() {
   return (
     <List
       resource={`events/${id}/roles`}
-      title={`Роли мероприятия ${data.name}`}
+      title={`Роли мероприятия: ${data.name}`}
       actions={<RolesListActions eventId={id} />}
     >
       <Datagrid size="medium" rowClick="show">

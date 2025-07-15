@@ -18,7 +18,7 @@ export function ActivitiesList() {
   return (
     <List
       resource={`events/${id}/activities`}
-      title={`Активности мероприятия ${data.name}`}
+      title={`Активности мероприятия: ${data.name}`}
       actions={<ActivitiesListActions eventId={id} />}
     >
       <Datagrid size="medium" rowClick="show">
@@ -26,22 +26,15 @@ export function ActivitiesList() {
         <TextField source="name" label="Название" />
         <FunctionField
           label="Переменные"
-          render={(record) =>
-            record.act_vars?.length ? (
-              <span>
-                {record.act_vars.map(
-                  ([name, type]: [string, string], index: number) => (
-                    <span key={index}>
-                      {name}, тип={type}
-                      <br />
-                    </span>
-                  ),
-                )}
-              </span>
-            ) : (
-              "—"
-            )
-          }
+          render={(record: any) => (
+            <div>
+              {record.act_vars?.map(([name, type]: [string, string]) => (
+                <div key={`${name}-${type}`}>
+                  {name}: {type}
+                </div>
+              ))}
+            </div>
+          )}
         />
       </Datagrid>
     </List>

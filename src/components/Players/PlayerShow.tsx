@@ -47,6 +47,7 @@ export function PlayerShow() {
       await dataProvider.create(`events/${id}/players/${player_id}/check-in`, {
         data: {},
       });
+
       notify("Участник отмечен", { type: "success" });
       refresh();
       navigate(-1);
@@ -59,7 +60,7 @@ export function PlayerShow() {
     <Show
       resource={`events/${id}/players`}
       id={player_id}
-      title={`Информация про ${data.first_name} ${data.last_name}`}
+      title={`Участник: ${data.first_name} ${data.last_name}`}
     >
       <SimpleShowLayout record={data}>
         <TextField source="first_name" label="Имя" />

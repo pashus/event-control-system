@@ -13,7 +13,7 @@ import { useNavigate, useParams } from "react-router";
 
 function EventEditTitle() {
   const record = useRecordContext<{ name?: string }>();
-  return <span>Мероприятие {record?.name ?? ""}</span>;
+  return <span>Мероприятие: {record?.name ?? ""}</span>;
 }
 
 export function EventEdit() {

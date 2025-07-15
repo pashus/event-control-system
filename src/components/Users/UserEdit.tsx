@@ -8,7 +8,7 @@ import {
 
 function UserEdititle() {
   const record = useRecordContext<{ username?: string }>();
-  return <span>Пользователь {record?.username ?? ""}</span>;
+  return <span>Пользователь: {record?.username ?? ""}</span>;
 }
 
 export function UserEdit() {

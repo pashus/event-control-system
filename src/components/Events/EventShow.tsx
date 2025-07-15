@@ -12,7 +12,7 @@ import { useNavigate } from "react-router";
 
 function EventShowTitle() {
   const record = useRecordContext<{ name?: string }>();
-  return <span>Мероприятие {record?.name ?? ""}</span>;
+  return <span>Мероприятие: {record?.name ?? ""}</span>;
 }
 
 export function EventShow() {

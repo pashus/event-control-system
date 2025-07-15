@@ -9,6 +9,8 @@ import {
   SimpleForm,
   TextInput,
   required,
+  ArrayInput,
+  SimpleFormIterator,
 } from "react-admin";
 
 export const ActivitiesListActions = ({ eventId }: { eventId: string }) => {
@@ -26,11 +28,12 @@ const AddActivityButton = ({ eventId }: { eventId: string }) => {
   const dataProvider = useDataProvider();
 
   const handleSubmit = async (data: any) => {
+    console.log(data.act_vars);
     try {
       await dataProvider.create(`events/${eventId}/activities`, {
         data: {
           name: data.name,
-          act_vars: data.act_vars,
+          act_vars: data.act_vars?.map((item: any) => [item.key, item.type]),
         },
       });
 
@@ -45,16 +48,34 @@ const AddActivityButton = ({ eventId }: { eventId: string }) => {
   return (
     <>
       <Button onClick={() => setOpen(true)}>Добавить активность</Button>
-      <Dialog open={open} onClose={() => setOpen(false)}>
+      <Dialog
+        open={open}
+        onClose={() => setOpen(false)}
+        maxWidth="sm"
+        fullWidth
+      >
         <DialogTitle>Добавить активность</DialogTitle>
         <DialogContent>
-          <SimpleForm onSubmit={handleSubmit} toolbar={false} sx={{ p: 0 }}>
+          <SimpleForm onSubmit={handleSubmit} toolbar={false}>
             <TextInput
               source="name"
               label="Название активности"
               validate={required()}
             />
-            <TextInput source="act_vars" label="Переменные активности" />
+            <ArrayInput source="act_vars" label="Переменные активности">
+              <SimpleFormIterator inline>
+                <TextInput
+                  source="key"
+                  label="Название переменной"
+                  validate={required()}
+                />
+                <TextInput
+                  source="type"
+                  label="Тип (bool или int)"
+                  validate={required()}
+                />
+              </SimpleFormIterator>
+            </ArrayInput>
             <Box display="flex" width="100%" justifyContent="space-between">
               <Button onClick={() => setOpen(false)} type="submit">
                 Сохранить

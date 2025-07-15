@@ -18,7 +18,7 @@ export function PlayersList() {
   return (
     <List
       resource={`events/${id}/players`}
-      title={`Участники мероприятия ${data.name}`}
+      title={`Участники мероприятия: ${data.name}`}
       actions={<PlayersListActions eventId={id} />}
     >
       <Datagrid size="medium" rowClick="show">

@@ -1,4 +1,3 @@
-import { Box } from "@mui/material";
 import {
   useGetOne,
   Show,
@@ -11,7 +10,7 @@ import { useParams } from "react-router";
 export const ActivityShow = () => {
   const { id, activity_id } = useParams();
   const { data, isLoading } = useGetOne(`events/${id}/activities`, {
-    id: activity_id, //params.id будет принимать activity_id
+    id: activity_id, //params.id будет принимать activity_id (в дата провайдер)
   });
 
   if (isLoading) return <div>Загрузка...</div>;
@@ -20,7 +19,7 @@ export const ActivityShow = () => {
     <Show
       resource={`events/${id}/activities`}
       id={activity_id}
-      title={`Информация про активность ${data.name}`}
+      title={`Активность: ${data.name}`}
     >
       <SimpleShowLayout>
         <TextField source="name" label="Название активности" />

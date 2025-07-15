@@ -7,7 +7,7 @@ import {
 
 function UserShowTitle() {
   const record = useRecordContext<{ username?: string }>();
-  return <span>Пользователь {record?.username ?? ""}</span>;
+  return <span>Пользователь: {record?.username ?? ""}</span>;
 }
 
 export function UserShow() {
