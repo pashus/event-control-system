@@ -6,6 +6,7 @@ import {
   FunctionField,
 } from "react-admin";
 import { useParams } from "react-router";
+import { ActivityName } from "../Activities/ActivityName";
 
 export const RoleShow = () => {
   const { id, role_id } = useParams();
@@ -33,19 +34,23 @@ export const RoleShow = () => {
             ) {
               return <span>Нет активностей</span>;
             }
+
             return (
               <div>
                 {record.activities_values.map(
                   (activity: any, index: number) => (
-                    <div key={index} style={{ marginBottom: "16px" }}>
+                    <div key={index}>
                       <div>
                         <span>Активность:</span>{" "}
-                        {activity.activity_id || "не указан"}
+                        <ActivityName
+                          eventId={id!}
+                          activityId={activity.activity_id}
+                        />
                       </div>
                       {activity.act_vars && activity.act_vars.length > 0 ? (
                         <pre>{JSON.stringify(activity.act_vars, null, 2)}</pre> //тут пока код вместо нормального отображения
                       ) : (
-                        <div style={{ marginTop: "8px" }}>Нет переменных</div>
+                        <div>Нет переменных</div>
                       )}
                     </div>
                   ),

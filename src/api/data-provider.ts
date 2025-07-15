@@ -40,7 +40,7 @@ export const baseProvider: DataProvider = {
 
   update: async (resource, params) => {
     const { json } = await httpClient(`${apiUrl}/${resource}/${params.id}/`, {
-      method: "PUT",
+      method: "PATCH",
       body: JSON.stringify(params.data),
     });
 
