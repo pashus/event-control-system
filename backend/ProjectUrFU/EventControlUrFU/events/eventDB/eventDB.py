@@ -145,6 +145,17 @@ class EventDB():
         )
         self.db.commit()
 
+    # изменить активность
+    def change_activity(self, event_id, act_id, act_info):
+        for key, value in act_info.items():
+            query = f"UPDATE activities_{event_id} SET {key}"
+            query += " = %s WHERE id = %s"
+            self.cur.execute(
+                query,
+                (value, act_id)
+            )
+        self.db.commit()
+
     # сбросить переменные у участинка 
     def reset_act_vars(self, event_id, act_id, player_id):
         activity = self.get_activity(event_id=event_id, act_id=act_id)
@@ -223,11 +234,13 @@ class EventDB():
         query += " VALUES (%s, %s, %s)"
         act_data = json.loads(act_data)
         for act in act_data:
-            self.cur.execute(
-                f"SELECT id FROM activities_{event_id}" + " WHERE name = %s",
-                (act['name'],)
-            )
-            act_id = self.cur.fetchone()['id']
+            act_id = act.get('activity_id')
+            if act_id is None:
+                self.cur.execute(
+                    f"SELECT id FROM activities_{event_id}" + " WHERE name = %s",
+                    (act.get('name'),)
+                )
+                act_id = self.cur.fetchone()['id']
             self.cur.execute(
                 query,
                 (act_id, role_id, json.dumps(act['act_vars']))    
@@ -279,6 +292,31 @@ class EventDB():
     def delete_role(self, event_id, role_id):
         self.cur.execute(f"DELETE FROM activities_roles_{event_id}" + " WHERE role_id = %s", (role_id,))
         self.cur.execute(f"DELETE FROM roles_{event_id}" + " WHERE id = %s", (role_id,))
+        self.db.commit()
+
+    # изменение роли
+    def change_role(self, event_id, role_id, role_info):
+        role_name = role_info.get('name')
+        if role_info is not None:
+            query = f"UPDATE roles_{event_id} SET name"
+            query += " = %s WHERE id = %s"
+            self.cur.execute(
+                query,
+                (role_name, role_id)
+            )
+        role_act_vars = role_info.get("activities_values")
+        if role_act_vars is not None:
+            role_vars = json.loads(role_act_vars)
+            for act in role_vars:
+                act_id = act.get('activity_id')
+                if act_id is None:
+                    continue
+                query = f"INSERT INTO activities_roles_{event_id} (activity_id, role_id, act_vars)"
+                query += " VALUES (%s, %s, %s) ON DUPLICATE KEY UPDATE act_vars = VALUES(act_vars)"
+                self.cur.execute(
+                    query,
+                    (act_id, role_id, json.dumps(act.get('act_vars')),)
+                )
         self.db.commit()
 
     # получить переменные участника 
@@ -354,6 +392,20 @@ class EventDB():
         self.cur.execute(f"DELETE FROM players_{event_id}" + " WHERE id = %s", (player_id,))
         self.db.commit()
 
+    # Изменить участника
+    def change_player(self, event_id, player_id, player_info):
+        for key, value in player_info.items():
+            query = f"UPDATE players_{event_id}"
+            query += f" SET {key}" + " = %s WHERE id = %s"
+            self.cur.execute(
+                query,
+                (value, player_id)
+            )
+        self.db.commit()
+        role_id = player_info.get('role_id')
+        if role_id is not None:
+            self.set_role_vars(event_id=event_id, player_id=player_id, role_id=role_id)
+
     # отметиться
     def check_in(self, event_id, player_id):
         self.cur.execute(
@@ -389,4 +441,13 @@ class EventDB():
         self.cur.execute(f"DROP TABLE activities_{event_id}")
         self.db.commit()
 
-
+    # изменить ивент
+    def change_event(self, event_id, event_info):
+        for key, value in event_info.items():
+            query = f"UPDATE events SET {key}"
+            query += " = %s WHERE id = %s"
+            self.cur.execute(
+                query,
+                (value, event_id)
+            )
+        self.db.commit()

@@ -1,49 +1,17 @@
+import { Dialog, DialogTitle, DialogContent, Box } from "@mui/material";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
 import {
-  List,
-  Datagrid,
-  TextField,
-  useGetOne,
-  Button,
+  TopToolbar,
   useNotify,
   useRefresh,
   useDataProvider,
+  Button,
   SimpleForm,
   TextInput,
   required,
-  TopToolbar,
-  FunctionField,
-  SimpleShowLayout,
-  Show,
 } from "react-admin";
-import { Dialog, DialogTitle, DialogContent, Box } from "@mui/material";
 
-export function EventActivitiesList() {
-  const { id } = useParams();
-  const { data: event } = useGetOne("events", { id });
-
-  if (!id) return null;
-
-  return (
-    <List
-      resource={`events/${id}/activities`}
-      title={`Активности мероприятия ${event?.name}`}
-      actions={<ActivitiesListActions eventId={id} />}
-    >
-      <Datagrid size="medium" rowClick="show">
-        <TextField source="id" label="ID" />
-        <TextField source="name" label="Название" />
-        <FunctionField
-          label="Переменные"
-          render={(record: any) => <span>{record.act_vars}</span>}
-        />
-      </Datagrid>
-    </List>
-  );
-}
-
-const ActivitiesListActions = ({ eventId }: { eventId: string }) => {
+export const ActivitiesListActions = ({ eventId }: { eventId: string }) => {
   return (
     <TopToolbar>
       <AddActivityButton eventId={eventId} />
@@ -97,34 +65,5 @@ const AddActivityButton = ({ eventId }: { eventId: string }) => {
         </DialogContent>
       </Dialog>
     </>
-  );
-};
-
-export const ActivityShow = () => {
-  const { id, activity_id } = useParams();
-  const { data: activity, isLoading } = useGetOne(`events/${id}/activities`, {
-    id: activity_id,
-  });
-
-  if (isLoading) return <div>Загрузка...</div>;
-
-  return (
-    <Show
-      resource={`events/${id}/activities`}
-      id={activity_id}
-      title={`Информация про активность ${activity.name}`}
-    >
-      <SimpleShowLayout>
-        <TextField source="name" label="Название активности" />
-        <FunctionField
-          label="Переменные"
-          render={(record: any) => (
-            <Box sx={{}}>
-              <pre style={{ margin: 0 }}>{record.act_vars}</pre>
-            </Box>
-          )}
-        />
-      </SimpleShowLayout>
-    </Show>
   );
 };

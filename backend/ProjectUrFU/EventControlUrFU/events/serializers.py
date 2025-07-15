@@ -41,3 +41,8 @@ class PlayerVarsSerializer(serializers.Serializer):
 # вообще не нужный и тупой костыль
 class RoleIDSErializer(serializers.Serializer):
     role_id = serializers.IntegerField()
+
+class AccessLevelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["access_level",]

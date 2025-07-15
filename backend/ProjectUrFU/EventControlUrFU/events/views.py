@@ -6,6 +6,7 @@ from .serializers import *
 import events.eventDB.eventDB as eventDB
 import events.eventDB.rawJSON as eventJSON
 import json
+from rest_framework.permissions import AllowAny
 
 import qrcode
 from io import BytesIO
@@ -74,6 +75,16 @@ class EventView(APIView):
         db.close()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
+    def patch(self, request, pk):
+        serializer = EventSerializer(data=request.data, partial=True)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        data = serializer.validated_data
+        db = eventDB.EventDB()
+        db.change_event(event_id=pk, event_info=data)
+        db.close()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
 class PlayersView(APIView):
     def get(self, request, pk):
         db = eventDB.EventDB()
@@ -137,14 +148,24 @@ class PlayerView(APIView):
         db.close()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
-    # реализовать обновление данных
+    # # реализовать обновление данных
+    # def patch(self, request, event_id, player_id):
+    #     serializer = RoleIDSErializer(data=request.data)
+    #     if not serializer.is_valid():
+    #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    #     data = serializer.validated_data
+    #     db = eventDB.EventDB()
+    #     db.assign_role(event_id=event_id, player_id=player_id, role_id=data['role_id'])
+    #     db.close()
+    #     return Response(serializer.data, status=status.HTTP_200_OK)
+    
     def patch(self, request, event_id, player_id):
-        serializer = RoleIDSErializer(data=request.data)
+        serializer = PlayerSerializer(data=request.data, partial=True)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         data = serializer.validated_data
         db = eventDB.EventDB()
-        db.assign_role(event_id=event_id, player_id=player_id, role_id=data['role_id'])
+        db.change_player(event_id=event_id, player_id=player_id, player_info=data)
         db.close()
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -237,6 +258,16 @@ class ActivityView(APIView):
         db.close()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
+    def patch(self, request, event_id, act_id):
+        serializer = ActivitySerializer(data=request.data, partial=True)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        data = serializer.validated_data
+        db = eventDB.EventDB()
+        db.change_activity(event_id=event_id, act_id=act_id, act_info=data)
+        db.close()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
 class RolesView(APIView):
     def get(self, request, pk):
         db = eventDB.EventDB()
@@ -302,6 +333,16 @@ class RoleView(APIView):
         db.delete_role(event_id=event_id, role_id=role_id)
         db.close()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+    def patch(self, request, event_id, role_id):
+        serializer = RoleSerializer(data=request.data, partial=True)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        data = serializer.validated_data
+        db = eventDB.EventDB()
+        db.change_role(event_id=event_id, role_id=role_id, role_info=data)
+        db.close()
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 class AllPlyaerVarsView(APIView):
     def get(self, request, event_id, player_id):
@@ -380,3 +421,45 @@ def generate_qr_code(request, event_id, player_id):
     response = HttpResponse(buffer.getvalue(), content_type="image/png")
     response['Content-Disposition'] = 'inline; filename="qr_code.png"'
     return response
+
+# это ужас просто
+class UserAccessView(APIView):
+    def post(self, request, user_id):
+        try:
+            target_user = User.objects.get(id=user_id)
+        except User.DoesNotExist:
+            return Response(
+                {"error": "User not found"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        # изменить: сделать разграничение между менеджерами и супер админами
+        if not (request.user.is_staff or request.user.access_level == 'manager'):
+            return Response(
+                {"error": "Permission denied"}, 
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        serializer = AccessLevelSerializer(target_user, data=request.data, partial=True)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        data = serializer.validated_data
+        access_level = data['access_level']
+        if access_level in ('manager', 'superadmin', 'volunteer'):
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class EventRegistrationView(APIView):
+    permission_classes = [AllowAny]
+    
+    def post(self, request, pk):
+        serializer = PlayerSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        data = serializer.validated_data
+        db = eventDB.EventDB()
+        player_id = db.new_player(pk, data['first_name'], data['last_name'], data['group_name'])
+        db.close()
+        ser_data = serializer.data
+        ser_data["id"] = player_id
+        return Response(ser_data, status=status.HTTP_201_CREATED)

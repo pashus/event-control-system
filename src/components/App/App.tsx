@@ -1,21 +1,27 @@
-import russianMessages from "ra-language-russian";
 import polyglotI18nProvider from "ra-i18n-polyglot";
+import russianMessages from "ra-language-russian";
 import { Admin, CustomRoutes, Resource } from "react-admin";
-import { EventList, EventEdit, EventCreate, EventShow } from "../Events/Events";
-import { UserList, UserEdit, UserCreate, UserShow } from "../Users/Users";
+import { Route } from "react-router";
+import authProvider from "../../api/auth-provider";
 import { dataProvider } from "../../api/data-provider";
 import { MyLayout } from "../../UI/MyLayout/MyLayout";
-import authProvider from "../../api/auth-provider";
-import { Route } from "react-router";
-import { EventPlayersList, PlayerShow } from "../EventsPlayers/EventsPlayers";
+import { ActivityShow } from "../EventActivities/ActivityShow";
+import { ActivitiesList } from "../EventActivities/ActivitiesList";
+import { PlayerShow } from "../Players/PlayerShow";
+import { PlayersList } from "../Players/PlayersList";
+import { PlayersRegistrationPage } from "../Players/PlayersRegistrationPage";
 import QRScanner from "../QRScanner/QRScanner";
 import RequireAuth from "../RequireAuth/RequireAuth";
-import { EventRegistrationPage } from "../EventsPlayers/EventPlayersRegistration";
-import {
-  EventActivitiesList,
-  ActivityShow,
-} from "../EventActivities/EventActivities";
-import { EventRolesList, RoleShow } from "../EventRoles/EventRoles";
+import { EventCreate } from "../Events/EventCreate";
+import { EventEdit } from "../Events/EventEdit";
+import { EventList } from "../Events/EventList";
+import { EventShow } from "../Events/EventShow";
+import { RoleShow } from "../Roles/RoleShow";
+import { RolesList } from "../Roles/RolesList";
+import { UserCreate } from "../Users/UserCreate";
+import { UserEdit } from "../Users/UserEdit";
+import { UserList } from "../Users/UserList";
+import { UserShow } from "../Users/UserShow";
 
 const customRussianMessages = {
   ...russianMessages,
@@ -61,7 +67,7 @@ function App() {
           path="/events/:id/players"
           element={
             <RequireAuth>
-              <EventPlayersList />
+              <PlayersList />
             </RequireAuth>
           }
         />
@@ -77,7 +83,7 @@ function App() {
           path="/events/:id/activities"
           element={
             <RequireAuth>
-              <EventActivitiesList />
+              <ActivitiesList />
             </RequireAuth>
           }
         />
@@ -93,7 +99,7 @@ function App() {
           path="/events/:id/roles"
           element={
             <RequireAuth>
-              <EventRolesList />
+              <RolesList />
             </RequireAuth>
           }
         />
@@ -115,7 +121,7 @@ function App() {
         />
         <Route
           path="/events/:id/registration"
-          element={<EventRegistrationPage />}
+          element={<PlayersRegistrationPage />}
         />
       </CustomRoutes>
     </Admin>

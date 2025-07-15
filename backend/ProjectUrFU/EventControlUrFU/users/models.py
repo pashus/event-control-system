@@ -3,4 +3,4 @@ from django.contrib.auth.models import AbstractUser
 
 
 class MyUser(AbstractUser):
-    pass
+    access_level = models.CharField(max_length=20, blank=True)

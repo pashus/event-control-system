@@ -18,7 +18,7 @@ import {
   useGetOne,
 } from "react-admin";
 
-export const EventRegistrationPage = () => {
+export const PlayersRegistrationPage = () => {
   const { id: eventId } = useParams();
   const navigate = useNavigate();
   const notify = useNotify();
@@ -27,7 +27,7 @@ export const EventRegistrationPage = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const { data: event, isLoading: isEventLoading } = useGetOne("events", {
+  const { data, isLoading } = useGetOne("events", {
     id: eventId,
   });
 
@@ -76,7 +76,7 @@ export const EventRegistrationPage = () => {
           Регистрация на мероприятие
         </Typography>
 
-        {!isEventLoading && event && (
+        {!isLoading && event && (
           <Box
             sx={{
               backgroundColor: theme.palette.primary.dark,
@@ -89,14 +89,14 @@ export const EventRegistrationPage = () => {
               variant={isMobile ? "subtitle1" : "h4"}
               sx={{ fontWeight: "bold" }}
             >
-              {event.name}
+              {data.name}
             </Typography>
             <Box sx={{ mt: 1 }}>
               <Typography variant="body1" color="text">
-                <strong>Место:</strong> {event.location}
+                <strong>Место:</strong> {data.location}
               </Typography>
               <Typography variant="body1" color="text" sx={{ mt: 1 }}>
-                <strong>Время:</strong> {formatTime(event.start_time)}
+                <strong>Время:</strong> {formatTime(data.start_time)}
               </Typography>
             </Box>
           </Box>
@@ -148,7 +148,7 @@ export const EventRegistrationPage = () => {
               variant="contained"
               color="primary"
               size={isMobile ? "medium" : "large"}
-              disabled={loading || isEventLoading}
+              disabled={loading || isLoading}
               fullWidth={isMobile}
             >
               {loading ? "Отправка..." : "Зарегистрироваться"}

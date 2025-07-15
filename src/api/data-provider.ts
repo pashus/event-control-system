@@ -2,74 +2,122 @@ import { DataProvider } from "react-admin";
 import { apiUrl } from "../constants/constants";
 import httpClient from "./httpClient";
 
-export const dataProvider: DataProvider = {
-  getList: (resource, params) => {
+export const baseProvider: DataProvider = {
+  getList: async (resource) => {
     const url =
       resource === "users" ? `${apiUrl}/users/list/` : `${apiUrl}/${resource}/`;
 
-    return httpClient(url).then(({ json }) => ({
+    const { json } = await httpClient(url);
+    return {
       data: json,
       total: json.length,
-    }));
+    };
   }, //мб без условия
 
-  getOne: (resource, params) =>
-    httpClient(
+  getOne: async (resource, params) => {
+    const url =
       resource === "users"
         ? `${apiUrl}/users/list/${params.id}/`
-        : `${apiUrl}/${resource}/${params.id}/`,
-    ).then(({ json }) => ({
-      data: json,
-    })),
+        : `${apiUrl}/${resource}/${params.id}/`;
 
-  getMany: (resource, params) => {
-    const query = params.ids.map((id) => `${apiUrl}/${resource}/${id}`);
-    return Promise.all(
-      query.map((url) => httpClient(url).then(({ json }) => json)),
-    ).then((data) => ({
-      data,
-    }));
+    const { json } = await httpClient(url);
+    return { data: json };
   },
 
-  getManyReference: () => {
-    return Promise.resolve({ data: [], total: 0 });
+  getMany: async (resource, params) => {
+    const results = await Promise.all(
+      params.ids.map((id) =>
+        httpClient(`${apiUrl}/${resource}/${id}`).then(({ json }) => json),
+      ),
+    );
+
+    return { data: results }; //
   },
 
-  update: (resource, params) =>
-    httpClient(`${apiUrl}/${resource}/${params.id}/`, {
+  getManyReference: async () => {
+    return { data: [], total: 0 };
+  },
+
+  update: async (resource, params) => {
+    const { json } = await httpClient(`${apiUrl}/${resource}/${params.id}/`, {
       method: "PUT",
       body: JSON.stringify(params.data),
-    }).then(({ json }) => ({ data: json })),
+    });
 
-  create: (resource, params) =>
-    httpClient(`${apiUrl}/${resource}/`, {
+    return { data: json };
+  },
+
+  create: async (resource, params) => {
+    const { json } = await httpClient(`${apiUrl}/${resource}/`, {
       method: "POST",
       body: JSON.stringify(params.data),
-    }).then(({ json }) => ({ data: json })),
+    });
 
-  delete: (resource, params) =>
-    httpClient(`${apiUrl}/${resource}/${params.id}/`, {
+    return { data: json };
+  },
+
+  delete: async (resource, params) => {
+    const { json } = await httpClient(`${apiUrl}/${resource}/${params.id}/`, {
       method: "DELETE",
-    }).then(({ json }) => ({ data: json })),
+    });
 
-  deleteMany: (resource, params) => {
-    return Promise.all(
+    return { data: json };
+  },
+
+  deleteMany: async (resource, params) => {
+    await Promise.all(
       params.ids.map((id) =>
         httpClient(`${apiUrl}/${resource}/${id}/`, {
           method: "DELETE",
         }),
       ),
-    ).then(() => ({ data: params.ids }));
+    );
+
+    return { data: params.ids };
   },
 
-  updateMany: (resource, params) => {
-    return Promise.all(
+  updateMany: async (resource, params) => {
+    const results = await Promise.all(
       params.ids.map((id) =>
         httpClient(`${apiUrl}/${resource}/${id}/`, {
           method: "PUT",
           body: JSON.stringify(params.data),
         }).then(({ json }) => json),
       ),
-    ).then((data) => ({ data: data.map((item) => item.id) }));
+    );
+
+    return { data: results.map((item) => item.id) };
+  },
+};
+
+export const dataProvider = {
+  ...baseProvider,
+
+  postNewEvent: async (payload: any) => {
+    const { json } = await httpClient(`${apiUrl}/events/new/`, {
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
+
+    return { data: json };
+  },
+
+  getPlayerQrCode: async (eventId: string, playerId: string) => {
+    const response = await fetch(
+      `${apiUrl}/events/${eventId}/players/${playerId}/qr-code/`,
+      {
+        headers: {
+          Authorization: `Token ${localStorage.getItem("token")}`,
+          Accept: "image/png",
+        },
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error("Ошибка при получении QR-кода");
+    }
+
+    const blob = await response.blob();
+    return URL.createObjectURL(blob);
   },
 };

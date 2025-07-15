@@ -17,4 +17,9 @@ urlpatterns = [
     path('events/<int:event_id>/players/<int:player_id>/vars/<int:act_id>/', PlayerVarsView.as_view(), name='act-vars'),
 
     path('events/<int:event_id>/players/<int:player_id>/qr-code/', generate_qr_code, name='check-in-qr'),
+
+    path('events/<int:pk>/registration/', EventRegistrationView.as_view(), name='registration'),
+
+    # он вообще не должен тут быть
+    path('user-role/<user_id>/', UserAccessView.as_view(), name='user-access'),
 ]
