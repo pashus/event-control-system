@@ -1,37 +1,39 @@
-import { Refine, Authenticated } from "@refinedev/core";
+import { Authenticated, Refine } from "@refinedev/core";
 import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools";
 import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
 
 import {
   ErrorComponent,
-  useNotificationProvider,
   ThemedLayoutV2,
   ThemedSiderV2,
+  useNotificationProvider,
 } from "@refinedev/antd";
 import "@refinedev/antd/dist/reset.css";
 
-import { App as AntdApp } from "antd";
-import { BrowserRouter, Route, Routes, Outlet } from "react-router";
 import routerBindings, {
-  NavigateToResource,
   CatchAllNavigate,
-  UnsavedChangesNotifier,
   DocumentTitleHandler,
+  NavigateToResource,
+  UnsavedChangesNotifier,
 } from "@refinedev/react-router";
+import { App as AntdApp } from "antd";
+import { BrowserRouter, Outlet, Route, Routes } from "react-router";
 
-import { AppIcon } from "./components/app-icon";
-import { ColorModeContextProvider } from "./contexts/color-mode";
-import { Header } from "./components/header";
-import { Login } from "./pages/login";
+import { CalendarOutlined, UserOutlined } from "@ant-design/icons";
 import { authProvider } from "./authProvider";
-import { EventCreate, EventEdit, EventShow, EventsList } from "./pages/events";
+import { AppIcon } from "@/components/app-icon";
+import { Header } from "@/components/header";
+import { ColorModeContextProvider } from "./contexts/color-mode";
+import customDataProvider from "./customDataProvider";
+import { EventCreate, EventEdit, EventShow, EventsList } from "@/pages/events";
 import {
   PlayerCreate,
   PlayerEdit,
   PlayerShow,
   PlayersList,
-} from "./pages/players";
-import customDataProvider from "./customDataProvider";
+} from "@/pages/players";
+import { UserCreate, UserEdit, UserShow, UsersList } from "@/pages/users";
+import { Login } from "@/pages/login";
 
 function App() {
   return (
@@ -55,6 +57,18 @@ function App() {
                     meta: {
                       canDelete: true,
                     },
+                    icon: <CalendarOutlined />,
+                  },
+                  {
+                    name: "users",
+                    list: "/users",
+                    create: "/users/create",
+                    edit: "/users/edit/:id",
+                    show: "/users/show/:id",
+                    meta: {
+                      canDelete: true,
+                    },
+                    icon: <UserOutlined />,
                   },
                   {
                     name: "players",
@@ -65,6 +79,7 @@ function App() {
                     meta: {
                       canDelete: true,
                       parent: "events",
+                      hide: true,
                     },
                   },
                 ]}
@@ -96,6 +111,14 @@ function App() {
                       index
                       element={<NavigateToResource resource="events" />}
                     />
+
+                    {/* Users */}
+                    <Route path="/users">
+                      <Route index element={<UsersList />} />
+                      <Route path="create" element={<UserCreate />} />
+                      <Route path="edit/:id" element={<UserEdit />} />
+                      <Route path="show/:id" element={<UserShow />} />
+                    </Route>
 
                     {/* Events */}
                     <Route path="/events">

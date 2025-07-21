@@ -1,6 +1,7 @@
-import { Show, TextField, MarkdownField, DateField } from "@refinedev/antd";
+import { Show, TextField, DateField } from "@refinedev/antd";
 import { useShow } from "@refinedev/core";
 import { Typography } from "antd";
+
 const { Title } = Typography;
 
 export const EventShow = () => {
@@ -18,7 +19,7 @@ export const EventShow = () => {
       <TextField value={record?.name} />
 
       <Title level={5}>{"Описание"}</Title>
-      <MarkdownField value={record?.description} />
+      <TextField value={record?.description} />
 
       <Title level={5}>{"Время начала"}</Title>
       <DateField value={record?.start_time} format="DD.MM.YYYY, HH:mm" />

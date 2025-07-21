@@ -1,41 +1,74 @@
+import { ICreateEventValues } from "@/types";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
-import { Create, useForm, useSelect } from "@refinedev/antd";
-import {
-  Button,
-  Card,
-  DatePicker,
-  Form,
-  Input,
-  Radio,
-  Select,
-  Space,
-} from "antd";
+import { Create, useForm } from "@refinedev/antd";
+import { Button, Card, DatePicker, Form, Input, Radio, Space } from "antd";
 
 export const EventCreate = () => {
-  const { formProps, saveButtonProps, onFinish } = useForm({});
+  const { formProps, saveButtonProps, onFinish, formLoading } =
+    useForm<ICreateEventValues>({
+      // onMutationSuccess: (data, variables) => {
+      //   console.log("ОТПРАВИЛОСЬ: ", { data, variables });
+      // },
+      // onMutationError: (data, variables) => {
+      //   console.log("НЕ ОТПРАВИЛОСЬ: ", { data, variables });
+      // },
+      successNotification: (data) => {
+        return {
+          message: `Мероприятие ${data?.data.name} успешно создано`,
+          type: "success",
+        };
+      },
+      errorNotification: () => {
+        return {
+          message: "Ошибка при создании мероприятия",
+          type: "error",
+        };
+      },
+    });
 
+  const handleOnFinish = (values: ICreateEventValues) => {
+    /**
+     * Тут ставится пустой массив если поля незаполнены
+     */
+
+    const activities = (values.activities || []).map((activity) => ({
+      ...activity,
+      act_vars: activity.act_vars ?? [],
+    }));
+
+    const roles = (values.roles || []).map((role) => ({
+      ...role,
+      activities_values: (role.activities_values || []).map((activity) => ({
+        ...activity,
+        act_vars: activity.act_vars ?? [],
+      })),
+    }));
+
+    onFinish({
+      event_info: {
+        name: values.name,
+        description: values.description,
+        start_time: values.start_time,
+        end_time: values.end_time,
+        location: values.location,
+      },
+      settings: {
+        has_player_balance: values.has_player_balance || false,
+        activities,
+        roles,
+      },
+      reg_form: {},
+    });
+  };
+
+  //надо потом дотипизировать
   return (
     <Create saveButtonProps={saveButtonProps}>
       <Form
         {...formProps}
         layout="vertical"
-        onFinish={(values: any) => {
-          onFinish({
-            event_info: {
-              name: values.name,
-              description: values.description,
-              start_time: values.start_time,
-              end_time: values.end_time,
-              location: values.location,
-            },
-            settings: {
-              has_player_balance: values.has_player_balance,
-              activities: values.activities,
-              roles: values.roles,
-            },
-            reg_form: {},
-          });
-        }}
+        onFinish={handleOnFinish}
+        isLoading={formLoading}
       >
         <Form.Item
           label={"Название"}
@@ -57,7 +90,7 @@ export const EventCreate = () => {
             },
           ]}
         >
-          <Input.TextArea />
+          <Input.TextArea autoSize={{ minRows: 4 }} />
         </Form.Item>
         <Form.Item
           label={"Время начала"}
@@ -95,6 +128,7 @@ export const EventCreate = () => {
         <Form.Item
           label={"Выберите, будет ли у пользователя баланс"}
           name="has_player_balance"
+          // initialValue={false}
         >
           <Radio.Group
             options={[
@@ -103,7 +137,7 @@ export const EventCreate = () => {
             ]}
           />
         </Form.Item>
-        <Form.List name="activities">
+        <Form.List initialValue={[]} name="activities">
           {(fields, { add, remove }) => (
             <Card
               title="Активности"
@@ -190,7 +224,7 @@ export const EventCreate = () => {
             </Card>
           )}
         </Form.List>
-        <Form.List name="roles">
+        <Form.List initialValue={[]} name="roles">
           {(fields, { add, remove }) => (
             <Card title="Роли" bordered={true}>
               {fields.map(({ key, name, ...restField }) => (

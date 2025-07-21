@@ -1,16 +1,9 @@
-import {
-  DateField,
-  DeleteButton,
-  EditButton,
-  List,
-  ShowButton,
-  useTable,
-} from "@refinedev/antd";
 import { useResource, type BaseRecord } from "@refinedev/core";
-import { Space, Table } from "antd";
 import { useNavigate } from "react-router";
+import { DeleteButton, EditButton, List, useTable } from "@refinedev/antd";
+import { Space, Table } from "antd";
 
-export const EventsList = () => {
+export const UsersList = () => {
   const navigate = useNavigate();
   const { resource } = useResource();
 
@@ -37,29 +30,23 @@ export const EventsList = () => {
         })}
       >
         <Table.Column dataIndex="id" title={"ID"} />
-        <Table.Column dataIndex="name" title={"Название"} />
-        <Table.Column dataIndex="description" title={"Описание"} />
+        <Table.Column dataIndex="username" title={"Имя пользователя"} />
         <Table.Column
-          dataIndex="start_time"
-          title={"Время начала"}
-          render={(value): any => (
-            <DateField value={value} format="DD.MM.YYYY, HH:mm" />
-          )}
+          dataIndex="email"
+          title={"Почта"}
+          render={(email: string) => (email ? email : "-")}
         />
-        <Table.Column
-          dataIndex="end_time"
-          title={"Время окончания"}
-          render={(value): any => (
-            <DateField value={value} format="DD.MM.YYYY, HH:mm" />
-          )}
-        />
-        <Table.Column dataIndex="location" title={"Место проведения"} />
         <Table.Column
           title={"Actions"}
           dataIndex="actions"
           render={(_, record: BaseRecord) => (
             <Space>
-              <EditButton hideText size="small" recordItemId={record.id} />
+              <EditButton
+                disabled
+                hideText
+                size="small"
+                recordItemId={record.id}
+              />
               <DeleteButton hideText size="small" recordItemId={record.id} />
             </Space>
           )}

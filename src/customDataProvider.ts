@@ -3,6 +3,7 @@ import { api } from "./api";
 
 const customDataProvider: DataProvider = {
   getList: async ({ resource }) => {
+    console.log(`LIST ${resource}`);
     if (resource.startsWith("events/")) {
       const [, eventId, subresource] = resource.split("/");
 
@@ -23,7 +24,7 @@ const customDataProvider: DataProvider = {
   },
 
   getMany: async ({ resource, ids }) => {
-    console.log(resource, ids);
+    console.log(`GET MANY ${resource} ${ids}`);
     if (resource.startsWith("events/")) {
       const [, eventId, subresource] = resource.split("/");
 
@@ -44,7 +45,7 @@ const customDataProvider: DataProvider = {
   },
 
   getOne: async ({ resource, id }) => {
-    console.log(resource, id);
+    console.log(`GET ONE ${resource} ${id}`);
     if (resource.startsWith("events/")) {
       const [, eventId, subresource] = resource.split("/");
       const response = await api.get(`events/${eventId}/${subresource}/${id}`);
@@ -53,13 +54,12 @@ const customDataProvider: DataProvider = {
     }
 
     const response = await api.get(`${resource}/${id}`);
-    console.log(123, resource);
 
     return { data: response.data };
   },
 
   create: async ({ resource, variables }) => {
-    console.log(resource, variables);
+    console.log(`CREATE ${resource}, ${variables}`);
     if (resource.startsWith("events/")) {
       const [, eventId, subresource] = resource.split("/");
       const response = await api.post(
@@ -79,10 +79,10 @@ const customDataProvider: DataProvider = {
   },
 
   update: async ({ resource, id, variables }) => {
-    console.log(resource, id, variables);
+    console.log(`UPDATE ${resource} ${id} ${variables}`);
     if (resource.startsWith("events/")) {
       const [, eventId, subresource] = resource.split("/");
-      const response = await api.put(
+      const response = await api.patch(
         `events/${eventId}/${subresource}/${id}/`,
         variables
       );
@@ -90,12 +90,12 @@ const customDataProvider: DataProvider = {
       return { data: response.data };
     }
 
-    const response = await api.put(`${resource}/${id}/`, variables);
+    const response = await api.patch(`${resource}/${id}/`, variables);
     return { data: response.data };
   },
 
   deleteOne: async ({ resource, id }) => {
-    console.log(resource, id);
+    console.log(`DELETE ONE ${resource} ${id}`);
     if (resource.startsWith("events/")) {
       const [, eventId, subresource] = resource.split("/");
       const response = await api.delete(

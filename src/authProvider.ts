@@ -40,11 +40,6 @@ export const authProvider: AuthProvider = {
   logout: async () => {
     try {
       await api.post("/token/logout/");
-
-      return {
-        success: true,
-        redirectTo: "/login",
-      };
     } catch (error) {
       console.warn("Logout failed on server, but clearing token anyway");
     }

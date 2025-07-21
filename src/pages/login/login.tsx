@@ -42,7 +42,11 @@ export const Login = () => {
             label="Пароль"
             rules={[{ required: true, message: "Введите пароль" }]}
           >
-            <Input.Password size="large" placeholder="Введите пароль" />
+            <Input.Password
+              visibilityToggle={false} //И если получится - убрать это
+              size="large"
+              placeholder="Введите пароль"
+            />
           </Form.Item>
 
           <Button
