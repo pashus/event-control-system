@@ -1,6 +1,6 @@
 import { Show, TextField, DateField } from "@refinedev/antd";
 import { useShow } from "@refinedev/core";
-import { Typography } from "antd";
+import { Button, Space, Typography } from "antd";
 
 const { Title } = Typography;
 
@@ -11,7 +11,7 @@ export const EventShow = () => {
   const record = data?.data;
 
   return (
-    <Show isLoading={isLoading}>
+    <Show title={`Мероприятие: ${record?.name}`} isLoading={isLoading}>
       <Title level={5}>{"ID"}</Title>
       <TextField value={record?.id} />
 
@@ -29,6 +29,13 @@ export const EventShow = () => {
 
       <Title level={5}>{"Место проведения"}</Title>
       <TextField value={record?.location} />
+
+      <Space>
+        <Button>Участники</Button>
+        <Button>Участники</Button>
+        <Button>Участники</Button>
+        <Button>Участники</Button>
+      </Space>
     </Show>
   );
 };

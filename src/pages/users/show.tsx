@@ -12,7 +12,11 @@ export const UserShow = () => {
 
   //пока убрать кнопку
   return (
-    <Show isLoading={isLoading} canEdit={false}>
+    <Show
+      title={`Пользователь: ${record?.username}`}
+      isLoading={isLoading}
+      canEdit={false}
+    >
       <Title level={5}>{"ID"}</Title>
       <TextField value={record?.id} />
 

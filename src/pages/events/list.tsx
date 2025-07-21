@@ -3,7 +3,6 @@ import {
   DeleteButton,
   EditButton,
   List,
-  ShowButton,
   useTable,
 } from "@refinedev/antd";
 import { useResource, type BaseRecord } from "@refinedev/core";
@@ -55,7 +54,7 @@ export const EventsList = () => {
         />
         <Table.Column dataIndex="location" title={"Место проведения"} />
         <Table.Column
-          title={"Actions"}
+          title={"-"}
           dataIndex="actions"
           render={(_, record: BaseRecord) => (
             <Space>

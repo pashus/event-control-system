@@ -37,7 +37,7 @@ export const UsersList = () => {
           render={(email: string) => (email ? email : "-")}
         />
         <Table.Column
-          title={"Actions"}
+          title={"-"}
           dataIndex="actions"
           render={(_, record: BaseRecord) => (
             <Space>

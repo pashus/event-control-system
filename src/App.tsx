@@ -20,11 +20,11 @@ import { App as AntdApp } from "antd";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router";
 
 import { CalendarOutlined, UserOutlined } from "@ant-design/icons";
-import { authProvider } from "./authProvider";
+import { authProvider } from "@/authProvider";
 import { AppIcon } from "@/components/app-icon";
 import { Header } from "@/components/header";
-import { ColorModeContextProvider } from "./contexts/color-mode";
-import customDataProvider from "./customDataProvider";
+import { ColorModeContextProvider } from "@/contexts/color-mode";
+import customDataProvider from "@/customDataProvider";
 import { EventCreate, EventEdit, EventShow, EventsList } from "@/pages/events";
 import {
   PlayerCreate,
@@ -34,6 +34,7 @@ import {
 } from "@/pages/players";
 import { UserCreate, UserEdit, UserShow, UsersList } from "@/pages/users";
 import { Login } from "@/pages/login";
+import { ruI18nProvider } from "@/ruI18nProvider";
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
           <AntdApp>
             <DevtoolsProvider>
               <Refine
+                i18nProvider={ruI18nProvider}
                 dataProvider={customDataProvider}
                 notificationProvider={useNotificationProvider}
                 authProvider={authProvider}
@@ -55,7 +57,7 @@ function App() {
                     edit: "/events/edit/:id",
                     show: "/events/show/:id",
                     meta: {
-                      canDelete: true,
+                      label: "Мероприятия",
                     },
                     icon: <CalendarOutlined />,
                   },
@@ -66,7 +68,7 @@ function App() {
                     edit: "/users/edit/:id",
                     show: "/users/show/:id",
                     meta: {
-                      canDelete: true,
+                      label: "Пользователи",
                     },
                     icon: <UserOutlined />,
                   },
