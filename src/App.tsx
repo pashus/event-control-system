@@ -1,14 +1,8 @@
-import {
-  Refine,
-  GitHubBanner,
-  WelcomePage,
-  Authenticated,
-} from "@refinedev/core";
+import { Refine, Authenticated } from "@refinedev/core";
 import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools";
 import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
 
 import {
-  AuthPage,
   ErrorComponent,
   useNotificationProvider,
   ThemedLayoutV2,
@@ -16,7 +10,6 @@ import {
 } from "@refinedev/antd";
 import "@refinedev/antd/dist/reset.css";
 
-import dataProvider from "@refinedev/simple-rest";
 import { App as AntdApp } from "antd";
 import { BrowserRouter, Route, Routes, Outlet } from "react-router";
 import routerBindings, {
@@ -25,58 +18,53 @@ import routerBindings, {
   UnsavedChangesNotifier,
   DocumentTitleHandler,
 } from "@refinedev/react-router";
-import {
-  BlogPostList,
-  BlogPostCreate,
-  BlogPostEdit,
-  BlogPostShow,
-} from "./pages/blog-posts";
-import {
-  CategoryList,
-  CategoryCreate,
-  CategoryEdit,
-  CategoryShow,
-} from "./pages/categories";
+
 import { AppIcon } from "./components/app-icon";
 import { ColorModeContextProvider } from "./contexts/color-mode";
 import { Header } from "./components/header";
 import { Login } from "./pages/login";
-import { Register } from "./pages/register";
-import { ForgotPassword } from "./pages/forgotPassword";
 import { authProvider } from "./authProvider";
+import { EventCreate, EventEdit, EventShow, EventsList } from "./pages/events";
+import {
+  PlayerCreate,
+  PlayerEdit,
+  PlayerShow,
+  PlayersList,
+} from "./pages/players";
+import customDataProvider from "./customDataProvider";
 
 function App() {
   return (
     <BrowserRouter>
-      <GitHubBanner />
       <RefineKbarProvider>
         <ColorModeContextProvider>
           <AntdApp>
             <DevtoolsProvider>
               <Refine
-                dataProvider={dataProvider("https://api.fake-rest.refine.dev")}
+                dataProvider={customDataProvider}
                 notificationProvider={useNotificationProvider}
                 authProvider={authProvider}
                 routerProvider={routerBindings}
                 resources={[
                   {
-                    name: "blog_posts",
-                    list: "/blog-posts",
-                    create: "/blog-posts/create",
-                    edit: "/blog-posts/edit/:id",
-                    show: "/blog-posts/show/:id",
+                    name: "events",
+                    list: "/events",
+                    create: "/events/create",
+                    edit: "/events/edit/:id",
+                    show: "/events/show/:id",
                     meta: {
                       canDelete: true,
                     },
                   },
                   {
-                    name: "categories",
-                    list: "/categories",
-                    create: "/categories/create",
-                    edit: "/categories/edit/:id",
-                    show: "/categories/show/:id",
+                    name: "players",
+                    list: "/events/:id/players",
+                    create: "/events/:id/players/create",
+                    edit: "/events/:id/players/edit/:playerId",
+                    show: "/events/:id/players/show/:playerId",
                     meta: {
                       canDelete: true,
+                      parent: "events",
                     },
                   },
                 ]}
@@ -106,19 +94,45 @@ function App() {
                   >
                     <Route
                       index
-                      element={<NavigateToResource resource="blog_posts" />}
+                      element={<NavigateToResource resource="events" />}
                     />
-                    <Route path="/blog-posts">
-                      <Route index element={<BlogPostList />} />
-                      <Route path="create" element={<BlogPostCreate />} />
-                      <Route path="edit/:id" element={<BlogPostEdit />} />
-                      <Route path="show/:id" element={<BlogPostShow />} />
-                    </Route>
-                    <Route path="/categories">
-                      <Route index element={<CategoryList />} />
-                      <Route path="create" element={<CategoryCreate />} />
-                      <Route path="edit/:id" element={<CategoryEdit />} />
-                      <Route path="show/:id" element={<CategoryShow />} />
+
+                    {/* Events */}
+                    <Route path="/events">
+                      <Route index element={<EventsList />} />
+                      <Route path="create" element={<EventCreate />} />
+                      <Route path="edit/:id" element={<EventEdit />} />
+                      <Route path="show/:id" element={<EventShow />} />
+
+                      {/* Players */}
+                      <Route path=":id/players">
+                        <Route index element={<PlayersList />} />
+                        <Route path="create" element={<PlayerCreate />} />
+                        <Route path="edit/:playerId" element={<PlayerEdit />} />
+                        <Route path="show/:playerId" element={<PlayerShow />} />
+                      </Route>
+
+                      {/* Activities */}
+                      {/* <Route path=":eventId/activities">
+                        <Route index element={<ActivitiesList />} />
+                        <Route path="create" element={<ActivityCreate />} />
+                        <Route
+                          path="edit/:activityId"
+                          element={<ActivityEdit />}
+                        />
+                        <Route
+                          path="show/:activityId"
+                          element={<ActivityShow />}
+                        />
+                      </Route> */}
+
+                      {/* Roles */}
+                      {/* <Route path=":eventId/roles">
+                        <Route index element={<RolesList />} />
+                        <Route path="create" element={<RoleCreate />} />
+                        <Route path="edit/:roleId" element={<RoleEdit />} />
+                        <Route path="show/:roleId" element={<RoleShow />} />
+                      </Route> */}
                     </Route>
                     <Route path="*" element={<ErrorComponent />} />
                   </Route>
@@ -133,11 +147,6 @@ function App() {
                     }
                   >
                     <Route path="/login" element={<Login />} />
-                    <Route path="/register" element={<Register />} />
-                    <Route
-                      path="/forgot-password"
-                      element={<ForgotPassword />}
-                    />
                   </Route>
                 </Routes>
 

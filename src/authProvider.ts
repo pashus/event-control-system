@@ -1,34 +1,64 @@
 import type { AuthProvider } from "@refinedev/core";
-
-export const TOKEN_KEY = "refine-auth";
+import { api } from "./api";
 
 export const authProvider: AuthProvider = {
-  login: async ({ username, email, password }) => {
-    if ((username || email) && password) {
-      localStorage.setItem(TOKEN_KEY, username);
+  login: async ({ username, password }) => {
+    try {
+      const response = await api.post("/token/login/", {
+        username,
+        password,
+      });
+
+      const token = response.data.auth_token;
+
+      if (token) {
+        localStorage.setItem("token", token);
+        return {
+          success: true,
+          redirectTo: "/",
+        };
+      }
+
       return {
-        success: true,
-        redirectTo: "/",
+        success: false,
+        error: {
+          name: "LoginError",
+          message: "Нет токена",
+        },
+      };
+    } catch (error: any) {
+      return {
+        success: false,
+        error: {
+          name: error.name || "LoginError",
+          message: "Неправильное имя пользователя или пароль",
+        },
       };
     }
-
-    return {
-      success: false,
-      error: {
-        name: "LoginError",
-        message: "Invalid username or password",
-      },
-    };
   },
+
   logout: async () => {
-    localStorage.removeItem(TOKEN_KEY);
+    try {
+      await api.post("/token/logout/");
+
+      return {
+        success: true,
+        redirectTo: "/login",
+      };
+    } catch (error) {
+      console.warn("Logout failed on server, but clearing token anyway");
+    }
+    localStorage.removeItem("token");
+
     return {
       success: true,
       redirectTo: "/login",
     };
   },
+
   check: async () => {
-    const token = localStorage.getItem(TOKEN_KEY);
+    console.log("Проверка");
+    const token = localStorage.getItem("token");
     if (token) {
       return {
         authenticated: true,
@@ -40,18 +70,23 @@ export const authProvider: AuthProvider = {
       redirectTo: "/login",
     };
   },
+
   getPermissions: async () => null,
+
   getIdentity: async () => {
-    const token = localStorage.getItem(TOKEN_KEY);
-    if (token) {
+    try {
+      const response = await api.get("/users/me/");
+
       return {
-        id: 1,
-        name: "John Doe",
-        avatar: "https://i.pravatar.cc/300",
+        id: response.data.id,
+        name: response.data.username,
+        avatar: response.data.avatar,
       };
+    } catch (error: any) {
+      console.error(error);
     }
-    return null;
   },
+
   onError: async (error) => {
     console.error(error);
     return { error };
