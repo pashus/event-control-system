@@ -35,6 +35,13 @@ import {
 import { UserCreate, UserEdit, UserShow, UsersList } from "@/pages/users";
 import { Login } from "@/pages/login";
 import { ruI18nProvider } from "@/ruI18nProvider";
+import {
+  ActivitiesList,
+  ActivityCreate,
+  ActivityEdit,
+  ActivityShow,
+} from "@/pages/activities";
+import { RolesList, RoleCreate, RoleEdit, RoleShow } from "@/pages/roles";
 
 function App() {
   return (
@@ -76,10 +83,34 @@ function App() {
                   },
                   {
                     name: "players",
-                    list: "/events/:id/players",
-                    create: "/events/:id/players/create",
-                    edit: "/events/:id/players/edit/:playerId",
-                    show: "/events/:id/players/show/:playerId",
+                    list: "/events/:eventId/players",
+                    create: "/events/:eventId/players/create",
+                    edit: "/events/:eventId/players/edit/:id",
+                    show: "/events/:eventId/players/show/:id",
+                    meta: {
+                      canDelete: true,
+                      parent: "events",
+                      hide: true,
+                    },
+                  },
+                  {
+                    name: "activities",
+                    list: "/events/:eventId/activities",
+                    create: "/events/:eventId/activities/create",
+                    edit: "/events/:eventId/activities/edit/:id",
+                    show: "/events/:eventId/activities/show/:id",
+                    meta: {
+                      canDelete: true,
+                      parent: "events",
+                      hide: true,
+                    },
+                  },
+                  {
+                    name: "roles",
+                    list: "/events/:eventId/roles",
+                    create: "/events/:eventId/roles/create",
+                    edit: "/events/:eventId/roles/edit/:id",
+                    show: "/events/:eventId/roles/show/:id",
                     meta: {
                       canDelete: true,
                       parent: "events",
@@ -96,6 +127,7 @@ function App() {
                 }}
               >
                 <Routes>
+                  {/* надо разобраться с защищенными роутами*/}
                   <Route
                     element={
                       <Authenticated
@@ -111,12 +143,17 @@ function App() {
                       </Authenticated>
                     }
                   >
+                    {/**
+                     * Роут названия у сайдбара
+                     */}
                     <Route
                       index
                       element={<NavigateToResource resource="events" />}
                     />
 
-                    {/* Users */}
+                    {/**
+                     * Users
+                     */}
                     <Route path="/users">
                       <Route index element={<UsersList />} />
                       <Route path="create" element={<UserCreate />} />
@@ -124,43 +161,49 @@ function App() {
                       <Route path="show/:id" element={<UserShow />} />
                     </Route>
 
-                    {/* Events */}
+                    {/**
+                     * Events
+                     */}
                     <Route path="/events">
                       <Route index element={<EventsList />} />
                       <Route path="create" element={<EventCreate />} />
                       <Route path="edit/:id" element={<EventEdit />} />
                       <Route path="show/:id" element={<EventShow />} />
 
-                      {/* Players */}
-                      <Route path=":id/players">
+                      {/**
+                       * Players
+                       */}
+                      <Route path=":eventId/players">
                         <Route index element={<PlayersList />} />
                         <Route path="create" element={<PlayerCreate />} />
-                        <Route path="edit/:playerId" element={<PlayerEdit />} />
-                        <Route path="show/:playerId" element={<PlayerShow />} />
+                        <Route path="edit/:id" element={<PlayerEdit />} />
+                        <Route path="show/:id" element={<PlayerShow />} />
                       </Route>
 
-                      {/* Activities */}
-                      {/* <Route path=":eventId/activities">
+                      {/**
+                       * Activities
+                       */}
+                      <Route path=":eventId/activities">
                         <Route index element={<ActivitiesList />} />
                         <Route path="create" element={<ActivityCreate />} />
-                        <Route
-                          path="edit/:activityId"
-                          element={<ActivityEdit />}
-                        />
-                        <Route
-                          path="show/:activityId"
-                          element={<ActivityShow />}
-                        />
-                      </Route> */}
+                        <Route path="edit/:id" element={<ActivityEdit />} />
+                        <Route path="show/:id" element={<ActivityShow />} />
+                      </Route>
 
-                      {/* Roles */}
-                      {/* <Route path=":eventId/roles">
+                      {/**
+                       * Roles
+                       */}
+                      <Route path=":eventId/roles">
                         <Route index element={<RolesList />} />
                         <Route path="create" element={<RoleCreate />} />
-                        <Route path="edit/:roleId" element={<RoleEdit />} />
-                        <Route path="show/:roleId" element={<RoleShow />} />
-                      </Route> */}
+                        <Route path="edit/:id" element={<RoleEdit />} />
+                        <Route path="show/:id" element={<RoleShow />} />
+                      </Route>
                     </Route>
+
+                    {/**
+                     * 404
+                     */}
                     <Route path="*" element={<ErrorComponent />} />
                   </Route>
                   <Route

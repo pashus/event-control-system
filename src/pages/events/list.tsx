@@ -24,13 +24,10 @@ export const EventsList = () => {
         rowKey="id"
         onRow={(record) => ({
           onClick: (event) => {
-            /**
-             * Тут скорее всего надо будет изменять
-             */
             if ((event.target as HTMLElement).closest(".ant-btn")) {
               return;
             }
-            navigate(`/${resource?.name}/show/${record.id}`);
+            navigate(`/events/show/${record.id}`);
           },
           style: { cursor: "pointer" },
         })}

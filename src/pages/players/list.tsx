@@ -1,14 +1,20 @@
-import { useResource, type BaseRecord } from "@refinedev/core";
+import { type BaseRecord } from "@refinedev/core";
 import { useNavigate, useParams } from "react-router";
 import { DeleteButton, EditButton, List, useTable } from "@refinedev/antd";
 import { Space, Table } from "antd";
 
 export const PlayersList = () => {
   const navigate = useNavigate();
-  const { resource } = useResource();
+  const { eventId } = useParams();
 
   const { tableProps } = useTable({
     syncWithLocation: true,
+    meta: {
+      parent: {
+        resource: "events",
+        id: eventId,
+      },
+    },
   });
 
   return (
@@ -18,13 +24,10 @@ export const PlayersList = () => {
         rowKey="id"
         onRow={(record) => ({
           onClick: (event) => {
-            /**
-             * Тут скорее всего надо будет изменять
-             */
             if ((event.target as HTMLElement).closest(".ant-btn")) {
               return;
             }
-            navigate(`/${resource?.name}/show/${record.id}`);
+            navigate(`/events/${eventId}/players/show/${record.id}`);
           },
           style: { cursor: "pointer" },
         })}
@@ -40,12 +43,7 @@ export const PlayersList = () => {
           dataIndex="actions"
           render={(_, record: BaseRecord) => (
             <Space>
-              <EditButton
-                disabled
-                hideText
-                size="small"
-                recordItemId={record.id}
-              />
+              <EditButton hideText size="small" recordItemId={record.id} />
               <DeleteButton hideText size="small" recordItemId={record.id} />
             </Space>
           )}

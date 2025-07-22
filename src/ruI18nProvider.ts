@@ -13,13 +13,29 @@ export const ruI18nProvider: I18nProvider = {
       "buttons.refresh": "Обновить",
       "buttons.show": "Показать",
       "buttons.confirm": "Действительно удалить?",
-      "events.titles.list": "Мероприятия",
+
       "users.titles.list": "Пользователи",
       "users.titles.create": "Добавить пользователя",
+      "users.titles.edit": "Редактировать пользователя",
+
+      "events.titles.list": "Мероприятия",
       "events.titles.create": "Создать мероприятие",
       "events.titles.edit": "Редактировать мероприятие",
-      "users.titles.edit": "Редактировать пользователя",
+
       "players.titles.list": "Участники",
+      "players.players": "Участники",
+      "players.titles.create": "Добавить участника",
+      "players.titles.edit": "Редактировать участника",
+
+      "activities.titles.list": "Активности",
+      "activities.activities": "Активности",
+      "activities.titles.create": "Создать активность",
+      "activities.titles.edit": "Редактировать активность",
+
+      "roles.roles": "Роли",
+      "roles.titles.list": "Роли",
+      "roles.titles.create": "Создать роль",
+      "roles.titles.edit": "Редактировать роль",
     };
 
     return translations[key] || key;

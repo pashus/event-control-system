@@ -5,110 +5,89 @@ const customDataProvider: DataProvider = {
   getList: async ({ resource, meta }) => {
     console.log(`LIST ${resource}`);
 
-    // if (meta?.parent) {
-    //   const response = await api.get(
-    //     `${meta?.parent.resource}/${meta?.parent.id}/${resource}`
-    //   );
-    //   return {
-    //     data: Array.isArray(response.data) ? response.data : [],
-    //     total: Array.isArray(response.data) ? response.data.length : 0,
-    //   };
-    // }
+    let url: string;
+    meta?.parent
+      ? (url = `${meta?.parent.resource}/${meta?.parent.id}/${resource}/`)
+      : (url = `${resource}/`);
 
-    const response = await api.get(`${resource}`, {});
+    const response = await api.get(url);
     return {
       data: Array.isArray(response.data) ? response.data : [],
       total: Array.isArray(response.data) ? response.data.length : 0,
     };
   },
 
-  getMany: async ({ resource, ids }) => {
-    console.log(`GET MANY ${resource} ${ids}`);
-    if (resource.startsWith("events/")) {
-      const [, eventId, subresource] = resource.split("/");
+  // getMany: async ({ resource, ids }) => {
+  //   console.log(`GET MANY ${resource} ${ids}`);
 
-      const response = await Promise.all(
-        ids.map((id) =>
-          api.get(`events/${eventId}/${subresource}/${id}`).then((r) => r.data)
-        )
-      );
-
-      return { data: response };
-    }
-
-    const response = await Promise.all(
-      ids.map((id) => api.get(`${resource}/${id}`).then((r) => r.data))
-    );
-    return { data: response };
-  },
+  //   const response = await Promise.all(
+  //     ids.map((id) => api.get(`${resource}/${id}`).then((r) => r.data))
+  //   );
+  //   return { data: response };
+  // },
 
   getOne: async ({ resource, id, meta }) => {
     console.log(`GET ONE ${resource} ${id}`);
 
-    if (resource.startsWith("events/")) {
-      const [, eventId, subresource] = resource.split("/");
-      const response = await api.get(`events/${eventId}/${subresource}/${id}`);
+    let url: string;
+    meta?.parent
+      ? (url = `${meta?.parent.resource}/${meta?.parent.id}/${resource}/${id}/`)
+      : (url = `${resource}/${id}/`);
 
-      return { data: response.data };
-    }
-
-    const response = await api.get(`${resource}/${id}`);
-    return { data: response.data };
+    const response = await api.get(url);
+    return {
+      data: response.data,
+    };
   },
 
   create: async ({ resource, variables, meta }) => {
     console.log(`CREATE ${resource}, ${variables}`);
-    // if (resource.startsWith("events/")) {
-    //   const [, eventId, subresource] = resource.split("/");
-    //   const response = await api.post(
-    //     `events/${eventId}/${subresource}/`,
-    //     variables
-    //   );
 
-    //   return { data: response.data };
+    let url: string;
+    meta?.parent
+      ? (url = `${meta?.parent.resource}/${meta?.parent.id}/${resource}/`)
+      : (url = `${resource}/`);
+
     if (resource === "events") {
-      const response = await api.post("events/new/", variables);
-
-      return { data: response.data };
+      url = `events/new/`;
     }
 
-    const response = await api.post(`${resource}/`, variables);
-    return { data: response.data };
+    const response = await api.post(url, variables);
+    return {
+      data: response.data,
+    };
   },
 
-  update: async ({ resource, id, variables }) => {
+  update: async ({ resource, id, variables, meta }) => {
     console.log(`UPDATE ${resource} ${id} ${variables}`);
-    if (resource.startsWith("events/")) {
-      const [, eventId, subresource] = resource.split("/");
-      const response = await api.patch(
-        `events/${eventId}/${subresource}/${id}/`,
-        variables
-      );
 
-      return { data: response.data };
-    }
+    let url: string;
+    meta?.parent
+      ? (url = `${meta?.parent.resource}/${meta?.parent.id}/${resource}/${id}/`)
+      : (url = `${resource}/${id}/`);
 
-    const response = await api.patch(`${resource}/${id}/`, variables);
-    return { data: response.data };
+    const response = await api.patch(url, variables);
+    return {
+      data: response.data,
+    };
   },
 
-  deleteOne: async ({ resource, id }) => {
+  deleteOne: async ({ resource, id, meta }) => {
     console.log(`DELETE ONE ${resource} ${id}`);
-    if (resource.startsWith("events/")) {
-      const [, eventId, subresource] = resource.split("/");
-      const response = await api.delete(
-        `events/${eventId}/${subresource}/${id}/`
-      );
 
-      return { data: response.data };
-    }
+    let url: string;
+    meta?.parent
+      ? (url = `${meta?.parent.resource}/${meta?.parent.id}/${resource}/${id}/`)
+      : (url = `${resource}/${id}/`);
 
-    const response = await api.delete(`${resource}/${id}/`);
-    return { data: response.data };
+    const response = await api.delete(url);
+    return {
+      data: response.data,
+    };
   },
 
   getApiUrl: () => {
-    return "http://localhost:8000/api/v1";
+    return "http://localhost:8000/api/v1/";
   },
 };
 

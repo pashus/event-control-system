@@ -1,14 +1,20 @@
-import { useResource, type BaseRecord } from "@refinedev/core";
-import { useNavigate } from "react-router";
+import { type BaseRecord } from "@refinedev/core";
+import { useNavigate, useParams } from "react-router";
 import { DeleteButton, EditButton, List, useTable } from "@refinedev/antd";
 import { Space, Table } from "antd";
 
-export const UsersList = () => {
+export const ActivitiesList = () => {
   const navigate = useNavigate();
-  const { resource } = useResource();
+  const { eventId } = useParams();
 
   const { tableProps } = useTable({
     syncWithLocation: true,
+    meta: {
+      parent: {
+        resource: "events",
+        id: eventId,
+      },
+    },
   });
 
   return (
@@ -18,35 +24,23 @@ export const UsersList = () => {
         rowKey="id"
         onRow={(record) => ({
           onClick: (event) => {
-            /**
-             * Тут скорее всего надо будет изменять
-             */
             if ((event.target as HTMLElement).closest(".ant-btn")) {
               return;
             }
-            navigate(`/users/show/${record.id}`);
+            navigate(`/events/${eventId}/activities/show/${record.id}`);
           },
           style: { cursor: "pointer" },
         })}
       >
         <Table.Column dataIndex="id" title={"ID"} />
-        <Table.Column dataIndex="username" title={"Имя пользователя"} />
-        <Table.Column
-          dataIndex="email"
-          title={"Почта"}
-          render={(email: string) => (email ? email : "-")}
-        />
+        <Table.Column dataIndex="name" title={"Название"} />
+        <Table.Column dataIndex="act_vars" title={"Переменные"} />
         <Table.Column
           title={"-"}
           dataIndex="actions"
           render={(_, record: BaseRecord) => (
             <Space>
-              <EditButton
-                disabled
-                hideText
-                size="small"
-                recordItemId={record.id}
-              />
+              <EditButton hideText size="small" recordItemId={record.id} />
               <DeleteButton hideText size="small" recordItemId={record.id} />
             </Space>
           )}

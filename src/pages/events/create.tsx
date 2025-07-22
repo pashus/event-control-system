@@ -6,12 +6,12 @@ import { Button, Card, DatePicker, Form, Input, Radio, Space } from "antd";
 export const EventCreate = () => {
   const { formProps, saveButtonProps, onFinish, formLoading } =
     useForm<ICreateEventValues>({
-      // onMutationSuccess: (data, variables) => {
-      //   console.log("ОТПРАВИЛОСЬ: ", { data, variables });
-      // },
-      // onMutationError: (data, variables) => {
-      //   console.log("НЕ ОТПРАВИЛОСЬ: ", { data, variables });
-      // },
+      onMutationSuccess: (data, variables) => {
+        console.log("ОТПРАВИЛОСЬ: ", { data, variables });
+      },
+      onMutationError: (data, variables) => {
+        console.log("НЕ ОТПРАВИЛОСЬ: ", { data, variables });
+      },
       successNotification: (data) => {
         return {
           message: `Мероприятие ${data?.data.name} успешно создано`,

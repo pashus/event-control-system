@@ -1,8 +1,17 @@
 import { Create, useForm } from "@refinedev/antd";
 import { Form, Input } from "antd";
+import { useParams } from "react-router";
 
 export const PlayerCreate = () => {
-  const { formProps, saveButtonProps, formLoading } = useForm({
+  const { eventId } = useParams();
+
+  const { formProps, saveButtonProps, formLoading, onFinish } = useForm({
+    onMutationSuccess: (data, variables) => {
+      console.log("ОТПРАВИЛОСЬ: ", { data, variables });
+    },
+    onMutationError: (data, variables) => {
+      console.log("НЕ ОТПРАВИЛОСЬ: ", { data, variables });
+    },
     successNotification: (data) => {
       return {
         message: `Участник ${data?.data.username} успешно добавлен`,
@@ -15,7 +24,24 @@ export const PlayerCreate = () => {
         type: "error",
       };
     },
+    meta: {
+      parent: {
+        resource: "events",
+        id: eventId,
+      },
+    },
   });
+
+  // const handleOnFinish = (values: any) => {
+  //   onFinish({
+  //     data: {
+  //       first_name: values.first_name,
+  //       last_name: values.last_name,
+  //       group_name: values.group_name,
+  //       role_id: values.role_id,
+  //     },
+  //   });
+  // };
 
   return (
     <Create saveButtonProps={saveButtonProps} isLoading={formLoading}>

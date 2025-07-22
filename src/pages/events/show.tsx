@@ -7,13 +7,13 @@ import {
   ListButton,
 } from "@refinedev/antd";
 import { useNavigation, useShow } from "@refinedev/core";
-import { Button, Space, Typography } from "antd";
+import { Button, Typography } from "antd";
 
 const { Title } = Typography;
 
 export const EventShow = () => {
-  const { queryResult } = useShow();
-  const { data, isLoading } = queryResult;
+  const { query } = useShow();
+  const { data, isLoading } = query;
 
   const record = data?.data;
 
@@ -29,15 +29,9 @@ export const EventShow = () => {
         listButtonProps,
       }) => (
         <>
-          {listButtonProps && (
-            <ListButton {...listButtonProps} meta={{ foo: "bar" }} />
-          )}
-          {editButtonProps && (
-            <EditButton {...editButtonProps} meta={{ foo: "bar" }} />
-          )}
-          {deleteButtonProps && (
-            <DeleteButton {...deleteButtonProps} meta={{ foo: "bar" }} />
-          )}
+          {listButtonProps && <ListButton {...listButtonProps} />}
+          {editButtonProps && <EditButton {...editButtonProps} />}
+          {deleteButtonProps && <DeleteButton {...deleteButtonProps} />}
         </>
       )}
       footerButtons={() => (
@@ -52,10 +46,18 @@ export const EventShow = () => {
           <Button color="geekblue" variant="outlined">
             Форма на регистрацию
           </Button>
-          <Button color="pink" variant="outlined">
+          <Button
+            onClick={() => push(`/events/${record?.id}/activities`)}
+            color="pink"
+            variant="outlined"
+          >
             Активности
           </Button>
-          <Button color="purple" variant="outlined">
+          <Button
+            onClick={() => push(`/events/${record?.id}/roles`)}
+            color="purple"
+            variant="outlined"
+          >
             Роли
           </Button>
         </>

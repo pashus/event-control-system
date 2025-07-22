@@ -7,19 +7,28 @@ import {
 } from "@refinedev/antd";
 import { useShow } from "@refinedev/core";
 import { Typography } from "antd";
+import { useParams } from "react-router";
 
 const { Title } = Typography;
 
-export const UserShow = () => {
-  const { query } = useShow();
+export const ActivityShow = () => {
+  const { eventId } = useParams();
+
+  const { query } = useShow({
+    meta: {
+      parent: {
+        resource: "events",
+        id: eventId,
+      },
+    },
+  });
   const { data, isLoading } = query;
 
   const record = data?.data;
 
-  //пока убрать кнопку
   return (
     <Show
-      title={`Пользователь: ${record?.username}`}
+      title={`Активность: ${record?.name}`}
       isLoading={isLoading}
       headerButtons={({
         deleteButtonProps,
@@ -32,16 +41,15 @@ export const UserShow = () => {
           {deleteButtonProps && <DeleteButton {...deleteButtonProps} />}
         </>
       )}
-      canEdit={false}
     >
       <Title level={5}>{"ID"}</Title>
       <TextField value={record?.id} />
 
-      <Title level={5}>{"Имя пользователя"}</Title>
-      <TextField value={record?.username} />
+      <Title level={5}>{"Название"}</Title>
+      <TextField value={record?.name} />
 
-      <Title level={5}>{"Почта"}</Title>
-      <TextField value={record?.email || "-"} />
+      <Title level={5}>{"Переменные активности"}</Title>
+      <TextField value={record?.act_vars} />
     </Show>
   );
 };
