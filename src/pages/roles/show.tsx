@@ -1,3 +1,4 @@
+import { UserSwitchOutlined } from "@ant-design/icons";
 import {
   DeleteButton,
   EditButton,
@@ -6,10 +7,10 @@ import {
   TextField,
 } from "@refinedev/antd";
 import { useShow } from "@refinedev/core";
-import { Typography } from "antd";
+import { Card, Space, Typography } from "antd";
 import { useParams } from "react-router";
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
 export const RoleShow = () => {
   const { eventId } = useParams();
@@ -36,7 +37,9 @@ export const RoleShow = () => {
         listButtonProps,
       }) => (
         <>
-          {listButtonProps && <ListButton {...listButtonProps} />}
+          {listButtonProps && (
+            <ListButton {...listButtonProps} icon={<UserSwitchOutlined />} />
+          )}
           {editButtonProps && <EditButton {...editButtonProps} />}
           {deleteButtonProps && (
             <DeleteButton
@@ -59,7 +62,29 @@ export const RoleShow = () => {
       <TextField value={record?.name} />
 
       <Title level={5}>{"Значения активностей"}</Title>
-      {/* <TextField value={record?.activities_values} /> */}
+      {record?.activities_values?.length ? (
+        <Space direction="vertical" style={{ width: "100%" }}>
+          {record.activities_values.map((activity: any, index: number) => (
+            <Card
+              key={index}
+              type="inner"
+              title={`Активность ID: ${activity.activity_id}`}
+            >
+              <Space direction="vertical">
+                {activity.act_vars.map(
+                  ([key, value]: [string, string], idx: number) => (
+                    <Text key={idx}>
+                      {key}: {value}
+                    </Text>
+                  )
+                )}
+              </Space>
+            </Card>
+          ))}
+        </Space>
+      ) : (
+        <Text type="secondary">Нет значений активностей</Text>
+      )}
     </Show>
   );
 };

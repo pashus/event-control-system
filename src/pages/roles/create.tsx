@@ -7,12 +7,12 @@ export const RoleCreate = () => {
   const { eventId } = useParams();
 
   const { formProps, saveButtonProps, formLoading } = useForm({
-    onMutationSuccess: (data, variables) => {
-      console.log("ОТПРАВИЛОСЬ: ", { data, variables });
-    },
-    onMutationError: (data, variables) => {
-      console.log("НЕ ОТПРАВИЛОСЬ: ", { data, variables });
-    },
+    // onMutationSuccess: (data, variables) => {
+    //   console.log("ОТПРАВИЛОСЬ: ", { data, variables });
+    // },
+    // onMutationError: (data, variables) => {
+    //   console.log("НЕ ОТПРАВИЛОСЬ: ", { data, variables });
+    // },
     successNotification: (data) => {
       return {
         message: `Активность ${data?.data.name} успешно добавлена`,

@@ -1,4 +1,4 @@
-import { UserOutlined } from "@ant-design/icons";
+import { CrownOutlined } from "@ant-design/icons";
 import {
   DeleteButton,
   EditButton,
@@ -29,7 +29,7 @@ export const UserShow = () => {
       }) => (
         <>
           {listButtonProps && (
-            <ListButton icon={<UserOutlined />} {...listButtonProps} />
+            <ListButton icon={<CrownOutlined />} {...listButtonProps} />
           )}
           {editButtonProps && <EditButton {...editButtonProps} />}
           {deleteButtonProps && <DeleteButton {...deleteButtonProps} />}

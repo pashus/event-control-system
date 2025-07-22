@@ -1,7 +1,9 @@
 import { type BaseRecord } from "@refinedev/core";
 import { useLocation, useNavigate, useParams } from "react-router";
 import { DeleteButton, EditButton, List, useTable } from "@refinedev/antd";
-import { Space, Table } from "antd";
+import { Space, Table, Typography } from "antd";
+
+const { Text } = Typography;
 
 export const RolesList = () => {
   const navigate = useNavigate();
@@ -35,6 +37,11 @@ export const RolesList = () => {
       >
         <Table.Column dataIndex="id" title={"ID"} />
         <Table.Column dataIndex="name" title={"Название"} />
+        <Table.Column
+          dataIndex="activities_values"
+          title={"Активности"}
+          render={() => <Text>см. внутри</Text>}
+        />
         <Table.Column
           title={"-"}
           dataIndex="actions"

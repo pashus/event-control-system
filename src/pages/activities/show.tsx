@@ -1,3 +1,4 @@
+import { ThunderboltOutlined } from "@ant-design/icons";
 import {
   DeleteButton,
   EditButton,
@@ -36,7 +37,9 @@ export const ActivityShow = () => {
         listButtonProps,
       }) => (
         <>
-          {listButtonProps && <ListButton {...listButtonProps} />}
+          {listButtonProps && (
+            <ListButton {...listButtonProps} icon={<ThunderboltOutlined />} />
+          )}
           {editButtonProps && <EditButton {...editButtonProps} />}
           {deleteButtonProps && (
             <DeleteButton

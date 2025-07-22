@@ -41,7 +41,7 @@ export const EventShow = () => {
         <>
           <Button
             onClick={() => push(`/events/${record?.id}/players`)}
-            color="cyan"
+            color="purple"
             variant="outlined"
           >
             Участники
