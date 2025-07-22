@@ -2,24 +2,23 @@ import { DataProvider } from "@refinedev/core";
 import { api } from "./api";
 
 const customDataProvider: DataProvider = {
-  getList: async ({ resource }) => {
+  getList: async ({ resource, meta }) => {
     console.log(`LIST ${resource}`);
-    if (resource.startsWith("events/")) {
-      const [, eventId, subresource] = resource.split("/");
 
-      const response = await api.get(`events/${eventId}/${subresource}`, {});
-
-      return {
-        data: response.data,
-        total: response.data.length,
-      };
-    }
+    // if (meta?.parent) {
+    //   const response = await api.get(
+    //     `${meta?.parent.resource}/${meta?.parent.id}/${resource}`
+    //   );
+    //   return {
+    //     data: Array.isArray(response.data) ? response.data : [],
+    //     total: Array.isArray(response.data) ? response.data.length : 0,
+    //   };
+    // }
 
     const response = await api.get(`${resource}`, {});
-
     return {
-      data: response.data,
-      total: response.data.length,
+      data: Array.isArray(response.data) ? response.data : [],
+      total: Array.isArray(response.data) ? response.data.length : 0,
     };
   },
 
@@ -40,12 +39,12 @@ const customDataProvider: DataProvider = {
     const response = await Promise.all(
       ids.map((id) => api.get(`${resource}/${id}`).then((r) => r.data))
     );
-
     return { data: response };
   },
 
-  getOne: async ({ resource, id }) => {
+  getOne: async ({ resource, id, meta }) => {
     console.log(`GET ONE ${resource} ${id}`);
+
     if (resource.startsWith("events/")) {
       const [, eventId, subresource] = resource.split("/");
       const response = await api.get(`events/${eventId}/${subresource}/${id}`);
@@ -54,21 +53,20 @@ const customDataProvider: DataProvider = {
     }
 
     const response = await api.get(`${resource}/${id}`);
-
     return { data: response.data };
   },
 
-  create: async ({ resource, variables }) => {
+  create: async ({ resource, variables, meta }) => {
     console.log(`CREATE ${resource}, ${variables}`);
-    if (resource.startsWith("events/")) {
-      const [, eventId, subresource] = resource.split("/");
-      const response = await api.post(
-        `events/${eventId}/${subresource}/`,
-        variables
-      );
+    // if (resource.startsWith("events/")) {
+    //   const [, eventId, subresource] = resource.split("/");
+    //   const response = await api.post(
+    //     `events/${eventId}/${subresource}/`,
+    //     variables
+    //   );
 
-      return { data: response.data };
-    } else if (resource === "events") {
+    //   return { data: response.data };
+    if (resource === "events") {
       const response = await api.post("events/new/", variables);
 
       return { data: response.data };

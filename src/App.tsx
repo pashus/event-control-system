@@ -57,6 +57,7 @@ function App() {
                     edit: "/events/edit/:id",
                     show: "/events/show/:id",
                     meta: {
+                      canDelete: true,
                       label: "Мероприятия",
                     },
                     icon: <CalendarOutlined />,
@@ -68,6 +69,7 @@ function App() {
                     edit: "/users/edit/:id",
                     show: "/users/show/:id",
                     meta: {
+                      canDelete: true,
                       label: "Пользователи",
                     },
                     icon: <UserOutlined />,

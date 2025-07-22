@@ -101,7 +101,7 @@ export const EventCreate = () => {
             },
           ]}
         >
-          <DatePicker showTime />
+          <DatePicker showTime style={{ width: "100%" }} />
         </Form.Item>
         <Form.Item
           label={"Время окончания"}
@@ -112,7 +112,7 @@ export const EventCreate = () => {
             },
           ]}
         >
-          <DatePicker showTime />
+          <DatePicker showTime style={{ width: "100%" }} />
         </Form.Item>
         <Form.Item
           label={"Место проведения"}
@@ -128,7 +128,6 @@ export const EventCreate = () => {
         <Form.Item
           label={"Выберите, будет ли у пользователя баланс"}
           name="has_player_balance"
-          // initialValue={false}
         >
           <Radio.Group
             options={[

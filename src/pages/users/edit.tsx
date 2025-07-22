@@ -22,6 +22,7 @@ export const UserEdit = () => {
     <Edit
       saveButtonProps={{ ...saveButtonProps, disabled: true }}
       isLoading={formLoading}
+      headerButtons={() => <></>}
     >
       <Form {...formProps} layout="vertical">
         <Form.Item

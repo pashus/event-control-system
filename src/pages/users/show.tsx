@@ -1,4 +1,10 @@
-import { Show, TextField } from "@refinedev/antd";
+import {
+  DeleteButton,
+  EditButton,
+  ListButton,
+  Show,
+  TextField,
+} from "@refinedev/antd";
 import { useShow } from "@refinedev/core";
 import { Typography } from "antd";
 
@@ -15,6 +21,23 @@ export const UserShow = () => {
     <Show
       title={`Пользователь: ${record?.username}`}
       isLoading={isLoading}
+      headerButtons={({
+        deleteButtonProps,
+        editButtonProps,
+        listButtonProps,
+      }) => (
+        <>
+          {listButtonProps && (
+            <ListButton {...listButtonProps} meta={{ foo: "bar" }} />
+          )}
+          {editButtonProps && (
+            <EditButton {...editButtonProps} meta={{ foo: "bar" }} />
+          )}
+          {deleteButtonProps && (
+            <DeleteButton {...deleteButtonProps} meta={{ foo: "bar" }} />
+          )}
+        </>
+      )}
       canEdit={false}
     >
       <Title level={5}>{"ID"}</Title>

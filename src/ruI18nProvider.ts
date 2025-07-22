@@ -16,8 +16,10 @@ export const ruI18nProvider: I18nProvider = {
       "events.titles.list": "Мероприятия",
       "users.titles.list": "Пользователи",
       "users.titles.create": "Добавить пользователя",
+      "events.titles.create": "Создать мероприятие",
       "events.titles.edit": "Редактировать мероприятие",
       "users.titles.edit": "Редактировать пользователя",
+      "players.titles.list": "Участники",
     };
 
     return translations[key] || key;

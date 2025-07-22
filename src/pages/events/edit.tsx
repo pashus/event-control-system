@@ -19,7 +19,11 @@ export const EventEdit = () => {
   });
 
   return (
-    <Edit saveButtonProps={saveButtonProps} isLoading={formLoading}>
+    <Edit
+      saveButtonProps={saveButtonProps}
+      isLoading={formLoading}
+      headerButtons={() => <></>}
+    >
       <Form {...formProps} layout="vertical">
         <Form.Item
           label={"Название"}

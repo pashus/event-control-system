@@ -1,5 +1,12 @@
-import { Show, TextField, DateField } from "@refinedev/antd";
-import { useShow } from "@refinedev/core";
+import {
+  Show,
+  TextField,
+  DateField,
+  DeleteButton,
+  EditButton,
+  ListButton,
+} from "@refinedev/antd";
+import { useNavigation, useShow } from "@refinedev/core";
 import { Button, Space, Typography } from "antd";
 
 const { Title } = Typography;
@@ -10,8 +17,50 @@ export const EventShow = () => {
 
   const record = data?.data;
 
+  const { push } = useNavigation();
+
   return (
-    <Show title={`Мероприятие: ${record?.name}`} isLoading={isLoading}>
+    <Show
+      title={`Мероприятие: ${record?.name}`}
+      isLoading={isLoading}
+      headerButtons={({
+        deleteButtonProps,
+        editButtonProps,
+        listButtonProps,
+      }) => (
+        <>
+          {listButtonProps && (
+            <ListButton {...listButtonProps} meta={{ foo: "bar" }} />
+          )}
+          {editButtonProps && (
+            <EditButton {...editButtonProps} meta={{ foo: "bar" }} />
+          )}
+          {deleteButtonProps && (
+            <DeleteButton {...deleteButtonProps} meta={{ foo: "bar" }} />
+          )}
+        </>
+      )}
+      footerButtons={() => (
+        <>
+          <Button
+            onClick={() => push(`/events/${record?.id}/players`)}
+            color="cyan"
+            variant="outlined"
+          >
+            Участники
+          </Button>
+          <Button color="geekblue" variant="outlined">
+            Форма на регистрацию
+          </Button>
+          <Button color="pink" variant="outlined">
+            Активности
+          </Button>
+          <Button color="purple" variant="outlined">
+            Роли
+          </Button>
+        </>
+      )}
+    >
       <Title level={5}>{"ID"}</Title>
       <TextField value={record?.id} />
 
@@ -30,12 +79,12 @@ export const EventShow = () => {
       <Title level={5}>{"Место проведения"}</Title>
       <TextField value={record?.location} />
 
-      <Space>
+      {/* <Space>
         <Button>Участники</Button>
         <Button>Участники</Button>
         <Button>Участники</Button>
         <Button>Участники</Button>
-      </Space>
+      </Space> */}
     </Show>
   );
 };
