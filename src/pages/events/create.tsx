@@ -6,12 +6,12 @@ import { Button, Card, DatePicker, Form, Input, Radio, Space } from "antd";
 export const EventCreate = () => {
   const { formProps, saveButtonProps, onFinish, formLoading } =
     useForm<ICreateEventValues>({
-      onMutationSuccess: (data, variables) => {
-        console.log("ОТПРАВИЛОСЬ: ", { data, variables });
-      },
-      onMutationError: (data, variables) => {
-        console.log("НЕ ОТПРАВИЛОСЬ: ", { data, variables });
-      },
+      // onMutationSuccess: (data, variables) => {
+      //   console.log("ОТПРАВИЛОСЬ: ", { data, variables });
+      // },
+      // onMutationError: (data, variables) => {
+      //   console.log("НЕ ОТПРАВИЛОСЬ: ", { data, variables });
+      // },
       successNotification: (data) => {
         return {
           message: `Мероприятие ${data?.data.name} успешно создано`,
@@ -26,23 +26,11 @@ export const EventCreate = () => {
       },
     });
 
-  const handleOnFinish = (values: ICreateEventValues) => {
+  //надо потом дотипизировать
+  const handleOnFinish = (values: any) => {
     /**
      * Тут ставится пустой массив если поля незаполнены
      */
-
-    const activities = (values.activities || []).map((activity) => ({
-      ...activity,
-      act_vars: activity.act_vars ?? [],
-    }));
-
-    const roles = (values.roles || []).map((role) => ({
-      ...role,
-      activities_values: (role.activities_values || []).map((activity) => ({
-        ...activity,
-        act_vars: activity.act_vars ?? [],
-      })),
-    }));
 
     onFinish({
       event_info: {
@@ -54,22 +42,16 @@ export const EventCreate = () => {
       },
       settings: {
         has_player_balance: values.has_player_balance || false,
-        activities,
-        roles,
+        activities: values.activities,
+        roles: values.roles,
       },
       reg_form: {},
     });
   };
 
-  //надо потом дотипизировать
   return (
-    <Create saveButtonProps={saveButtonProps}>
-      <Form
-        {...formProps}
-        layout="vertical"
-        onFinish={handleOnFinish}
-        isLoading={formLoading}
-      >
+    <Create saveButtonProps={saveButtonProps} isLoading={formLoading}>
+      <Form {...formProps} layout="vertical" onFinish={handleOnFinish}>
         <Form.Item
           label={"Название"}
           name="name"
@@ -161,7 +143,7 @@ export const EventCreate = () => {
                     <Input />
                   </Form.Item>
 
-                  <Form.List name={[name, "act_vars"]}>
+                  <Form.List name={[name, "act_vars"]} initialValue={[]}>
                     {(varFields, { add: addVar, remove: removeVar }) => (
                       <>
                         {varFields.map(
@@ -244,7 +226,10 @@ export const EventCreate = () => {
                     <Input />
                   </Form.Item>
 
-                  <Form.List name={[name, "activities_values"]}>
+                  <Form.List
+                    name={[name, "activities_values"]}
+                    initialValue={[]}
+                  >
                     {(
                       activityFields,
                       { add: addActivity, remove: removeActivity }
@@ -273,7 +258,10 @@ export const EventCreate = () => {
                                 <Input />
                               </Form.Item>
 
-                              <Form.List name={[aName, "act_vars"]}>
+                              <Form.List
+                                name={[aName, "act_vars"]}
+                                initialValue={[]}
+                              >
                                 {(
                                   varFields,
                                   { add: addVar, remove: removeVar }

@@ -38,7 +38,17 @@ export const PlayerShow = () => {
         <>
           {listButtonProps && <ListButton {...listButtonProps} />}
           {editButtonProps && <EditButton {...editButtonProps} />}
-          {deleteButtonProps && <DeleteButton {...deleteButtonProps} />}
+          {deleteButtonProps && (
+            <DeleteButton
+              {...deleteButtonProps}
+              meta={{
+                parent: {
+                  resource: "events",
+                  id: eventId,
+                },
+              }}
+            />
+          )}
         </>
       )}
     >

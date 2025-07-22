@@ -1,3 +1,4 @@
+import { CalendarOutlined } from "@ant-design/icons";
 import {
   Show,
   TextField,
@@ -29,7 +30,9 @@ export const EventShow = () => {
         listButtonProps,
       }) => (
         <>
-          {listButtonProps && <ListButton {...listButtonProps} />}
+          {listButtonProps && (
+            <ListButton icon={<CalendarOutlined />} {...listButtonProps} />
+          )}
           {editButtonProps && <EditButton {...editButtonProps} />}
           {deleteButtonProps && <DeleteButton {...deleteButtonProps} />}
         </>

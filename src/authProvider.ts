@@ -22,7 +22,7 @@ export const authProvider: AuthProvider = {
       return {
         success: false,
         error: {
-          name: "LoginError",
+          name: " ",
           message: "Нет токена",
         },
       };
@@ -30,7 +30,7 @@ export const authProvider: AuthProvider = {
       return {
         success: false,
         error: {
-          name: error.name || "LoginError",
+          name: " ",
           message: "Неправильное имя пользователя или пароль",
         },
       };

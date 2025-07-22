@@ -6,10 +6,10 @@ import {
   TextField,
 } from "@refinedev/antd";
 import { useShow } from "@refinedev/core";
-import { Typography } from "antd";
+import { Space, Typography } from "antd";
 import { useParams } from "react-router";
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
 export const ActivityShow = () => {
   const { eventId } = useParams();
@@ -38,7 +38,17 @@ export const ActivityShow = () => {
         <>
           {listButtonProps && <ListButton {...listButtonProps} />}
           {editButtonProps && <EditButton {...editButtonProps} />}
-          {deleteButtonProps && <DeleteButton {...deleteButtonProps} />}
+          {deleteButtonProps && (
+            <DeleteButton
+              {...deleteButtonProps}
+              meta={{
+                parent: {
+                  resource: "events",
+                  id: eventId,
+                },
+              }}
+            />
+          )}
         </>
       )}
     >
@@ -49,7 +59,19 @@ export const ActivityShow = () => {
       <TextField value={record?.name} />
 
       <Title level={5}>{"Переменные активности"}</Title>
-      <TextField value={record?.act_vars} />
+      <Space direction="vertical">
+        {record?.act_vars?.length ? (
+          record.act_vars.map(
+            ([key, value]: [string, string], index: number) => (
+              <Text key={index}>
+                {key}: {value}
+              </Text>
+            )
+          )
+        ) : (
+          <Text type="secondary">Нет переменных</Text>
+        )}
+      </Space>
     </Show>
   );
 };

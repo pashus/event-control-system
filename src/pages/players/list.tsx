@@ -1,10 +1,11 @@
 import { type BaseRecord } from "@refinedev/core";
-import { useNavigate, useParams } from "react-router";
+import { useLocation, useNavigate, useParams } from "react-router";
 import { DeleteButton, EditButton, List, useTable } from "@refinedev/antd";
 import { Space, Table } from "antd";
 
 export const PlayersList = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { eventId } = useParams();
 
   const { tableProps } = useTable({
@@ -27,7 +28,7 @@ export const PlayersList = () => {
             if ((event.target as HTMLElement).closest(".ant-btn")) {
               return;
             }
-            navigate(`/events/${eventId}/players/show/${record.id}`);
+            navigate(`${location.pathname}/show/${record.id}`);
           },
           style: { cursor: "pointer" },
         })}
@@ -44,7 +45,17 @@ export const PlayersList = () => {
           render={(_, record: BaseRecord) => (
             <Space>
               <EditButton hideText size="small" recordItemId={record.id} />
-              <DeleteButton hideText size="small" recordItemId={record.id} />
+              <DeleteButton
+                hideText
+                size="small"
+                recordItemId={record.id}
+                meta={{
+                  parent: {
+                    resource: "events",
+                    id: eventId,
+                  },
+                }}
+              />
             </Space>
           )}
         />

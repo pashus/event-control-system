@@ -14,6 +14,9 @@ export const ruI18nProvider: I18nProvider = {
       "buttons.show": "Показать",
       "buttons.confirm": "Действительно удалить?",
 
+      "notifications.success": "Успешно",
+      "notifications.deleteSuccess": "Удалено",
+
       "users.titles.list": "Пользователи",
       "users.titles.create": "Добавить пользователя",
       "users.titles.edit": "Редактировать пользователя",

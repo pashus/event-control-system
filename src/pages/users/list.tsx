@@ -1,11 +1,11 @@
 import { useResource, type BaseRecord } from "@refinedev/core";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { DeleteButton, EditButton, List, useTable } from "@refinedev/antd";
 import { Space, Table } from "antd";
 
 export const UsersList = () => {
   const navigate = useNavigate();
-  const { resource } = useResource();
+  const location = useLocation();
 
   const { tableProps } = useTable({
     syncWithLocation: true,
@@ -24,7 +24,7 @@ export const UsersList = () => {
             if ((event.target as HTMLElement).closest(".ant-btn")) {
               return;
             }
-            navigate(`/users/show/${record.id}`);
+            navigate(`${location.pathname}/show/${record.id}`);
           },
           style: { cursor: "pointer" },
         })}

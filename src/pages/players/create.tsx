@@ -6,12 +6,12 @@ export const PlayerCreate = () => {
   const { eventId } = useParams();
 
   const { formProps, saveButtonProps, formLoading, onFinish } = useForm({
-    onMutationSuccess: (data, variables) => {
-      console.log("ОТПРАВИЛОСЬ: ", { data, variables });
-    },
-    onMutationError: (data, variables) => {
-      console.log("НЕ ОТПРАВИЛОСЬ: ", { data, variables });
-    },
+    // onMutationSuccess: (data, variables) => {
+    //   console.log("ОТПРАВИЛОСЬ: ", { data, variables });
+    // },
+    // onMutationError: (data, variables) => {
+    //   console.log("НЕ ОТПРАВИЛОСЬ: ", { data, variables });
+    // },
     successNotification: (data) => {
       return {
         message: `Участник ${data?.data.username} успешно добавлен`,

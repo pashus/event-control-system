@@ -1,3 +1,4 @@
+import { UserOutlined } from "@ant-design/icons";
 import {
   DeleteButton,
   EditButton,
@@ -27,7 +28,9 @@ export const UserShow = () => {
         listButtonProps,
       }) => (
         <>
-          {listButtonProps && <ListButton {...listButtonProps} />}
+          {listButtonProps && (
+            <ListButton icon={<UserOutlined />} {...listButtonProps} />
+          )}
           {editButtonProps && <EditButton {...editButtonProps} />}
           {deleteButtonProps && <DeleteButton {...deleteButtonProps} />}
         </>

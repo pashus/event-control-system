@@ -5,13 +5,13 @@ import {
   List,
   useTable,
 } from "@refinedev/antd";
-import { useResource, type BaseRecord } from "@refinedev/core";
+import { type BaseRecord } from "@refinedev/core";
 import { Space, Table } from "antd";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 
 export const EventsList = () => {
   const navigate = useNavigate();
-  const { resource } = useResource();
+  const location = useLocation();
 
   const { tableProps } = useTable({
     syncWithLocation: true,
@@ -27,7 +27,7 @@ export const EventsList = () => {
             if ((event.target as HTMLElement).closest(".ant-btn")) {
               return;
             }
-            navigate(`/events/show/${record.id}`);
+            navigate(`${location.pathname}/show/${record.id}`);
           },
           style: { cursor: "pointer" },
         })}

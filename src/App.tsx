@@ -43,6 +43,10 @@ import {
 } from "@/pages/activities";
 import { RolesList, RoleCreate, RoleEdit, RoleShow } from "@/pages/roles";
 
+const customTitleHandler = () => {
+  return "Система контроля мероприятия";
+};
+
 function App() {
   return (
     <BrowserRouter>
@@ -222,7 +226,11 @@ function App() {
 
                 <RefineKbar />
                 <UnsavedChangesNotifier />
-                <DocumentTitleHandler />
+                {/**
+                 * Название вкладки можно будет изменить вдальнейшем на
+                 * динамическое
+                 */}
+                <DocumentTitleHandler handler={customTitleHandler} />
               </Refine>
               <DevtoolsPanel />
             </DevtoolsProvider>
