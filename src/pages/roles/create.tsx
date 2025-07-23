@@ -49,7 +49,7 @@ export const RoleCreate = () => {
         </Form.Item>
         <Form.List name="activities_values" initialValue={[]}>
           {(fields, { add, remove }) => (
-            <Card title="Активности" bordered style={{ marginBottom: 24 }}>
+            <Card title="Активности" variant="outlined">
               {fields.map(({ key, name, ...restField }) => (
                 <Card
                   key={key}

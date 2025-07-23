@@ -6,7 +6,7 @@ import {
   useTable,
 } from "@refinedev/antd";
 import { type BaseRecord } from "@refinedev/core";
-import { Space, Table } from "antd";
+import { notification, Space, Table } from "antd";
 import { useLocation, useNavigate } from "react-router";
 
 export const EventsList = () => {

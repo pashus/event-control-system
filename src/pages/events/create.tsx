@@ -30,6 +30,7 @@ export const EventCreate = () => {
   const handleOnFinish = (values: any) => {
     /**
      * Тут ставится пустой массив если поля незаполнены
+     * (в самой форме)
      */
 
     onFinish({
@@ -122,7 +123,7 @@ export const EventCreate = () => {
           {(fields, { add, remove }) => (
             <Card
               title="Активности"
-              bordered={true}
+              variant="outlined"
               style={{ marginBottom: 24 }}
             >
               {fields.map(({ key, name, ...restField }) => (
@@ -207,7 +208,7 @@ export const EventCreate = () => {
         </Form.List>
         <Form.List initialValue={[]} name="roles">
           {(fields, { add, remove }) => (
-            <Card title="Роли" bordered={true}>
+            <Card title="Роли" variant="outlined">
               {fields.map(({ key, name, ...restField }) => (
                 <Card
                   key={key}

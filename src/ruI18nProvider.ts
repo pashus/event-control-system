@@ -16,6 +16,7 @@ export const ruI18nProvider: I18nProvider = {
 
       "notifications.success": "Успешно",
       "notifications.deleteSuccess": "Удалено",
+      "notifications.deleteError": "Ошибка при удалении",
 
       "users.titles.list": "Пользователи",
       "users.titles.create": "Добавить пользователя",
