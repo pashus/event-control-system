@@ -2,6 +2,8 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 import { ConfigProvider } from "antd";
 import ruRU from "antd/lib/locale/ru_RU";
+import "./index.css";
+import { Html5Qrcode } from "html5-qrcode";
 
 import App from "./App";
 

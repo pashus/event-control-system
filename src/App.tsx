@@ -19,7 +19,11 @@ import routerBindings, {
 import { App as AntdApp } from "antd";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router";
 
-import { CalendarOutlined, UserOutlined } from "@ant-design/icons";
+import {
+  CalendarOutlined,
+  QrcodeOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import { authProvider } from "@/authProvider";
 import { AppIcon } from "@/components/app-icon";
 import { Header } from "@/components/header";
@@ -42,6 +46,7 @@ import {
   ActivityShow,
 } from "@/pages/activities";
 import { RolesList, RoleCreate, RoleEdit, RoleShow } from "@/pages/roles";
+import { QrScanner } from "@/pages/qr-scanner";
 
 const customTitleHandler = () => {
   return "Система контроля мероприятия";
@@ -86,6 +91,15 @@ function App() {
                     icon: <UserOutlined />,
                   },
                   {
+                    name: "qr-scanner",
+                    list: "/qr-scanner",
+                    meta: {
+                      canDelete: true,
+                      label: "QR-сканнер",
+                    },
+                    icon: <QrcodeOutlined />,
+                  },
+                  {
                     name: "players",
                     list: "/events/:eventId/players",
                     create: "/events/:eventId/players/create",
@@ -127,7 +141,10 @@ function App() {
                   warnWhenUnsavedChanges: true,
                   useNewQueryKeys: true,
                   projectId: "dUhZC0-eQiUVJ-Uf8gLR",
-                  title: { text: "Event Control System", icon: <AppIcon /> },
+                  title: {
+                    text: "Система контроля мероприятий",
+                    icon: <AppIcon />,
+                  },
                 }}
               >
                 <Routes>
@@ -204,6 +221,8 @@ function App() {
                         <Route path="show/:id" element={<RoleShow />} />
                       </Route>
                     </Route>
+
+                    <Route path="qr-scanner" element={<QrScanner />} />
 
                     {/**
                      * 404
