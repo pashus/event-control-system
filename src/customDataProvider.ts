@@ -17,14 +17,22 @@ const customDataProvider: DataProvider = {
     };
   },
 
-  // getMany: async ({ resource, ids }) => {
-  //   console.log(`GET MANY ${resource} ${ids}`);
+  getMany: async ({ resource, ids, meta }) => {
+    console.log(`GET MANY ${resource} ${ids}`);
 
-  //   const response = await Promise.all(
-  //     ids.map((id) => api.get(`${resource}/${id}`).then((r) => r.data))
-  //   );
-  //   return { data: response };
-  // },
+    const responses = await Promise.all(
+      ids.map((id) => {
+        const url = meta?.parent
+          ? `${meta.parent.resource}/${meta.parent.id}/${resource}/${id}/`
+          : `${resource}/${id}/`;
+        return api.get(url).then((r) => r.data);
+      })
+    );
+
+    return {
+      data: responses,
+    };
+  },
 
   getOne: async ({ resource, id, meta }) => {
     console.log(`GET ONE ${resource} ${id}`);

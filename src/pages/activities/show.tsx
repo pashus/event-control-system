@@ -67,7 +67,7 @@ export const ActivityShow = () => {
           record.act_vars.map(
             ([key, value]: [string, string], index: number) => (
               <Text key={index}>
-                {key}: {value}
+                {key}: <span style={{ color: "#ff4d4f" }}>{value}</span>
               </Text>
             )
           )

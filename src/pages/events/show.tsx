@@ -1,4 +1,10 @@
-import { CalendarOutlined } from "@ant-design/icons";
+import {
+  CalendarOutlined,
+  FormOutlined,
+  TeamOutlined,
+  ThunderboltOutlined,
+  UserSwitchOutlined,
+} from "@ant-design/icons";
 import {
   Show,
   TextField,
@@ -43,16 +49,18 @@ export const EventShow = () => {
             onClick={() => push(`/events/${record?.id}/players`)}
             color="purple"
             variant="outlined"
+            icon={<TeamOutlined />}
           >
             Участники
           </Button>
-          <Button color="geekblue" variant="outlined">
+          <Button color="geekblue" variant="outlined" icon={<FormOutlined />}>
             Форма на регистрацию
           </Button>
           <Button
             onClick={() => push(`/events/${record?.id}/activities`)}
             color="pink"
             variant="outlined"
+            icon={<ThunderboltOutlined />}
           >
             Активности
           </Button>
@@ -60,6 +68,7 @@ export const EventShow = () => {
             onClick={() => push(`/events/${record?.id}/roles`)}
             color="purple"
             variant="outlined"
+            icon={<UserSwitchOutlined />}
           >
             Роли
           </Button>
@@ -83,13 +92,6 @@ export const EventShow = () => {
 
       <Title level={5}>{"Место проведения"}</Title>
       <TextField value={record?.location} />
-
-      {/* <Space>
-        <Button>Участники</Button>
-        <Button>Участники</Button>
-        <Button>Участники</Button>
-        <Button>Участники</Button>
-      </Space> */}
     </Show>
   );
 };

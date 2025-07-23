@@ -19,7 +19,7 @@ import routerBindings, {
 import { App as AntdApp } from "antd";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router";
 
-import { CalendarOutlined, CrownOutlined } from "@ant-design/icons";
+import { CalendarOutlined, UserOutlined } from "@ant-design/icons";
 import { authProvider } from "@/authProvider";
 import { AppIcon } from "@/components/app-icon";
 import { Header } from "@/components/header";
@@ -83,7 +83,7 @@ function App() {
                       canDelete: true,
                       label: "Пользователи",
                     },
-                    icon: <CrownOutlined />,
+                    icon: <UserOutlined />,
                   },
                   {
                     name: "players",
