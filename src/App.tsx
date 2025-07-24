@@ -1,7 +1,6 @@
 import { Authenticated, Refine } from "@refinedev/core";
 import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools";
 import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
-
 import {
   ErrorComponent,
   ThemedLayoutV2,
@@ -16,6 +15,7 @@ import routerBindings, {
   NavigateToResource,
   UnsavedChangesNotifier,
 } from "@refinedev/react-router";
+
 import { App as AntdApp } from "antd";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router";
 
@@ -29,6 +29,7 @@ import { AppIcon } from "@/components/app-icon";
 import { Header } from "@/components/header";
 import { ColorModeContextProvider } from "@/contexts/color-mode";
 import customDataProvider from "@/customDataProvider";
+
 import { EventCreate, EventEdit, EventShow, EventsList } from "@/pages/events";
 import {
   PlayerCreate,
@@ -38,6 +39,7 @@ import {
 } from "@/pages/players";
 import { UserCreate, UserEdit, UserShow, UsersList } from "@/pages/users";
 import { Login } from "@/pages/login";
+import { RegistrationForm } from "@/pages/registration";
 import { ruI18nProvider } from "@/ruI18nProvider";
 import {
   ActivitiesList,
@@ -72,10 +74,7 @@ function App() {
                     create: "/events/create",
                     edit: "/events/edit/:id",
                     show: "/events/show/:id",
-                    meta: {
-                      canDelete: true,
-                      label: "Мероприятия",
-                    },
+                    meta: { canDelete: true, label: "Мероприятия" },
                     icon: <CalendarOutlined />,
                   },
                   {
@@ -84,19 +83,13 @@ function App() {
                     create: "/users/create",
                     edit: "/users/edit/:id",
                     show: "/users/show/:id",
-                    meta: {
-                      canDelete: true,
-                      label: "Пользователи",
-                    },
+                    meta: { canDelete: true, label: "Пользователи" },
                     icon: <UserOutlined />,
                   },
                   {
                     name: "qr-scanner",
                     list: "/qr-scanner",
-                    meta: {
-                      canDelete: true,
-                      label: "QR-сканнер",
-                    },
+                    meta: { canDelete: true, label: "QR-сканнер" },
                     icon: <QrcodeOutlined />,
                   },
                   {
@@ -105,11 +98,7 @@ function App() {
                     create: "/events/:eventId/players/create",
                     edit: "/events/:eventId/players/edit/:id",
                     show: "/events/:eventId/players/show/:id",
-                    meta: {
-                      canDelete: true,
-                      parent: "events",
-                      hide: true,
-                    },
+                    meta: { canDelete: true, parent: "events", hide: true },
                   },
                   {
                     name: "activities",
@@ -117,11 +106,7 @@ function App() {
                     create: "/events/:eventId/activities/create",
                     edit: "/events/:eventId/activities/edit/:id",
                     show: "/events/:eventId/activities/show/:id",
-                    meta: {
-                      canDelete: true,
-                      parent: "events",
-                      hide: true,
-                    },
+                    meta: { canDelete: true, parent: "events", hide: true },
                   },
                   {
                     name: "roles",
@@ -129,11 +114,7 @@ function App() {
                     create: "/events/:eventId/roles/create",
                     edit: "/events/:eventId/roles/edit/:id",
                     show: "/events/:eventId/roles/show/:id",
-                    meta: {
-                      canDelete: true,
-                      parent: "events",
-                      hide: true,
-                    },
+                    meta: { canDelete: true, parent: "events", hide: true },
                   },
                 ]}
                 options={{
@@ -148,7 +129,7 @@ function App() {
                 }}
               >
                 <Routes>
-                  {/* надо разобраться с защищенными роутами*/}
+                  {/* Приватные маршруты (требуют токена) */}
                   <Route
                     element={
                       <Authenticated
@@ -164,17 +145,9 @@ function App() {
                       </Authenticated>
                     }
                   >
-                    {/**
-                     * Роут названия у сайдбара
-                     */}
-                    <Route
-                      index
-                      element={<NavigateToResource resource="events" />}
-                    />
+                    <Route index element={<NavigateToResource resource="events" />} />
 
-                    {/**
-                     * Users
-                     */}
+                    {/* Users */}
                     <Route path="/users">
                       <Route index element={<UsersList />} />
                       <Route path="create" element={<UserCreate />} />
@@ -182,18 +155,14 @@ function App() {
                       <Route path="show/:id" element={<UserShow />} />
                     </Route>
 
-                    {/**
-                     * Events
-                     */}
+                    {/* Events */}
                     <Route path="/events">
                       <Route index element={<EventsList />} />
                       <Route path="create" element={<EventCreate />} />
                       <Route path="edit/:id" element={<EventEdit />} />
                       <Route path="show/:id" element={<EventShow />} />
 
-                      {/**
-                       * Players
-                       */}
+                      {/* Players */}
                       <Route path=":eventId/players">
                         <Route index element={<PlayersList />} />
                         <Route path="create" element={<PlayerCreate />} />
@@ -201,9 +170,7 @@ function App() {
                         <Route path="show/:id" element={<PlayerShow />} />
                       </Route>
 
-                      {/**
-                       * Activities
-                       */}
+                      {/* Activities */}
                       <Route path=":eventId/activities">
                         <Route index element={<ActivitiesList />} />
                         <Route path="create" element={<ActivityCreate />} />
@@ -211,9 +178,7 @@ function App() {
                         <Route path="show/:id" element={<ActivityShow />} />
                       </Route>
 
-                      {/**
-                       * Roles
-                       */}
+                      {/* Roles */}
                       <Route path=":eventId/roles">
                         <Route index element={<RolesList />} />
                         <Route path="create" element={<RoleCreate />} />
@@ -222,13 +187,11 @@ function App() {
                       </Route>
                     </Route>
 
-                    <Route path="qr-scanner" element={<QrScanner />} />
-
-                    {/**
-                     * 404
-                     */}
+                    <Route path="/qr-scanner" element={<QrScanner />} />
                     <Route path="*" element={<ErrorComponent />} />
                   </Route>
+
+                  {/* Публичные маршруты */}
                   <Route
                     element={
                       <Authenticated
@@ -241,14 +204,19 @@ function App() {
                   >
                     <Route path="/login" element={<Login />} />
                   </Route>
+                  <Route
+                    path="/events/:eventId/registration-form"
+                    element={
+                      <ThemedLayoutV2 Header={Header} Sider={() => null}>
+                        <RegistrationForm />
+                    </ThemedLayoutV2>
+                  } 
+                />
+
                 </Routes>
 
                 <RefineKbar />
                 <UnsavedChangesNotifier />
-                {/**
-                 * Название вкладки можно будет изменить вдальнейшем на
-                 * динамическое
-                 */}
                 <DocumentTitleHandler handler={customTitleHandler} />
               </Refine>
               <DevtoolsPanel />

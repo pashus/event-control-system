@@ -53,7 +53,11 @@ export const EventShow = () => {
           >
             Участники
           </Button>
-          <Button color="geekblue" variant="outlined" icon={<FormOutlined />}>
+          <Button 
+            onClick={() => push(`/events/${record?.id}/registration-form`)}
+            color="geekblue" 
+            variant="outlined" 
+            icon={<FormOutlined />}>
             Форма на регистрацию
           </Button>
           <Button
