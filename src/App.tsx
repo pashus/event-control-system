@@ -142,7 +142,24 @@ function App() {
                       >
                         <ThemedLayoutV2
                           Header={Header}
-                          Sider={(props) => <ThemedSiderV2 {...props} fixed />}
+                          Sider={(props) => (
+                            <ThemedSiderV2
+                              {...props}
+                              fixed
+                              // render={({ items, logout }) => (
+                              //   <div
+                              //     style={{
+                              //       display: "flex",
+                              //       flexDirection: "column",
+                              //       height: "100%",
+                              //     }}
+                              //   >
+                              //     <div style={{ flexGrow: 1 }}>{items}</div>
+                              //     <div>{logout}</div>
+                              //   </div>
+                              // )}
+                            />
+                          )}
                         >
                           <Outlet />
                         </ThemedLayoutV2>

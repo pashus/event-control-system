@@ -14,7 +14,7 @@ export const PlayerCreate = () => {
     // },
     successNotification: (data) => {
       return {
-        message: `Участник ${data?.data.name} успешно добавлен`,
+        message: `Участник ${data?.data.first_name} ${data?.data.last_name} успешно добавлен`,
         type: "success",
       };
     },
@@ -31,17 +31,6 @@ export const PlayerCreate = () => {
       },
     },
   });
-
-  // const handleOnFinish = (values: any) => {
-  //   onFinish({
-  //     data: {
-  //       first_name: values.first_name,
-  //       last_name: values.last_name,
-  //       group_name: values.group_name,
-  //       role_id: values.role_id,
-  //     },
-  //   });
-  // };
 
   return (
     <Create saveButtonProps={saveButtonProps} isLoading={formLoading}>
