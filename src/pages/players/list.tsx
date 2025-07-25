@@ -22,7 +22,7 @@ export const PlayersList = () => {
   const roleIds =
     tableProps.dataSource?.map((item) => item.role_id).filter(Boolean) ?? [];
 
-  const { data: rolesData, isLoading: isRolesLoading } = useMany({
+  const { data: rolesData } = useMany({
     resource: "roles",
     ids: roleIds,
     meta: {
@@ -57,7 +57,6 @@ export const PlayersList = () => {
           },
           style: { cursor: "pointer" },
         })}
-        loading={isRolesLoading}
       >
         <Table.Column dataIndex="id" title={"ID"} />
         <Table.Column dataIndex="first_name" title={"Имя"} />

@@ -9,7 +9,7 @@ export const RegistrationForm = () => {
   const { eventId } = useParams();
 
   const { formProps, saveButtonProps, formLoading } = useForm({
-    resource: "players",
+    resource: `registration`,
     redirect: false,
     successNotification: () => ({
       message: `Вы успешно зарегистрировались`,
@@ -30,27 +30,27 @@ export const RegistrationForm = () => {
     },
   });
 
-  const { data: eventData, isLoading } = useOne({
-    resource: "events",
-    id: eventId,
-  });
-  const eventTitle = eventData?.data.name;
+  // const { data: eventData, isLoading } = useOne({
+  //   resource: "events",
+  //   id: eventId,
+  // });
+  // const eventTitle = eventData?.data.name;
 
-  if (isLoading) {
-    return (
-      <div style={{ textAlign: "center", padding: "40px 0" }}>
-        <Spin size="large" tip="Загрузка мероприятия..." />
-      </div>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <div style={{ textAlign: "center", padding: "40px 0" }}>
+  //       <Spin size="large" tip="Загрузка мероприятия..." />
+  //     </div>
+  //   );
+  // }
 
-  if (!eventTitle) {
-    return (
-      <Title level={4} style={{ textAlign: "center", color: "#ff4d4f" }}>
-        Мероприятие не найдено
-      </Title>
-    );
-  }
+  // if (!eventTitle) {
+  //   return (
+  //     <Title level={4} style={{ textAlign: "center", color: "#ff4d4f" }}>
+  //       Мероприятие не найдено
+  //     </Title>
+  //   );
+  // }
 
   return (
     <Create
@@ -72,7 +72,7 @@ export const RegistrationForm = () => {
       }}
     >
       <Title level={4} style={{ marginBottom: "24px" }}>
-        {`Регистрация на мероприятие: ${eventTitle}`}
+        {`Регистрация на мероприятие`}
       </Title>
       <Form {...formProps} layout="vertical">
         <Form.Item
