@@ -54,6 +54,10 @@ const customTitleHandler = () => {
   return "Система контроля мероприятия";
 };
 
+const CustomHeader = () => {
+  return <div />;
+};
+
 function App() {
   return (
     <BrowserRouter>
@@ -145,7 +149,10 @@ function App() {
                       </Authenticated>
                     }
                   >
-                    <Route index element={<NavigateToResource resource="events" />} />
+                    <Route
+                      index
+                      element={<NavigateToResource resource="events" />}
+                    />
 
                     {/* Users */}
                     <Route path="/users">
@@ -207,12 +214,11 @@ function App() {
                   <Route
                     path="/events/:eventId/registration-form"
                     element={
-                      <ThemedLayoutV2 Header={Header} Sider={() => null}>
+                      <ThemedLayoutV2 Header={CustomHeader} Sider={() => null}>
                         <RegistrationForm />
-                    </ThemedLayoutV2>
-                  } 
-                />
-
+                      </ThemedLayoutV2>
+                    }
+                  />
                 </Routes>
 
                 <RefineKbar />

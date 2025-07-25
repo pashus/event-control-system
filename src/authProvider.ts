@@ -69,16 +69,18 @@ export const authProvider: AuthProvider = {
   getPermissions: async () => null,
 
   getIdentity: async () => {
-    try {
-      const response = await api.get("/users/me/");
+    if (localStorage.getItem("token")) {
+      try {
+        const response = await api.get("/users/me/");
 
-      return {
-        id: response.data.id,
-        name: response.data.username,
-        avatar: response.data.avatar,
-      };
-    } catch (error: any) {
-      console.error(error);
+        return {
+          id: response.data.id,
+          name: response.data.username,
+          avatar: response.data.avatar,
+        };
+      } catch (error: any) {
+        console.error(error);
+      }
     }
   },
 

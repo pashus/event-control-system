@@ -14,7 +14,7 @@ export const PlayerCreate = () => {
     // },
     successNotification: (data) => {
       return {
-        message: `Участник ${data?.data.username} успешно добавлен`,
+        message: `Участник ${data?.data.name} успешно добавлен`,
         type: "success",
       };
     },
