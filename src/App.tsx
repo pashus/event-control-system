@@ -24,11 +24,11 @@ import {
   QrcodeOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { authProvider } from "@/authProvider";
+import { authProvider } from "@/providers/authProvider";
 import { AppIcon } from "@/components/app-icon";
 import { Header } from "@/components/header";
 import { ColorModeContextProvider } from "@/contexts/color-mode";
-import customDataProvider from "@/customDataProvider";
+import customDataProvider from "@/providers/customDataProvider";
 
 import { EventCreate, EventEdit, EventShow, EventsList } from "@/pages/events";
 import {
@@ -40,7 +40,7 @@ import {
 import { UserCreate, UserEdit, UserShow, UsersList } from "@/pages/users";
 import { Login } from "@/pages/login";
 import { RegistrationForm } from "@/pages/registration";
-import { ruI18nProvider } from "@/ruI18nProvider";
+import { ruI18nProvider } from "@/providers/ruI18nProvider";
 import {
   ActivitiesList,
   ActivityCreate,

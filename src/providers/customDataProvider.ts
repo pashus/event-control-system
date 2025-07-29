@@ -1,5 +1,5 @@
 import { DataProvider } from "@refinedev/core";
-import { api } from "./api";
+import { api } from "@/api";
 
 const customDataProvider: DataProvider = {
   getList: async ({ resource, meta }) => {
