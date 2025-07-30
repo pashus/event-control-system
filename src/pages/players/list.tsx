@@ -1,7 +1,14 @@
 import { type BaseRecord } from "@refinedev/core";
 import { useLocation, useNavigate, useParams } from "react-router";
-import { DeleteButton, EditButton, List, useTable } from "@refinedev/antd";
+import {
+  CreateButton,
+  DeleteButton,
+  EditButton,
+  List,
+  useTable,
+} from "@refinedev/antd";
 import { Space, Table } from "antd";
+import { ExcelImport } from "@/components/Exel Import/exelImport";
 
 export const PlayersList = () => {
   const navigate = useNavigate();
@@ -19,8 +26,18 @@ export const PlayersList = () => {
   });
 
   return (
-    <List>
+    <List
+      headerButtons={
+        <>
+          <CreateButton />
+          <ExcelImport eventId={eventId!} />
+        </>
+      }
+    >
       <Table
+        rowSelection={{
+          type: "checkbox",
+        }}
         {...tableProps}
         rowKey="id"
         onRow={(record) => ({
