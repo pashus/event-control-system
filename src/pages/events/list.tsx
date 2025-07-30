@@ -20,6 +20,9 @@ export const EventsList = () => {
   return (
     <List>
       <Table
+        rowSelection={{
+          type: "checkbox",
+        }}
         {...tableProps}
         rowKey="id"
         onRow={(record) => ({

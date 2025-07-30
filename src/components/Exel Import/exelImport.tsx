@@ -2,8 +2,9 @@ import { Upload, Button, message } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import * as XLSX from "xlsx";
 import axios from "axios";
+import { api } from "@/api";
 
-export const ExcelImport = ({ eventId }: { eventId: string | number }) => {
+export const ExcelImport = ({ eventId }: { eventId: string }) => {
   const handleUpload = async (file: File) => {
     try {
       const data = await file.arrayBuffer();
@@ -15,14 +16,11 @@ export const ExcelImport = ({ eventId }: { eventId: string | number }) => {
       const players = json.map((row: any) => ({
         first_name: row["Имя"] || "",
         last_name: row["Фамилия"] || "",
-        group: row["Группа"] || "",
+        group_name: row["Группа"] || "",
         role_id: row["Роль"] || null,
       }));
 
-      await axios.post(
-        `http://localhost:8000/api/v1/events/${eventId}/players/excel`,
-        players
-      );
+      await api.post(`events/${eventId}/players/exel`, { players });
 
       message.success("Участники импортированы");
     } catch (error) {
@@ -39,3 +37,6 @@ export const ExcelImport = ({ eventId }: { eventId: string | number }) => {
     </Upload>
   );
 };
+function useGetToken(): { data: any } {
+  throw new Error("Function not implemented.");
+}
