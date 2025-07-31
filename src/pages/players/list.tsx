@@ -10,8 +10,9 @@ import {
 import { Space, Table, Button } from "antd";
 import ExcelImport from "@/components/ImportExcel/importExcel";
 import { useState } from "react";
+import { useItemsDelete } from "@/hooks/useItemsDelete";
 
-export const PlayersList: React.FC = () => {
+export const PlayersList = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { eventId } = useParams();
@@ -26,31 +27,8 @@ export const PlayersList: React.FC = () => {
     },
   });
 
-  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-
-  const { mutate: deleteMany, isPending, error } = useDeleteMany();
-
-  const handleBulkDelete = () => {
-    deleteMany(
-      {
-        resource: "players",
-        ids: selectedRowKeys as number[],
-        meta: {
-          parent: { resource: "events", id: eventId },
-        },
-      },
-      {
-        onSuccess: () => {
-          setSelectedRowKeys([]);
-        },
-      }
-    );
-  };
-
-  const rowSelection = {
-    selectedRowKeys,
-    onChange: (keys: React.Key[]) => setSelectedRowKeys(keys),
-  };
+  const { rowSelection, itemsDelete, selectedRowKeys, isPending } =
+    useItemsDelete("players", { parent: { resource: "events", id: eventId } });
 
   return (
     <List
@@ -60,7 +38,7 @@ export const PlayersList: React.FC = () => {
           <ExcelImport eventId={eventId!} />
           <Button
             danger
-            onClick={handleBulkDelete}
+            onClick={itemsDelete}
             disabled={selectedRowKeys.length === 0}
             loading={isPending}
             style={{ marginLeft: 8 }}
