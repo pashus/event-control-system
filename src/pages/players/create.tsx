@@ -84,7 +84,7 @@ export const PlayerCreate = () => {
           name="role_id"
           rules={[
             {
-              required: true,
+              required: false,
             },
           ]}
         >
