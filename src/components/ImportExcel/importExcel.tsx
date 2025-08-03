@@ -3,26 +3,30 @@ import { Button, Upload, message } from "antd";
 import * as XLSX from "xlsx";
 
 const ExcelImport = ({ eventId }: { eventId: string }) => {
-  const { mutateAsync: create } = useCreate();
+  const { mutateAsync: create } = useCreate({
+    successNotification: false,
+  });
 
   const handleImport = async (file: File) => {
     try {
       const data = await file.arrayBuffer();
       const workbook = XLSX.read(data);
       const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-      const jsonData = XLSX.utils.sheet_to_json(worksheet);
+      const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
 
-      const players = jsonData.map((row: any) => ({
-        first_name: row.first_name,
-        last_name: row.last_name,
-        group_name: row.group_name,
-        role_id: row.role_id || null,
+      const rowData = jsonData.slice(1);
+
+      const players = rowData.map((row: any) => ({
+        first_name: row[0].toString().trim() || "",
+        last_name: row[1].toString().trim() || "",
+        group_name: row[2].toString().trim() || "",
+        role_id: row[3] === undefined ? undefined : Number(row[3]),
       }));
 
       await Promise.all(
         players.map((player) =>
           create({
-            resource: "players/excel",
+            resource: "players",
             values: player,
             meta: {
               parent: {
@@ -34,7 +38,7 @@ const ExcelImport = ({ eventId }: { eventId: string }) => {
         )
       );
 
-      message.success("Участники успешно импортированы");
+      message.success("Импорт успешно завершен");
     } catch (error) {
       console.error("Ошибка импорта", error);
       message.error("Произошла ошибка при импорте");
