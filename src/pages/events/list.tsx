@@ -1,4 +1,5 @@
 import {
+  CreateButton,
   DateField,
   DeleteButton,
   EditButton,
@@ -6,8 +7,9 @@ import {
   useTable,
 } from "@refinedev/antd";
 import { type BaseRecord } from "@refinedev/core";
-import { notification, Space, Table } from "antd";
+import { Button, notification, Space, Table } from "antd";
 import { useLocation, useNavigate } from "react-router";
+import { useItemsDelete } from "@/hooks/useItemsDelete";
 
 export const EventsList = () => {
   const navigate = useNavigate();
@@ -17,16 +19,33 @@ export const EventsList = () => {
     syncWithLocation: true,
   });
 
+  const { rowSelection, itemsDelete, selectedRowKeys, isPending } =
+    useItemsDelete("events");
+
   return (
-    <List>
+    <List
+      headerButtons={
+        <>
+          <CreateButton />
+          <Button
+            danger
+            onClick={itemsDelete}
+            disabled={selectedRowKeys.length === 0}
+            loading={isPending}
+            style={{ marginLeft: 8 }}
+          >
+            Удалить выбранные ({selectedRowKeys.length})
+          </Button>
+        </>
+      }
+    >
       <Table
         {...tableProps}
         rowKey="id"
+        rowSelection={rowSelection}
         onRow={(record) => ({
-          onClick: (event) => {
-            if ((event.target as HTMLElement).closest(".ant-btn")) {
-              return;
-            }
+          onClick: (e) => {
+            if ((e.target as HTMLElement).closest(".ant-btn")) return;
             navigate(`${location.pathname}/show/${record.id}`);
           },
           style: { cursor: "pointer" },
