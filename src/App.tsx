@@ -54,7 +54,7 @@ const customTitleHandler = () => {
   return "Система контроля мероприятия";
 };
 
-const CustomHeader = () => {
+const CustomRegistrationHeader = () => {
   return <div />;
 };
 
@@ -231,7 +231,10 @@ function App() {
                   <Route
                     path="/events/:eventId/registration-form"
                     element={
-                      <ThemedLayoutV2 Header={CustomHeader} Sider={() => null}>
+                      <ThemedLayoutV2
+                        Header={CustomRegistrationHeader}
+                        Sider={() => null}
+                      >
                         <RegistrationForm />
                       </ThemedLayoutV2>
                     }

@@ -52,30 +52,6 @@ export const PlayersList = () => {
     return acc;
   }, {} as Record<number, string>);
 
-  const roleIds =
-    tableProps.dataSource?.map((item) => item.role_id).filter(Boolean) ?? [];
-
-  const { data: rolesData } = useMany({
-    resource: "roles",
-    ids: roleIds,
-    meta: {
-      parent: {
-        resource: "events",
-        id: eventId,
-      },
-    },
-    queryOptions: {
-      enabled: roleIds.length > 0,
-    },
-  });
-
-  const rolesMap = rolesData?.data.reduce((acc: any, role: any) => {
-    if (role.id != null) {
-      acc[role.id] = role.name;
-    }
-    return acc;
-  }, {} as Record<number, string>);
-
   const { rowSelection, itemsDelete, selectedRowKeys, isPending } =
     useItemsDelete("players", { parent: { resource: "events", id: eventId } });
 
@@ -90,7 +66,6 @@ export const PlayersList = () => {
             onClick={itemsDelete}
             disabled={selectedRowKeys.length === 0}
             loading={isPending}
-            style={{ marginLeft: 8 }}
           >
             Удалить выбранные ({selectedRowKeys.length})
           </Button>

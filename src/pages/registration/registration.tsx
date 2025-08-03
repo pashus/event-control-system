@@ -1,6 +1,5 @@
 import { Create, useForm } from "@refinedev/antd";
-import { useOne } from "@refinedev/core";
-import { Form, Input, Spin, Typography } from "antd";
+import { Form, Input, Typography } from "antd";
 import { useParams } from "react-router";
 
 const { Title } = Typography;

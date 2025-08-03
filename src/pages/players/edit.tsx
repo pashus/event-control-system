@@ -76,11 +76,11 @@ export const PlayerEdit = () => {
         <Form.Item
           label={"ID роли"}
           name="role_id"
-          rules={[
-            {
-              required: true,
-            },
-          ]}
+          // rules={[
+          //   {
+          //     required: true,
+          //   },
+          // ]}
         >
           <Input />
         </Form.Item>

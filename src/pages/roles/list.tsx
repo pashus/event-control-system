@@ -40,7 +40,6 @@ export const RolesList = () => {
             onClick={itemsDelete}
             disabled={selectedRowKeys.length === 0}
             loading={isPending}
-            style={{ marginLeft: 8 }}
           >
             Удалить выбранные ({selectedRowKeys.length})
           </Button>

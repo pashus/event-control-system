@@ -1,4 +1,4 @@
-import { useResource, type BaseRecord } from "@refinedev/core";
+import { type BaseRecord } from "@refinedev/core";
 import { useLocation, useNavigate } from "react-router";
 import { DeleteButton, EditButton, List, useTable } from "@refinedev/antd";
 import { Space, Table } from "antd";
