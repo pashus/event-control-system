@@ -41,7 +41,7 @@ export const QrScanner = () => {
       async (decodedText) => {
         try {
           const checkInEndpoint = decodedText;
-          // console.log(checkInEndpoint);
+          console.log(checkInEndpoint);
           await api.post(checkInEndpoint);
 
           setResponse("Участник отмечен");

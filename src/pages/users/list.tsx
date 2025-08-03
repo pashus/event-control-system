@@ -1,21 +1,46 @@
 import { type BaseRecord } from "@refinedev/core";
 import { useLocation, useNavigate } from "react-router";
-import { DeleteButton, EditButton, List, useTable } from "@refinedev/antd";
-import { Space, Table } from "antd";
+import {
+  CreateButton,
+  DeleteButton,
+  EditButton,
+  List,
+  useTable,
+} from "@refinedev/antd";
+import { Button, Space, Table } from "antd";
+import { useItemsDelete } from "@/hooks/useItemsDelete";
 
 export const UsersList = () => {
   const navigate = useNavigate();
   const location = useLocation();
+
+  const { rowSelection, itemsDelete, selectedRowKeys, isPending } =
+    useItemsDelete("events");
 
   const { tableProps } = useTable({
     syncWithLocation: true,
   });
 
   return (
-    <List>
+    <List
+      headerButtons={
+        <>
+          <CreateButton />
+          <Button
+            danger
+            onClick={itemsDelete}
+            disabled={selectedRowKeys.length === 0}
+            loading={isPending}
+          >
+            Удалить выбранные ({selectedRowKeys.length})
+          </Button>
+        </>
+      }
+    >
       <Table
         {...tableProps}
         rowKey="id"
+        rowSelection={rowSelection}
         onRow={(record) => ({
           onClick: (event) => {
             /**

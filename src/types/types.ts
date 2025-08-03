@@ -1,15 +1,16 @@
-type TActVarPair = [string, string];
+export type TActVarPair = [string, string];
 
-interface IActivity {
+export interface IActivity {
+  id: string;
   name: string;
   act_vars: TActVarPair[];
 }
 
-interface IRoleActivityValue {
+export interface IRoleActivityValue {
   act_vars: TActVarPair[];
 }
 
-interface IRoles {
+export interface IRoles {
   name: string;
   activities_values: IRoleActivityValue[];
 }

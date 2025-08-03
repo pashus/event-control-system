@@ -1,5 +1,8 @@
 #html5-qrcode-button-camera-permission,
-#html5-qrcode-button-file-selection {
+#html5-qrcode-button-file-selection,
+#html5-qrcode-button-camera-start,
+#html5-qrcode-select-camera,
+#html5-qrcode-button-camera-stop {
   background-color: #1668dc;
   color: #fff;
   border: none;

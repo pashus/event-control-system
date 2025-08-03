@@ -7,7 +7,7 @@ import {
   useTable,
 } from "@refinedev/antd";
 import { type BaseRecord } from "@refinedev/core";
-import { Button, notification, Space, Table } from "antd";
+import { Button, Space, Table } from "antd";
 import { useLocation, useNavigate } from "react-router";
 import { useItemsDelete } from "@/hooks/useItemsDelete";
 

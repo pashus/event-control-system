@@ -2,11 +2,32 @@ import { useCreate, useNotification } from "@refinedev/core";
 import { Button, Upload } from "antd";
 import * as XLSX from "xlsx";
 
+const isExcelFile = (file: File) => {
+  const allowedTypes = [
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xlsx
+    "application/vnd.ms-excel", // .xls
+  ];
+  const allowedExtensions = [".xlsx", ".xls"];
+  const hasValidType = allowedTypes.includes(file.type);
+  const hasValidExt = allowedExtensions.some((ext) =>
+    file.name.toLowerCase().endsWith(ext)
+  );
+  return hasValidType || hasValidExt;
+};
+
 const ExcelImport = ({ eventId }: { eventId: string }) => {
   const { mutateAsync: create } = useCreate();
-  const { open: openNotification } = useNotification();
+  const { open } = useNotification();
 
   const handleImport = async (file: File) => {
+    if (!isExcelFile(file)) {
+      open?.({
+        message: "Неверный формат файла",
+        description: "Пожалуйста, выберите файл Excel (.xls или .xlsx)",
+        type: "error",
+      });
+      return;
+    }
     try {
       const data = await file.arrayBuffer();
       const workbook = XLSX.read(data);
@@ -26,7 +47,7 @@ const ExcelImport = ({ eventId }: { eventId: string }) => {
       await Promise.all(
         players.map((player) =>
           create({
-            resource: "players/excel",
+            resource: "players", //???временный endpoint для создания игроков, в последствии нужно будет изменить на 'players/excel'
             values: player,
             meta: {
               parent: {
@@ -38,12 +59,12 @@ const ExcelImport = ({ eventId }: { eventId: string }) => {
         )
       );
 
-      openNotification?.({
+      open?.({
         message: "Участники успешно добавлены",
         type: "success",
       });
     } catch (error: any) {
-      openNotification?.({
+      open?.({
         message: "Ошибка при добавлении участников",
         type: "error",
       });
@@ -52,6 +73,7 @@ const ExcelImport = ({ eventId }: { eventId: string }) => {
 
   return (
     <Upload
+      accept=".xlsx,.xls"
       beforeUpload={(file) => {
         handleImport(file);
         return false;

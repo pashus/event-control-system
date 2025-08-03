@@ -49,6 +49,7 @@ import {
 } from "@/pages/activities";
 import { RolesList, RoleCreate, RoleEdit, RoleShow } from "@/pages/roles";
 import { QrScanner } from "@/pages/qr-scanner";
+import { VolunteerActivityPage } from "./pages/volunteer-activity/volunteer-activity";
 
 const customTitleHandler = () => {
   return "Система контроля мероприятия";
@@ -118,6 +119,10 @@ function App() {
                     create: "/events/:eventId/roles/create",
                     edit: "/events/:eventId/roles/edit/:id",
                     show: "/events/:eventId/roles/show/:id",
+                    meta: { canDelete: true, parent: "events", hide: true },
+                  },
+                  {
+                    name: "volunteer-activity",
                     meta: { canDelete: true, parent: "events", hide: true },
                   },
                 ]}
@@ -208,6 +213,10 @@ function App() {
                         <Route path="create" element={<RoleCreate />} />
                         <Route path="edit/:id" element={<RoleEdit />} />
                         <Route path="show/:id" element={<RoleShow />} />
+                      </Route>
+
+                      <Route path=":eventId/volunteer-activity">
+                        <Route index element={<VolunteerActivityPage />} />
                       </Route>
                     </Route>
 

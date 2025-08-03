@@ -1,6 +1,7 @@
 import {
   CalendarOutlined,
   FormOutlined,
+  SmileOutlined,
   TeamOutlined,
   ThunderboltOutlined,
   UserSwitchOutlined,
@@ -53,11 +54,12 @@ export const EventShow = () => {
           >
             Участники
           </Button>
-          <Button 
+          <Button
             onClick={() => push(`/events/${record?.id}/registration-form`)}
-            color="geekblue" 
-            variant="outlined" 
-            icon={<FormOutlined />}>
+            color="geekblue"
+            variant="outlined"
+            icon={<FormOutlined />}
+          >
             Форма на регистрацию
           </Button>
           <Button
@@ -75,6 +77,13 @@ export const EventShow = () => {
             icon={<UserSwitchOutlined />}
           >
             Роли
+          </Button>
+          <Button
+            icon={<SmileOutlined />}
+            onClick={() => push(`/events/${record?.id}/volunteer-activity`)}
+            variant="outlined"
+          >
+            Волонтёрская активность
           </Button>
         </>
       )}
