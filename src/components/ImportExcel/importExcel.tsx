@@ -26,7 +26,7 @@ const ExcelImport = ({ eventId }: { eventId: string }) => {
       await Promise.all(
         players.map((player) =>
           create({
-            resource: "players",
+            resource: "players/excel",
             values: player,
             meta: {
               parent: {
