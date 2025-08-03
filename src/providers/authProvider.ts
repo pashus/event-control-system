@@ -53,17 +53,22 @@ export const authProvider: AuthProvider = {
 
   check: async () => {
     console.log("Проверка");
+
     const token = localStorage.getItem("token");
-    if (token) {
-      return {
-        authenticated: true,
-      };
+    if (!token) {
+      return { authenticated: false, redirectTo: "/login" };
     }
 
-    return {
-      authenticated: false,
-      redirectTo: "/login",
-    };
+    try {
+      await api.get("/users/me/");
+      return { authenticated: true };
+    } catch (error: any) {
+      if (error.response?.status === 401) {
+        localStorage.removeItem("token");
+        return { authenticated: false, redirectTo: "/login" };
+      }
+      return { authenticated: false, redirectTo: "/login" };
+    }
   },
 
   getPermissions: async () => null,
@@ -85,7 +90,11 @@ export const authProvider: AuthProvider = {
   },
 
   onError: async (error) => {
-    console.error(error);
+    const status = error?.response?.status;
+    if (status === 401) {
+      localStorage.removeItem("token");
+      return { logout: true, redirectTo: "/login" };
+    }
     return { error };
   },
 };

@@ -1,7 +1,7 @@
 import { DataProvider } from "@refinedev/core";
 import { api } from "@/api";
 
-const customDataProvider: DataProvider = {
+export const customDataProvider: DataProvider = {
   getList: async ({ resource, meta }) => {
     console.log(`LIST ${resource}`);
 
@@ -98,5 +98,3 @@ const customDataProvider: DataProvider = {
     return "http://localhost:8000/api/v1/";
   },
 };
-
-export default customDataProvider;

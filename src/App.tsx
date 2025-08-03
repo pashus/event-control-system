@@ -28,7 +28,6 @@ import { authProvider } from "@/providers/authProvider";
 import { AppIcon } from "@/components/app-icon";
 import { Header } from "@/components/header";
 import { ColorModeContextProvider } from "@/contexts/color-mode";
-import customDataProvider from "@/providers/customDataProvider";
 
 import { EventCreate, EventEdit, EventShow, EventsList } from "@/pages/events";
 import {
@@ -49,7 +48,8 @@ import {
 } from "@/pages/activities";
 import { RolesList, RoleCreate, RoleEdit, RoleShow } from "@/pages/roles";
 import { QrScanner } from "@/pages/qr-scanner";
-import { VolunteerActivityPage } from "./pages/volunteer-activity/volunteer-activity";
+import { VolunteerActivityPage } from "@/pages/volunteer-activity/volunteer-activity";
+import { customDataProvider } from "@/providers";
 
 const customTitleHandler = () => {
   return "Система контроля мероприятия";

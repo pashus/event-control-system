@@ -78,7 +78,7 @@ export const QrScanner = () => {
   return (
     <Card
       title="Сканер QR-кодов"
-      style={{ maxWidth: 500, margin: "24px auto" }}
+      style={{ maxWidth: "650px", margin: "24px auto" }}
     >
       <Text>Отсканируйте QR-код</Text>
       <div id="reader" style={{ width: "100%", marginTop: 16 }} />
