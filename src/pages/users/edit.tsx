@@ -26,7 +26,7 @@ export const UserEdit = () => {
     >
       <Form {...formProps} layout="vertical">
         <Form.Item
-          label={"Имя пользователя"}
+          label="Имя пользователя"
           name="username"
           rules={[
             {

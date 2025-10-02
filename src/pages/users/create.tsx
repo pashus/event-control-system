@@ -27,7 +27,7 @@ export const UserCreate = () => {
     <Create saveButtonProps={saveButtonProps} isLoading={formLoading}>
       <Form {...formProps} layout="vertical">
         <Form.Item
-          label={"Имя пользователя"}
+          label="Имя пользователя"
           name="username"
           rules={[
             {
@@ -38,7 +38,7 @@ export const UserCreate = () => {
           <Input />
         </Form.Item>
         <Form.Item
-          label={"Пароль"}
+          label="Пароль"
           name="password"
           rules={[
             {
@@ -48,7 +48,7 @@ export const UserCreate = () => {
         >
           <Input.Password />
         </Form.Item>
-        {/* <Form.Item label={"Email"} name="email">
+        {/* <Form.Item label="Email" name="email">
           <Input type="email" />
         </Form.Item> - если будет */}
       </Form>

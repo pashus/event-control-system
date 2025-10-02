@@ -41,7 +41,7 @@ export const PlayerEdit = () => {
     >
       <Form {...formProps} layout="vertical">
         <Form.Item
-          label={"Имя"}
+          label="Имя"
           name="first_name"
           rules={[
             {
@@ -52,7 +52,7 @@ export const PlayerEdit = () => {
           <Input />
         </Form.Item>
         <Form.Item
-          label={"Фамилия"}
+          label="Фамилия"
           name="last_name"
           rules={[
             {
@@ -63,7 +63,7 @@ export const PlayerEdit = () => {
           <Input />
         </Form.Item>
         <Form.Item
-          label={"Номер группы"}
+          label="Номер группы"
           name="group_name"
           rules={[
             {
@@ -74,7 +74,7 @@ export const PlayerEdit = () => {
           <Input />
         </Form.Item>
         <Form.Item
-          label={"ID роли"}
+          label="ID роли"
           name="role_id"
           // rules={[
           //   {

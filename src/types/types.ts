@@ -21,7 +21,7 @@ export interface ICreateEventValues {
   start_time: string;
   end_time: string;
   location: string;
-  has_player_balance: true | false;
+  has_player_balance: boolean;
   activities: IActivity[];
   roles: IRoles[];
   reg_form: object;

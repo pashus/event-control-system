@@ -1,1 +1,1 @@
-export { api, apiPublic } from "./axios";
+export { api } from "./axios";

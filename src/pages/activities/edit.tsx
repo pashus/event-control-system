@@ -41,7 +41,7 @@ export const ActivityEdit = () => {
     >
       <Form {...formProps} layout="vertical">
         <Form.Item
-          label={"Название"}
+          label="Название"
           name="name"
           rules={[
             {

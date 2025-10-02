@@ -37,7 +37,7 @@ export const RoleCreate = () => {
     <Create saveButtonProps={saveButtonProps} isLoading={formLoading}>
       <Form {...formProps} layout="vertical">
         <Form.Item
-          label={"Название"}
+          label="Название"
           name="name"
           rules={[
             {

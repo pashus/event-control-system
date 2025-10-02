@@ -54,7 +54,7 @@ export const EventCreate = () => {
     <Create saveButtonProps={saveButtonProps} isLoading={formLoading}>
       <Form {...formProps} layout="vertical" onFinish={handleOnFinish}>
         <Form.Item
-          label={"Название"}
+          label="Название"
           name="name"
           rules={[
             {
@@ -65,7 +65,7 @@ export const EventCreate = () => {
           <Input />
         </Form.Item>
         <Form.Item
-          label={"Описание"}
+          label="Описание"
           name="description"
           rules={[
             {
@@ -76,7 +76,7 @@ export const EventCreate = () => {
           <Input.TextArea autoSize={{ minRows: 4 }} />
         </Form.Item>
         <Form.Item
-          label={"Время начала"}
+          label="Время начала"
           name="start_time"
           rules={[
             {
@@ -87,7 +87,7 @@ export const EventCreate = () => {
           <DatePicker showTime style={{ width: "100%" }} />
         </Form.Item>
         <Form.Item
-          label={"Время окончания"}
+          label="Время окончания"
           name="end_time"
           rules={[
             {
@@ -98,7 +98,7 @@ export const EventCreate = () => {
           <DatePicker showTime style={{ width: "100%" }} />
         </Form.Item>
         <Form.Item
-          label={"Место проведения"}
+          label="Место проведения"
           name="location"
           rules={[
             {
@@ -109,7 +109,7 @@ export const EventCreate = () => {
           <Input />
         </Form.Item>
         <Form.Item
-          label={"Выберите, будет ли у пользователя баланс"}
+          label="Выберите, будет ли у пользователя баланс"
           name="has_player_balance"
         >
           <Radio.Group

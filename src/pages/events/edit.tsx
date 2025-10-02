@@ -26,7 +26,7 @@ export const EventEdit = () => {
     >
       <Form {...formProps} layout="vertical">
         <Form.Item
-          label={"Название"}
+          label="Название"
           name="name"
           rules={[
             {
@@ -37,7 +37,7 @@ export const EventEdit = () => {
           <Input />
         </Form.Item>
         <Form.Item
-          label={"Описание"}
+          label="Описание"
           name="description"
           rules={[
             {
@@ -48,7 +48,7 @@ export const EventEdit = () => {
           <Input.TextArea autoSize={{ minRows: 4 }} />
         </Form.Item>
         <Form.Item
-          label={"Время начала"}
+          label="Время начала"
           name="start_time"
           getValueProps={(value) => ({
             value: value ? dayjs(value) : null,
@@ -62,7 +62,7 @@ export const EventEdit = () => {
           <DatePicker showTime />
         </Form.Item>
         <Form.Item
-          label={"Время окончания"}
+          label="Время окончания"
           name="end_time"
           getValueProps={(value) => ({
             value: value ? dayjs(value) : null,
@@ -76,7 +76,7 @@ export const EventEdit = () => {
           <DatePicker showTime />
         </Form.Item>
         <Form.Item
-          label={"Место проведения"}
+          label="Место проведения"
           name="location"
           rules={[
             {

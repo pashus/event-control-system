@@ -36,7 +36,7 @@ export const PlayerCreate = () => {
     <Create saveButtonProps={saveButtonProps} isLoading={formLoading}>
       <Form {...formProps} layout="vertical">
         <Form.Item
-          label={"Имя"}
+          label="Имя"
           name="first_name"
           rules={[
             {
@@ -47,7 +47,7 @@ export const PlayerCreate = () => {
           <Input />
         </Form.Item>
         <Form.Item
-          label={"Фамилия"}
+          label="Фамилия"
           name="last_name"
           rules={[
             {
@@ -58,7 +58,7 @@ export const PlayerCreate = () => {
           <Input />
         </Form.Item>
         <Form.Item
-          label={"Номер группы"}
+          label="Номер группы"
           name="group_name"
           rules={[
             {
@@ -69,7 +69,7 @@ export const PlayerCreate = () => {
           <Input />
         </Form.Item>
         <Form.Item
-          label={"ID Роли"}
+          label="ID Роли"
           name="role_id"
           rules={[
             {
@@ -79,7 +79,7 @@ export const PlayerCreate = () => {
         >
           <Input />
         </Form.Item>
-        {/* <Form.Item label={"Email"} name="email">
+        {/* <Form.Item label="Email" name="email">
           <Input type="email" />
         </Form.Item> - если будет */}
       </Form>
